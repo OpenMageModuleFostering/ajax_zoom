@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/controllers/IndexController.php
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.0
-*  Date: 2015-09-08
-*  Review: 2015-09-08
+*  Version: 1.0.7
+*  Date: 2015-11-15
+*  Review: 2015-11-15
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -164,6 +164,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $name       =   $get->getParam('name');
         $existing   =   $get->getParam('existing');
         $zip        =   $get->getParam('zip');
+        $delete        =   $get->getParam('delete');
         $arcfile    =   $get->getParam('arcfile');
         $newId = '';
         $newName = '';
@@ -190,7 +191,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $sets = array();
         
         if ($zip == 'true') {
-            $sets = $this->addImagesArc($arcfile, $productId, $id360, $id360set);
+            $sets = $this->addImagesArc($arcfile, $productId, $id360, $id360set, $delete);
         }
                 
         die(Mage::helper('core')->jsonEncode(array(
@@ -209,7 +210,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
     }
 
 
-    public function addImagesArc($arcfile, $productId, $id360, $id360set)
+    public function addImagesArc($arcfile, $productId, $id360, $id360set, $delete = '')
     {
         set_time_limit(0);
 
@@ -217,7 +218,8 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $baseUrlJs = Mage::getBaseUrl('js');
 
         $path = $baseDir . '/js/axzoom/zip/' . $arcfile;
-        $dst = $this->extractArc($path);
+        $dst = is_dir($path) ? $path : $this->extractArc($path);
+        @chmod($dst, 0777);
         $data = $this->getFolderData($dst);
         
         $name = Mage::getModel('axzoom/ax360')->load($id360)->getName();
@@ -230,15 +232,17 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
                 'status' => '1'
                 ));
 
+        $move = is_dir($path) ? false : true;
+
         if (count($data['folders']) == 0) { // files (360)
-            $this->copyImages($productId, $id360, $id360set, $dst);
+            $this->copyImages($productId, $id360, $id360set, $dst, $move);
         } elseif (count($data['folders']) == 1) { // 1 folder (360)
-            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0]);
+            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0], $move);
         } else { // 3d
-            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0]);
+            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0], $move);
             for ($i=1; $i < count($data['folders']); $i++) { 
                 $id360set = Mage::getModel('axzoom/ax360set')->setData(array('id_360' => $id360, 'sort_order' => 0))->save()->getId();
-                $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][$i]);
+                $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][$i], $move);
 
                 $sets[] = array(
                     'name' => $name,
@@ -248,7 +252,20 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
             }
         }
 
-        $this->deleteDirectory($dst);
+        
+        // delete temp directory which was created when zip extracted
+        if(!is_dir($path)) {
+            $this->deleteDirectory($dst);
+        }
+
+        // delete the sourece file (zip/dir) if checkbox is checked
+        if($delete == 'true') {
+            if(is_dir($path)) {
+                $this->deleteDirectory($dst);
+            } else {
+                @unlink($path);
+            }
+        }        
         return $sets;
     }
 
@@ -277,7 +294,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $folders = array();
         if ($handle = opendir($path)) {
             while (false !== ($entry = readdir($handle))) {
-                if ($entry != '.' && $entry != '..') {
+                if ($entry != '.' && $entry != '..' && $entry != '.htaccess' && $entry != '__MACOSX') {
                     if (is_dir($path . '/' . $entry)) {
                         array_push($folders, $entry);
                     } else {
@@ -297,7 +314,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
             );
     }
 
-    public function copyImages($productId, $id360, $id360set, $path)
+    public function copyImages($productId, $id360, $id360set, $path, $move)
     {
         $files = $this->getFilesFromFolder($path);
         $folder = $this->createProduct360Folder($productId, $id360set);
@@ -308,7 +325,14 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
             $tmp = explode('.', $name);
             $ext = end($tmp);
             $dst = $folder . '/' . $name;
-            rename($path . '/' . $file, $dst);
+
+            if($move) {
+                if(@!rename($path.'/'.$file, $dst)) {
+                    copy($path.'/'.$file, $dst);
+                }
+            } else {
+                copy($path.'/'.$file, $dst);
+            }
         }
     }
 
@@ -318,7 +342,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $files = array();
         if ($handle = opendir($path)) {
             while (false !== ($entry = readdir($handle))) {
-                if ($entry != '.' && $entry != '..') {
+                if ($entry != '.' && $entry != '..' && $entry != '.htaccess' && $entry != '__MACOSX') {
                     $files[] = $entry;
                 }
             }
@@ -396,7 +420,6 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
     
     public function rootFolder()
     {
-        $p = parse_url(Mage::getBaseUrl());
-        return str_replace('index.php/', '', $p['path']);
+        return preg_replace('|js/$|', '', parse_url(Mage::getBaseUrl('js'), PHP_URL_PATH));
     }
 }

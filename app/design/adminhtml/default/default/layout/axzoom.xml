@@ -35,7 +35,11 @@
 			<action method="addJs"><script>axzoom/jquery.fileupload.js</script></action>
 			<action method="addJs"><script>axzoom/jquery.fileupload-process.js</script></action>
 			<action method="addJs"><script>axzoom/jquery.fileupload-validate.js</script></action>
-
+            
+            <!-- test 
+            <action method="addJs"><script>axzoom/jquery.livequery.min.js</script></action>
+            -->
+            
 		</reference>
 	</adminhtml_catalog_product_edit>
 </layout>

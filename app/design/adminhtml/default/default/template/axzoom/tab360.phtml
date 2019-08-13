@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360.phtml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.0
-*  Date: 2015-09-08
-*  Review: 2015-09-08
+*  Version: 1.0.9
+*  Date: 2015-12-01
+*  Review: 2015-12-01
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -19,7 +19,7 @@
 
 <input type="hidden" name="id_360set" id="id_360set" value="" />
 
-<div id="product-images360" class="entry-edit" style="display:none">
+<div id="product-images360" class="entry-edit" style="display: none">
 	<div class="entry-edit-head">
 		<h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('Images') ?></h4>
 	</div>
@@ -29,18 +29,13 @@
 
 			<div class="row">
 				<div class="form-group">
-					<label class="control-label col-lg-3 file_upload_label">
-						<span class="label-tooltip" data-toggle="tooltip" title="<?php echo $this->__('Format: JPG, GIF, PNG. Filesize: %s MB max', $maxImageSize) ?>">
-							<?php echo $this->__('Add a new image to this image set') ?>
-						</span>
-					</label>
 					<div class="col-lg-9">
 						<?php require "uploader.phtml"; ?>
 					</div>
 				</div>
 			</div>
 			<div class="grid">
-				<table class="data border" id="imageTable360">
+				<table class="data border" id="imageTable360" cellspacing="0">
 					<thead>
 						<tr class="headings">
 							<th><?php echo $this->__('Image') ?></th>
@@ -51,20 +46,20 @@
 					</tbody>
 				</table>
 			</div>
-			<table id="lineType360" style="display:none;">
+			<table id="lineType360" style="display:none;" cellspacing="0">
 				<tr id="image_id">
 					<td>
 						<img src="<?php echo Mage::getModel('axzoom/ax360')->rootFolder() ?>js/axzoom/image_path.gif" alt="legend" title="legend" class="img-thumbnail" />
 					</td>
 					<td style="width:75px;">
 						<button type="button" class="delete_product_image360 scalable delete" >
-							<span><span><?php echo $this->__('Delete this image') ?><span></span></span></span>
+							<span><?php echo $this->__('Delete this image') ?></span>
 						</button>
 					</td>
 				</tr>
 			</table>
 			<div class="panel-footer">
-				<button class="btn_cancel"><?php echo $this->__('Cancel') ?></button>
+				<button class="btn_cancel"><span><?php echo $this->__('Cancel') ?></span></button>
 			</div>
 		</div>
 	</div>
@@ -128,6 +123,7 @@
 		{
 			e.preventDefault();
 			$('#product-images360').hide();
+			$('#imageTableSetsRows tr').removeClass('active');
 		});
 
 

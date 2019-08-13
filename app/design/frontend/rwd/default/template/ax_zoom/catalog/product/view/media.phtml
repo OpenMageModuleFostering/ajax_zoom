@@ -1,0 +1,423 @@
+<?php
+$productId = Mage::app()->getRequest()->getParam('id');
+$ax = Mage::getModel('axzoom/ax360');
+
+$conf = Mage::getStoreConfig('axzoom_options');
+$tmp = parse_url(Mage::getBaseUrl());
+$axZmPath = str_replace('index.php/', '', $tmp['path']) . 'js/axzoom/axZm/';
+$product = Mage::getModel('catalog/product')->load($productId); //product id here
+$images360Json = $ax->images360Json($productId);
+
+
+
+
+// 360 assigned from configurable products to Simple products
+$map = array();
+if ($groups = $ax->getCollection()->addFieldToFilter('id_product', $productId)->getData()) foreach ($groups as $group) {
+	$comp = Mage::helper('core')->jsonDecode($group['combinations']);
+	if ($comp) {
+		foreach ($comp as $pid) {
+			if (!isset($map[$pid])) {
+				$map[$pid] = array();
+			}
+			array_push($map[$pid], $group['id_360']);
+		}
+		
+	}
+}
+
+
+// all attributes map
+$mapAttributesCodeId = array();
+$attributes = Mage::getResourceModel('catalog/product_attribute_collection')->getItems();
+foreach ($attributes as $attribute){
+	$mapAttributesCodeId[$attribute->getAttributecode()] = $attribute->getId();
+}
+$mapAttributesIdCode = array_flip($mapAttributesCodeId);
+
+// get configurable options
+if ($product->type_id == 'configurable') {
+	$attributesCodes = array();
+	$productAttributesOptions = $product->getTypeInstance(true)->getConfigurableOptions($product);
+	foreach ($productAttributesOptions as $productAttributeId => $productAttributeOption) {
+		$attributesCodes[] = $mapAttributesIdCode[$productAttributeId];
+	}
+}
+
+
+// get associated products
+$res = array();
+if ($product->isConfigurable()) {
+	$childProducts = Mage::getModel('catalog/product_type_configurable')
+		->getUsedProducts(null,$product);
+	foreach ($childProducts as $child) {
+
+		$data = $child->getData();
+		$p = Mage::getModel('catalog/product')->load($data['entity_id']);
+
+		$pairs = array();
+		$labels = array();
+		foreach ($attributesCodes as $code) {
+			$pairs[] = $mapAttributesCodeId[$code] . ':' . $data[$code];
+
+			$attr = $product->getResource()->getAttribute($code);
+			$option_label = $attr->getSource()->getOptionText($data[$code]);
+			array_push($labels, trim($option_label));
+		}
+		  
+		$idx = implode(',', $pairs);
+		$res[$idx] = array();
+		
+		$obj = null;
+		$cnt = 0;
+		// add native images
+		foreach ($p->getMediaGalleryImages() as $image) {
+			
+			$tmp = parse_url($image->getUrl());
+			if (!$obj) $obj = new stdClass;
+			$params = new stdClass;
+			$params->img = $tmp['path'];
+			$params->title = '';
+			$obj->$cnt = $params; 
+			$cnt++;
+		}
+
+		// add related images via labels
+		foreach ($product->getMediaGalleryImages() as $image) {
+			if ($image->label_default != '' && in_array(trim($image->label_default), $labels)) {
+				$tmp = parse_url($image->getUrl());
+				if (!$obj) $obj = new stdClass;
+				$params = new stdClass;
+				$params->img = $tmp['path'];
+				$params->title = '';
+				$obj->$cnt = $params; 
+				$cnt++;
+			}
+		}
+
+		if ($obj != null){
+			$res[$idx]['images'] = $obj;
+		} else {
+			$res[$idx]['images'] = new stdClass();
+		}
+		$extraGroups = empty($map[$data['entity_id']]) ? array() : $map[$data['entity_id']];
+		$res[$idx]['images360'] = Mage::helper('core')->jsonDecode(str_replace("'", '"', $ax->images360Json($data['entity_id'], $extraGroups)));
+	}
+}
+
+//$helper = Mage::helper('configurableswatches/mediafallback');
+//$imageFallback = $helper->getConfigurableImagesFallbackArray($product, array('image'), null);
+//print_r($imageFallback);
+
+
+/* OLD (based on labels)
+// swatches
+$swatches = array();
+if (version_compare(Mage::getVersion(), '1.9.1') >= 0) {
+	$helper = Mage::helper('configurableswatches/mediafallback');
+	if ($labelMapping = $product->getChildAttributeLabelMapping() && $imageFallback = $helper->getConfigurableImagesFallbackArray($product, array('image'), null)) {
+
+		foreach ($imageFallback['option_labels'] as $label => $data) {
+			$swatches[$label] = array();
+			$cnt = 1;
+			$extraGroups = array();
+			foreach ($data['products'] as $pid) {
+				$p = Mage::getModel('catalog/product')->load($pid);
+				$obj = null;
+				foreach ($p->getMediaGalleryImages() as $image) {
+					
+					$tmp = parse_url($image->getUrl());
+					$obj = new stdClass;
+					$params = new stdClass;
+					$params->img = $tmp['path'];
+					$params->title = '';
+					$obj->$cnt = $params; 
+					$cnt++;
+				}
+				if ($obj != null){
+					$swatches[$label]['images'] = $obj;
+				}
+				if (isset($map[$pid])) {
+					$extraGroups = array_merge($extraGroups, $map[$pid]);
+				}
+			}
+			$swatches[$label]['images360'] = Mage::helper('core')->jsonDecode(str_replace("'", '"', $ax->images360Json($data['products'], $extraGroups)));
+		}
+	}
+}
+*/
+
+
+$cnt = 0;
+$imagesJson = array();
+if (count($this->getGalleryImages()) > 0) {
+	
+	foreach ($this->getGalleryImages() as $image) {
+		
+		$check_image = true;
+		if(method_exists($this, 'isGalleryImageVisible')) {
+			$check_image = $this->isGalleryImageVisible($image);
+		}
+
+		if ($check_image) {
+			$cnt++;
+			$tmp = parse_url($image->getUrl());
+			array_push($imagesJson, $cnt . ': {img: "' . $tmp['path'] . '", title: ""}');
+		}
+	}
+} else {
+	if($image_url = $this->helper('catalog/image')->init($product, 'image')) {
+		$tmp = parse_url($image_url);
+		array_push($imagesJson, '1: {img: "' . $tmp['path'] . '", title: ""}');
+	}
+}
+?>
+<div id="az_mouseOverZoomParent" style="margin-bottom: 20px;">
+	<!-- Container for mouse over image -->
+	<div id="az_mouseOverZoomContainer" style="position: relative; border: #AAA 1px solid;">
+	    Mouseover Zoom loading...
+	</div>
+
+	<!-- gallery with thumbs (will be filled with thumbs by javascript) -->
+	<div id="az_mouseOverZoomGallery" style="position: relative; margin-top: 20px; height: 76px; width: 100%; display: none;">
+	    Gellery loading...
+	</div>
+</div>
+
+<?php echo $this->getChildHtml('after'); ?>
+
+<script type="text/javascript">
+	<?php
+	$exclParArray = array('LICENSE_LIC');
+	foreach ($conf as $group => $data){
+		foreach ($data as $key => $value){
+			$groupKey = strtoupper($group . '_' . $key);
+			if (!in_array($groupKey, $exclParArray)){
+				if ($value == 'false' || $value == 'true' || $value == 'null' || is_numeric($value) || substr(trim($value), 0, 1) == '{' || substr(trim($value), 0, 1) == '['){
+					echo '	var AJAXZOOM_' . $groupKey . ' = ' . $value . '; ' . "\n";
+				} else {
+					echo '	var AJAXZOOM_' . $groupKey . ' = "' . str_replace('"', '&#34;', $value) . '"; ' . "\n";
+				}
+			}
+		}
+	}
+	?>
+	var AXZMPATH = '<?php echo $axZmPath; ?>';
+	
+	// colors
+	var axAssociated = jQuery.parseJSON('<?php echo Mage::helper('core')->jsonEncode($res); ?>');
+		
+	// default 360
+	var IMAGES_360_JSON = <?php echo $images360Json; ?>;
+	
+	// default plain images
+	var IMAGES_JSON = {<?php echo implode(',', $imagesJson);?>};
+	
+	var zoomParams = {
+		disableAllMsg: AJAXZOOM_MAIN_DISABLEALLMSG,
+		axZmPath: AXZMPATH,
+		divID: AJAXZOOM_MAIN_DIVID,
+		galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
+		images: IMAGES_JSON,
+		firstImageToLoad: AJAXZOOM_MAIN_FIRSTIMAGETOLOAD,
+		images360: IMAGES_360_JSON,
+		images360firstToLoad: AJAXZOOM_MAIN_IMAGES360FIRSTTOLOAD,
+		images360Opt: AJAXZOOM_MAIN_IMAGES360OPT,
+		images360Thumb: AJAXZOOM_MAIN_IMAGES360THUMB,
+		images360Preview: AJAXZOOM_MAIN_IMAGES360PREVIEW, 
+		images360examplePreview: AJAXZOOM_MAIN_IMAGES360EXAMPLEPREVIEW,
+		zoomMsg360: AJAXZOOM_MAIN_ZOOMMSG360,
+		thumbW: AJAXZOOM_MAIN_THUMBW,
+		thumbH: AJAXZOOM_MAIN_THUMBH,
+		thumbRetina: AJAXZOOM_MAIN_THUMBRETINA,
+		galleryAxZmThumbSlider: AJAXZOOM_MAIN_GALLERYAXZMTHUMBSLIDER,
+		galleryAxZmThumbSliderParam: AJAXZOOM_MAIN_GALLERYAXZMTHUMBSLIDERPARAM,
+		preloadMouseOverImages: AJAXZOOM_MAIN_PRELOADMOUSEOVERIMAGES, 
+		width: AJAXZOOM_MAIN_WIDTH,
+		height: AJAXZOOM_MAIN_HEIGHT,
+		responsive: AJAXZOOM_MAIN_RESPONSIVE,
+		heightRatio: AJAXZOOM_MAIN_HEIGHTRATIO,
+		heightMaxWidthRatio: AJAXZOOM_MAIN_HEIGHTMAXWIDTHRATIO,
+		maxSizePrc: AJAXZOOM_MAIN_MAXSIZEPRC,
+		mouseOverZoomWidth: AJAXZOOM_MAIN_MOUSEOVERZOOMWIDTH,
+		mouseOverZoomHeight: AJAXZOOM_MAIN_MOUSEOVERZOOMHEIGHT,
+		ajaxZoomOpenMode: AJAXZOOM_MAIN_AJAXZOOMOPENMODE,
+		example: AJAXZOOM_MAIN_EXAMPLE,
+		exampleFancyboxFullscreen: AJAXZOOM_MAIN_EXAMPLEFANCYBOXFULLSCREEN,
+		exampleFancybox: AJAXZOOM_MAIN_EXAMPLEFANCYBOX,
+		exampleColorbox: AJAXZOOM_MAIN_EXAMPLECOLORBOX,
+		fancyBoxParam: {
+			boxMargin: 0,
+			boxPadding: 0,
+			boxCenterOnScroll: true,
+			boxOverlayShow: true,
+			boxOverlayOpacity: 0.75,
+			boxOverlayColor: "#777",
+			boxTransitionIn: "fade",
+			boxTransitionOut: "fade",
+			boxSpeedIn: 300,
+			boxSpeedOut: 300,
+			boxEasingIn: "swing",
+			boxEasingOut: "swing",
+			boxShowCloseButton: true,
+			boxEnableEscapeButton: true,
+			boxTitleShow: true,
+			boxTitlePosition: "float",
+			boxTitleFormat: null
+		},
+		disableScrollAnm: AJAXZOOM_MAIN_DISABLESCROLLANM,
+		fullScreenApi: AJAXZOOM_MAIN_FULLSCREENAPI,
+		axZmCallBacks: AJAXZOOM_MAIN_AXZMCALLBACKS,
+
+		azOptions: AJAXZOOM_MAIN_AZOPTIONS,
+		azOptions360: AJAXZOOM_MAIN_AZOPTIONS360,
+
+		// Experimental
+		pinterest: {
+			enabled: AJAXZOOM_PINTEREST_ENABLED,
+			build: AJAXZOOM_PINTEREST_BUILD,
+			btnSrc: AJAXZOOM_PINTEREST_BTNSRC,
+			data: { // any data attributes
+				"pin-do" : "buttonPin",
+				"pin-shape": null,
+				"pin-config": "none", 
+				"pin-color": null,
+				"pin-height": null
+			}
+		},
+				
+		// Mouse hover zoom parameters
+		mouseOverZoomParam: {
+			position: AJAXZOOM_MOUSEOVERZOOMPARAM_POSITION,
+			posAutoInside: AJAXZOOM_MOUSEOVERZOOMPARAM_POSAUTOINSIDE,
+			autoFlip: AJAXZOOM_MOUSEOVERZOOMPARAM_AUTOFLIP,
+			biggestSpace: AJAXZOOM_MOUSEOVERZOOMPARAM_BIGGESTSPACE,
+			zoomFullSpace: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMFULLSPACE,
+			zoomWidth: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMWIDTH,
+			zoomHeight: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMHEIGHT,
+			autoMargin: AJAXZOOM_MOUSEOVERZOOMPARAM_AUTOMARGIN,
+			adjustX: AJAXZOOM_MOUSEOVERZOOMPARAM_ADJUSTX,
+			adjustY: AJAXZOOM_MOUSEOVERZOOMPARAM_ADJUSTY,
+			
+			lensOpacity: AJAXZOOM_MOUSEOVERZOOMPARAM_LENSOPACITY, 
+			lensStyle: {},
+			lensClass: AJAXZOOM_MOUSEOVERZOOMPARAM_LENSCLASS,
+			zoomAreaBorderWidth: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMAREABORDERWIDTH,
+			galleryFade: AJAXZOOM_MOUSEOVERZOOMPARAM_GALLERYFADE,
+			shutterSpeed: AJAXZOOM_MOUSEOVERZOOMPARAM_SHUTTERSPEED,
+			showFade: AJAXZOOM_MOUSEOVERZOOMPARAM_SHOWFADE,
+			hideFade: AJAXZOOM_MOUSEOVERZOOMPARAM_HIDEFADE, 
+			autoScroll: AJAXZOOM_MOUSEOVERZOOMPARAM_AUTOSCROLL,
+			
+			flyOutSpeed: AJAXZOOM_MOUSEOVERZOOMPARAM_FLYOUTSPEED,
+			flyOutTransition: AJAXZOOM_MOUSEOVERZOOMPARAM_FLYOUTTRANSITION,
+			flyOutOpacity: AJAXZOOM_MOUSEOVERZOOMPARAM_FLYOUTOPACITY,
+			flyBackSpeed: AJAXZOOM_MOUSEOVERZOOMPARAM_FLYBACKSPEED,
+			flyBackTransition: AJAXZOOM_MOUSEOVERZOOMPARAM_FLYBACKTRANSITION,
+			flyBackOpacity: AJAXZOOM_MOUSEOVERZOOMPARAM_FLYBACKOPACITY,
+			
+			smoothMove: AJAXZOOM_MOUSEOVERZOOMPARAM_SMOOTHMOVE, 
+			
+			tint: AJAXZOOM_MOUSEOVERZOOMPARAM_TINT,
+			tintOpacity: AJAXZOOM_MOUSEOVERZOOMPARAM_TINTOPACITY, 
+			tintFilter: AJAXZOOM_MOUSEOVERZOOMPARAM_TINTFILTER,
+			tintLensBack: AJAXZOOM_MOUSEOVERZOOMPARAM_TINTLENSBACK,
+			
+			showTitle: AJAXZOOM_MOUSEOVERZOOMPARAM_SHOWTITLE, 
+			titleOpacity: AJAXZOOM_MOUSEOVERZOOMPARAM_TITLEOPACITY, 
+			titlePosition: AJAXZOOM_MOUSEOVERZOOMPARAM_TITLEPOSITION, 
+			cursorPositionX: AJAXZOOM_MOUSEOVERZOOMPARAM_CURSORPOSITIONX, 
+			cursorPositionY: AJAXZOOM_MOUSEOVERZOOMPARAM_CURSORPOSITIONY,
+			loading: AJAXZOOM_MOUSEOVERZOOMPARAM_LOADING, 
+			loadingMessage: AJAXZOOM_MOUSEOVERZOOMPARAM_LOADINGMESSAGE, 
+			loadingWidth: AJAXZOOM_MOUSEOVERZOOMPARAM_LOADINGWIDTH, 
+			loadingHeight: AJAXZOOM_MOUSEOVERZOOMPARAM_LOADINGHEIGHT, 
+			loadingOpacity: AJAXZOOM_MOUSEOVERZOOMPARAM_LOADINGOPACITY,
+			zoomHintEnable: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMHINTENABLE,
+			zoomHintText: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMHINTTEXT,
+			zoomMsgHover: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMMSGHOVER,
+			zoomMsgClick: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMMSGCLICK,
+			spinner: AJAXZOOM_MAIN_SPINNER
+		}
+
+	};
+
+	jQuery.mouseOverZoomInit(zoomParams);
+
+	jQuery.axZm_psh = { };
+	jQuery.axZm_psh.prevPid = null;
+	jQuery.axZm_psh.compVersions = function(strV1, strV2) { 
+	    var nRes = 0, parts1 = strV1.split('.'), parts2 = strV2.split('.'), nLen = Math.max(parts1.length, parts2.length); 
+	    for (var i = 0; i < nLen; i++) { 
+	        var nP1 = (i < parts1.length) ? parseInt(parts1[i], 10) : 0, nP2 = (i < parts2.length) ? parseInt(parts2[i], 10) : 0;
+	        if (isNaN(nP1)) { nP1 = 0; } if (isNaN(nP2)) { nP2 = 0; } 
+	        if (nP1 != nP2) { nRes = (nP1 > nP2) ? 1 : -1; break; } 
+	    } 
+	    return nRes; 
+	};
+	
+	<?php //if (version_compare(Mage::getVersion(), '1.9.1') >= 0): ?>
+	
+	
+	// Swatches
+	jQuery(function($) {
+
+		var resetAxZoom = function() {
+			$.mouseOverZoomInit.replaceImages( { 
+				divID: AJAXZOOM_MAIN_DIVID,
+				galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
+				images: IMAGES_JSON,
+				images360: IMAGES_360_JSON
+			});
+		};
+		
+		window.resetAxZoom = resetAxZoom;
+
+		var updateAxZoom = function(e) {
+
+			var obj = $(this);
+
+			setTimeout(function(){
+
+				if(e.type == 'change' && obj.val() == '') {
+					resetAxZoom();
+					return;
+				}
+
+				var pairs = [];
+				for (var k in spConfig.state){
+					if (typeof spConfig.state[k] !== 'function' && typeof spConfig.state[k] !== 'object' &&  spConfig.state[k] != false) {
+						pairs.push(k + ':' + spConfig.state[k]);
+					}
+				}
+				var idx = pairs.join(',');
+				
+				//console.log(idx, axAssociated);
+
+				if(axAssociated[idx]) {
+					
+					if( ($.isPlainObject(axAssociated[idx].images) && !$.isEmptyObject(axAssociated[idx].images)) 
+						|| 
+						($.isPlainObject(axAssociated[idx].images360) && !$.isEmptyObject(axAssociated[idx].images360))
+						) {
+						$.mouseOverZoomInit.replaceImages( { 
+							divID: AJAXZOOM_MAIN_DIVID,
+							galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
+							images: axAssociated[idx].images,
+							images360: axAssociated[idx].images360
+						});
+					} else { // show initial images
+						resetAxZoom();
+					}
+				}
+
+			}, 100);
+		
+		}
+
+		$('.swatch-label').click(updateAxZoom); // version 1.9.1 or more
+		$('.super-attribute-select').change(updateAxZoom);
+	});
+	
+	<?php //endif; ?>
+</script>

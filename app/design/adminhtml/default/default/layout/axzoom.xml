@@ -1,0 +1,25 @@
+<layout>
+	<adminhtml_catalog_product_edit>
+		<reference name="head">
+			<!--<action method="removeItem"><type>js</type><name>prototype/prototype.js</name></action>-->
+			<action method="addJs"><script>axzoom/jquery-1.11.0.min.js</script></action>
+			<action method="addJs"><script>axzoom/jquery-migrate-1.2.1.min.js</script></action>
+			<action method="addJs"><script>axzoom/axZm/extensions/jquery.axZm.openAjaxZoomInFancyBox.js</script></action>
+			<action method="addJs"><script>axzoom/axZm/plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.pack.js</script></action>
+
+			<action method="addJs"><script>axzoom/jquery.ui.widget.min.js</script></action>
+			<action method="addJs"><script>axzoom/jquery.fileupload.js</script></action>
+			<action method="addJs"><script>axzoom/jquery.fileupload-process.js</script></action>
+			<action method="addJs"><script>axzoom/jquery.fileupload-validate.js</script></action>
+			
+			
+
+			<action method="addCss">
+                <stylesheet>../../../../js/axzoom/axZm/plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.css</stylesheet>
+            </action>
+
+			<!--<action method="addJs"><script>axzoom/colorpicker.js</script></action>-->
+			<!--<action method="addJs"><script>prototype/prototype.js</script></action>-->
+		</reference>
+	</adminhtml_catalog_product_edit>
+</layout>

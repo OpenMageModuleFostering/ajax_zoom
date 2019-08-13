@@ -1,0 +1,1148 @@
+<?xml version="1.0"?>
+<config>
+	<sections>
+		<axzoom_options translate="label" module="axzoom">
+			<label>AJAX-ZOOM</label>
+			<tab>catalog</tab>
+			<frontend_type>text</frontend_type>
+			<sort_order>1000</sort_order>
+			<show_in_default>1</show_in_default>
+			<show_in_website>1</show_in_website>
+			<show_in_store>1</show_in_store>
+			<groups>
+	        	<general translate="label">
+                    <label>About</label>
+                    <sort_order>0</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment>
+                    <![CDATA[  
+                    	<style>
+                    		.importantAZoption{
+                    			color: #eb5e00; 
+                    			font-weight: bolder; 
+                    			background-position: 0 0 !important; 
+                    			padding-left: 24px; 
+                    			background-color: transparent !important;
+                    			border-width: 0 !important;
+                    			word-break: break-all;
+                    		}
+                    	</style>
+						<ul style="list-style: square">
+							<li>AJAX-ZOOM is a multipurpose library for displaying (high resolution) images and 360°/3D spins. 
+								This Magento module integrates only one particular implementation (example) from AJAX-ZOOM library into Magento. 
+								In raw form this example can be found here: 
+								<a target="_blank" href="http://www.ajax-zoom.com/examples/example32_responsive.php">
+									http://www.ajax-zoom.com/examples/example32_responsive.php 
+								</a> 
+								There you will also find some subtle detailes about the options which you can configure below. 
+								These options mainly refere to this one implementation / example.
+							</li>
+							<li>However AJAX-ZOOM has many other options which can be set manually in /js/axzoom/axZm/zoomConfigCustom.inc.php 
+								after <br> <code>elseif ($_GET['example'] == 'mouseOverExtension360')</code> for 360° views and 
+								<br><code>elseif ($_GET['example'] == 'mouseOverExtension')</code> 
+								for regular images views <br> or if you do not want to edit PHP files - most of the options can be also set in these 
+								formfields as JS plain object in:
+								<ol>
+									<li>azOptions - for 2D zoom</li>
+									<li>azOptions360 - for 360/3D zoom</li>
+								</ol>
+							</li>
+							<li>Depending on the template used you might need to adjust especially these two options:
+								<ol>
+									<li>zoomWidth - width of the mouseover flyout window</li>
+									<li>zoomHeight - height of the mouseover flyout window</li>
+								</ol>
+								If you will be not able to adjust these options on your own please 
+								<a target="_blank" "http://www.ajax-zoom.com/index.php?cid=contact">ask for support</a>
+							</li>
+							<li>Other useful / most common options are marked yellow or with this symbol: <span class="notice-msg importantAZoption"></span>
+							</li>
+						</ul>
+                    ]]>
+                	</comment>
+				</general>
+				<license translate="label">
+					<label>AJAX-ZOOM license(s)</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>1</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>                
+					<fields>
+						<lic>
+							<label>License</label>
+							<comment><![CDATA[<a href="http://www.ajax-zoom.com/index.php?cid=contact" target="_blank">Ask for support</a>&nbsp;&nbsp;&nbsp;<a href="http://www.ajax-zoom.com/index.php?cid=download#heading_3" target="_blank">Buy a license</a>]]></comment>
+
+                            <frontend_model>zoom/adminhtml_system_config_fieldset_license</frontend_model>
+                            <backend_model>adminhtml/system_config_backend_serialized_array</backend_model>
+
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</lic>
+					</fields>                 
+				</license>
+				<mouseOverZoomParam translate="comment">
+					<label>mouseOverZoomParam - JS object containing specific options to this mouseover zoom</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>2</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<position>
+							<label><![CDATA[<div class="notice-msg importantAZoption">position</div>]]></label>
+							<comment>Position of the flyout zoom window, possible values: 'inside', 'top', 'right', 'bottom', 'left'</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/position</source_model>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</position>		
+						<posAutoInside>
+							<label>posAutoInside</label>
+							<comment>applies when width (left, right) or height (top, bottom) of zoom window are less than this px value (zoomWidth || zoomHeight are set to auto); if zoomWidth || zoomHeight are fixed, applies when zoom window is out of page border</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</posAutoInside>
+						<posInsideArea>
+							<label>posInsideArea</label>
+							<comment>When "posAutoInside" is enabled and inner zoom fires or "position" option is set to 'inside' right away - there is no lens. However you will notice that the reaction to mouse movements occure somewhere in the middle of the image; at the edges mostly nothing happens in simmilar scripts. With this option you can adjust how far from the edge mouse movements should be captured. The range is between 0 and 0.5;</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</posInsideArea>
+						<autoFlip>
+							<label>autoFlip</label>
+							<comment>Flip right to left and bottom to top if less than int px value or false to disable</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</autoFlip>
+						<biggestSpace>
+							<label>biggestSpace</label>
+							<comment>Overrides position option and instantly chooses the direction, disables autoFlip; playes nicely when zoomWidth and zoomHeight are set to 'auto'</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</biggestSpace>
+						<zoomFullSpace>
+							<label>zoomFullSpace</label>
+							<comment>Uses full screen height (does not align to the map / disables adjustY) if position is right or left || uses full screen width (does not align to the map / disables adjustX) if position is top or bottom</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomFullSpace>
+						<zoomWidth>
+							<label>zoomWidth</label>
+							<comment>Width of the zoom window e.g. 540 or 'auto' or jQuery selector|correction value, e.g. '#refWidthTest|+20'; 
+								so if you want to have a width of the zoom window same as for example a responsive container to the right 
+								(so it is fully covered) and max possible height, then define the id of this container to the right, 
+								e.g. 'myArticleData', set "zoomWidth" to '#myArticleData|+10' and "zoomHeight" to 'auto'. 
+								New in Ver. b4: if you have a three column design and want to cover both containers to the right, 
+								then just define both containers in the jQuery selector, e.g. '.pb-center-column,.pb-right-column|+20'; 
+								the margin between the containers is not taken into account but you can adjust the result with the second value after vertical bar.
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomWidth>
+						<zoomHeight>
+							<label>zoomHeight</label>
+							<comment>Height of the zoom window e.g. 375, or 'auto' or jQuery selector|correction value, 
+								e.g. '#refWidthTest|+20'; if your selector matches more than one element, e.g. '.pb-center-column,.pb-right-column|+20', 
+								then the highest value will be choosen. This is different from the multiple selector in "zoomWidth", where the values are added.
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomHeight>
+						<autoMargin>
+							<label>autoMargin</label>
+							<comment>If zoomWidth or zoomHeight are set to 'auto', the margin to the edge of the screen</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</autoMargin>
+						<adjustX>
+							<label>adjustX</label>
+							<comment>Horizontal margin of the zoom window</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</adjustX>
+						<adjustY>
+							<label>adjustY</label>
+							<comment>Vertical margin of the zoom window</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</adjustY>
+						<lensOpacity>
+							<label><![CDATA[<div class="notice-msg importantAZoption">lensOpacity</div>]]></label>
+							<comment>Opacity of the selector lens</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</lensOpacity>
+						<lensStyle>
+							<label>lensStyle</label>
+							<comment>Quickly override css of the lens</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</lensStyle>
+						<lensClass>
+							<label>lensClass</label>
+							<comment>Set css class for the lens</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>14</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</lensClass>
+						<zoomAreaBorderWidth>
+							<label>zoomAreaBorderWidth</label>
+							<comment>Border thickness of the zoom window</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomAreaBorderWidth>
+						<galleryFade>
+							<label>galleryFade</label>
+							<comment>Speed of inner fade or false</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>16</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</galleryFade>
+						<shutterSpeed>
+							<label>shutterSpeed</label>
+							<comment>Speed of shutter fadein or false; applies only if image proportions are different from container</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>17</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</shutterSpeed>
+						<showFade>
+							<label>showFade</label>
+							<comment>Speed of fade in for mouse over</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>18</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</showFade>
+						<hideFade>
+							<label>hideFade</label>
+							<comment>Speed of fade out for mouse over</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>19</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</hideFade>
+						<flyOutSpeed>
+							<label>flyOutSpeed</label>
+							<comment>Speed for flyout or false to disable</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</flyOutSpeed>
+						<flyOutTransition>
+							<label>flyOutTransition</label>
+							<comment>Transition of the flyout</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>21</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</flyOutTransition>
+						<flyOutOpacity>
+							<label>flyOutOpacity</label>
+							<comment>Initial opacity for flyout</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>22</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</flyOutOpacity>
+						<flyBackSpeed>
+							<label>flyBackSpeed</label>
+							<comment>Speed for fly back or false to disable</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>23</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</flyBackSpeed>
+						<flyBackTransition>
+							<label>flyBackTransition</label>
+							<comment>Transition type of the fly back</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>24</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</flyBackTransition>
+						<flyBackOpacity>
+							<label>flyBackOpacity</label>
+							<comment>Final opacity of fly back</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</flyBackOpacity>
+						<autoScroll>
+							<label>autoScroll</label>
+							<comment>Scroll page when clicked on the thumb and the mouse over preview image is not fully visible</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>26</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</autoScroll>
+						<smoothMove>
+							<label><![CDATA[<div class="notice-msg importantAZoption">smoothMove</div>]]></label>
+							<comment>Integer bigger than 1 indicates smoother movements; set 0 to disable</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>27</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</smoothMove>
+						<tint>
+							<label>tint</label>
+							<comment>Color value around the lens or false</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>28</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</tint>
+						<tintOpacity>
+							<label>tintOpacity</label>
+							<comment>Opacity of the area around the lens when "tint" option is set to some color value</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>29</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</tintOpacity>
+						<tintFilter>
+							<label>tintFilter</label>
+							<comment>Apply filter to the image, e.g. "blur", "grayscale", "sepia", "invert", "saturate"; see also .axZm_mouseOverEffect>img CSS</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</tintFilter>
+						<tintLensBack>
+							<label>tintLensBack</label>
+							<comment>Show background image in the lens</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>31</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</tintLensBack>
+						<showTitle>
+							<label>showTitle</label>
+							<comment>Enable / disable title on zoom window</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>32</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</showTitle>
+						<titleOpacity>
+							<label>titleOpacity</label>
+							<comment>Opacity of the title container</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>33</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</titleOpacity>
+						<titlePosition>
+							<label>titlePosition</label>
+							<comment>Position of the title, top or bottom</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>34</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</titlePosition>
+						<cursorPositionX>
+							<label>cursorPositionX</label>
+							<comment>Cursor over lens horizontal offset, 0.5 is middle</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>35</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cursorPositionX>
+						<cursorPositionY>
+							<label>cursorPositionY</label>
+							<comment>Cursor over lens vertical offset, 0.5 is middle</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>36</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</cursorPositionY>
+						<touchClickAbort>
+							<label>touchClickAbort</label>
+							<comment>Time in ms after which click is aborted without touch movement and mousehover is initialized</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>37</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</touchClickAbort>
+						<loading>
+							<label>loading</label>
+							<comment>Display loading information, CSS .mouseOverLoading</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>38</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</loading>
+						<loadingMessage>
+							<label>loadingMessage</label>
+							<comment>Loading message, not needed, can be just the spinner - see below</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>39</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</loadingMessage>
+						<loadingWidth>
+							<label>loadingWidth</label>
+							<comment>Width of loading container</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</loadingWidth>
+						<loadingHeight>
+							<label>loadingHeight</label>
+							<comment>Height of loading container</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>41</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</loadingHeight>
+						<loadingOpacity>
+							<label>loadingOpacity</label>
+							<comment>Opacity of the loading container (the transparent background is set via png image on default, see css class)</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>42</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</loadingOpacity>
+						<zoomHintEnable>
+							<label>zoomHintEnable</label>
+							<comment>Enable zoom icon which disappears on mouse hover; css class: .axZm_mouseOverZoomHint; If you want to change the position or the icon simply change the css class;</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>43</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomHintEnable>
+						<zoomHintText>
+							<label>zoomHintText</label>
+							<comment>Text which will be appended next to the icon enabled by "zoomHintEnable"</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>44</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomHintText>
+						<zoomMsgHover>
+							<label>zoomMsgHover</label>
+							<comment>Message which can appear under the mouse over zoom, css class: .axZm_mouseOverZoomMsg</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>45</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomMsgHover>
+						<zoomMsgClick>
+							<label>zoomMsgClick</label>
+							<comment>Message which can appear under the mouse over zoom when the mouse enters it.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>46</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomMsgClick>
+					</fields>
+				</mouseOverZoomParam>
+				<main translate="label">
+					<label>General Settings</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>3</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>                
+					<fields>
+						<disableAllMsg>
+							<label>disableAllMsg</label>
+							<comment>Instantly hide gallery if there is only one image or one 360/3D</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>0</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</disableAllMsg>
+						<divid>
+							<label>divID</label>
+							<comment>DIV (container) ID for mouseover zoom</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>1</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</divid>
+						<galleryDivID>
+							<label>galleryDivID</label>
+							<comment>DIV (container) id of the gallery, set to false to disable gallery</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>2</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</galleryDivID>
+						<hideGalleryOneImage>
+							<label>hideGalleryOneImage</label>
+							<comment>Instantly hide gallery if there is only one image or one 360/3D</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>3</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</hideGalleryOneImage>
+						<galleryHover>
+							<label>galleryHover</label>
+							<comment>Use mouseenter (mouseover) for switching between images. 
+								You can specify an integer which will represent the time in ms to wait for switching after the mouse enters the thumb; 
+								true defaults to 200
+							</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>4</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</galleryHover>
+						<galleryAxZmThumbSlider>
+							<label><![CDATA[<div class="notice-msg importantAZoption">galleryAxZmThumbSlider</div>]]></label>
+							<comment>Use $.axZmThumbSlider on gallery thumbnails or not</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>5</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</galleryAxZmThumbSlider>
+						<galleryAxZmThumbSliderParam>
+							<label><![CDATA[<div class="notice-msg importantAZoption">galleryAxZmThumbSliderParam</div>]]></label>
+							<comment>
+								<![CDATA[<div class="validation-advice">Attention: you are editing JavaScript object! Errors will lead to AJAX-ZOOM not working properly.</div>
+								<p class="preference_description note">$.axZmThumbSlider parametrs if "galleryAxZmThumbSlider" is enabled; for full list of options see under: 
+								<a href="http://www.ajax-zoom.com/axZm/extensions/axZmThumbSlider/" target="_blank">http://www.ajax-zoom.com/axZm/extensions/axZmThumbSlider/</a></p>
+								]]> 
+							</comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>6</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</galleryAxZmThumbSliderParam>
+						<thumbW>
+							<label><![CDATA[<div class="notice-msg importantAZoption">thumbW</div>]]></label>
+							<comment>Gallery thumb width</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>7</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</thumbW>
+						<thumbH>
+							<label><![CDATA[<div class="notice-msg importantAZoption">thumbH</div>]]></label>
+							<comment>Gallery thumb height</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>8</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</thumbH>
+						<thumbRetina>
+							<label>thumbRetina</label>
+							<comment>Double resolution of the thumb image</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>9</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</thumbRetina>
+						<firstImageToLoad>
+							<label>firstImageToLoad</label>
+							<comment>Image from "images" option which should be loaded at first; see also "images360firstToLoad" option below</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>10</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</firstImageToLoad>
+						<images360firstToLoad>
+							<label>images360firstToLoad</label>
+							<comment>In case present load 360 from "images360" first and not an image from "images"</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>11</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</images360firstToLoad>
+						<images360Opt>
+							<label>images360Opt</label>
+							<comment>Some (not all) options from '/axZm/zoomConfig.inc.php' and '/axZm/zoomConfigCustom.inc.php' can be set during runtime or in 'onBeforeStart' AJAX-ZOOM callback. "images360Opt" is a list of what possibly could be set in "images360" objects, e.g. ['spinReverseZ', 'spinWhilePreload'] and so on. Default is: ['spinReverse', 'spinReverseZ', 'spinBounce', 'spinDemoRounds', 'spinDemoTime', 'spinWhilePreload']</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>12</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</images360Opt>
+						<images360Thumb>
+							<label>images360Thumb</label>
+							<comment>Show first image of the spin as thumb</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>13</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</images360Thumb>
+						<images360Preview>
+							<label>images360Preview</label>
+							<comment>Normally plain images are opened in some kind of lightbox or fullscreen; By setting this option to true the 360's will load into "divID" at first and can be expanded to fullscreen.</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>14</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</images360Preview>
+						<images360PreviewResponsive>
+							<label>images360PreviewResponsive</label>
+							<comment>This option is set to true for convinience reasons; In case your "divID" has fixed width and height, set $zoom['config']['picDim'] option in '/axZm/zoomConfigCustom.inc.php' after elseif ($_GET['example'] == 'mouseOverExtension360')</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>15</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</images360PreviewResponsive>
+						<images360examplePreview>
+							<label>images360examplePreview</label>
+							<comment>In case "images360Preview" is set to true, the value of this parameter will be sent to AJAX-ZOOM as "options set" (example=mouseOverExtension360)</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>16</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</images360examplePreview>
+						<zoomMsg360>
+							<label>zoomMsg360</label>
+							<comment>Message displayed under mouse over zoom when 360 is loaded, e.g. "Drag to spin 360, scroll to zoom"</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>17</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</zoomMsg360>
+						<preloadMouseOverImages>
+							<label>preloadMouseOverImages</label>
+							<comment>Preload all preview and mouseover images, possible values: false, true, 'oneByOne'</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>18</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</preloadMouseOverImages>
+						<noImageAvailableClass>
+							<label>noImageAvailableClass</label>
+							<comment>In case there are no images in "images", nor there are any in "images360", a div with some image as background can be appended to the container and receive this options value as css class</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>19</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</noImageAvailableClass>
+
+						<width>
+							<label>width</label>
+							<comment>Width of the preview image or 'auto' (depending on parent container size - "divID", see above); this is also the value which will be passed to your AJAX-ZOOM imaging server to generate this image on-the-fly.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>20</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</width>
+						<height>
+							<label>height</label>
+							<comment>Height of the preview image or 'auto' (depending on parent container size - "divID", see above); this is also the value which will be passed to your AJAX-ZOOM imaging server to generate this image on-the-fly.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>21</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</height>
+						<responsive>
+							<label>responsive</label>
+							<comment>Set this to true for responsive layouts</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>22</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</responsive>
+
+						<oneSrcImg>
+							<label>oneSrcImg</label>
+							<comment>Use single image as "preview image" - the image which is hovered and the big "flyout image".</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>23</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</oneSrcImg>
+						<heightRatio>
+							<label><![CDATA[<div class="notice-msg importantAZoption">heightRatio</div>]]></label>
+							<comment>If "responsive" option is enabled, "heightRatio" with instantly adjust the height of mouseover container depending on width calculated by the browser, e.g. 1.0 will always (only limited by "maxSizePrc" option) make height same as width; a value of 1.5 will make the preview like a portrait. You can also set "heightRatio" to 'auto'. In this case the height will be adjusted to cover available space instantly! Please note that when your images are not always same proportion, then the container will also change the size when the user switches to a different image.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>24</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</heightRatio>
+
+						<heightMaxWidthRatio>
+							<label>heightMaxWidthRatio</label>
+							<comment>Similar as you would set max-width: someValue @media only screen condition you can define "heightRatio" depending on the width of the browser, e.g. ["960|0.8", "700|0.7"]</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>25</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</heightMaxWidthRatio>
+						<widthRatio>
+							<label>widthRatio</label>
+							<comment>Oposit of "heightRatio"</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>26</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</widthRatio>
+						<widthMaxHeightRatio>
+							<label>widthMaxHeightRatio</label>
+							<comment>Oposit of "heightMaxWidthRatio"</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>27</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</widthMaxHeightRatio>
+
+						<maxSizePrc>
+							<label><![CDATA[<div class="notice-msg importantAZoption">maxSizePrc</div>]]></label>
+							<comment>Limit the height if "responsive" and "heightRatio" options are set. Setting "heightRatio" option may result in that the height of the mouseover zoom is bigger than window height and the image is not fully visible. To prevent this you can limit the calculated height with this "maxSizePrc" option. The value of 1.0 would limit the height to 100% of window height; a value of 0.8 to 80% of window height; you can also define two values, e.g. '1.0|-120' which would be window height minus 120px.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>28</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</maxSizePrc>
+						<mouseOverZoomWidth>
+							<label><![CDATA[<div class="notice-msg importantAZoption">mouseOverZoomWidth</div>]]></label>
+							<comment>Max width of the image that will be shown in the zoom window; this is the value which will be passed to your AJAX-ZOOM imaging server to generate this image on-the-fly. Please note that the size is limited by $zoom['config']['allowDynamicThumbsMaxSize'] which is can be set in '/axZm/zoomConfig.inc.php'. You can also specify a link to the image, see "images" option above. To set the width of the fly out window see "zoomWidth" under "mouseOverZoomParam".</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>29</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</mouseOverZoomWidth>
+						<mouseOverZoomHeight>
+							<label><![CDATA[<div class="notice-msg importantAZoption">mouseOverZoomHeight</div>]]></label>
+							<comment>Max height of the image that will be shown in the zoom window; this is the value which will be passed to your AJAX-ZOOM imaging server to generate this image on-the-fly. Please note that the size is limited by $zoom['config']['allowDynamicThumbsMaxSize'] which is can be set in '/axZm/zoomConfig.inc.php'. You can also specify a link to the image, see "images" option above. To set the height of the fly out window see "zoomHeight" under "mouseOverZoomParam".</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>30</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</mouseOverZoomHeight>
+						<ajaxZoomOpenMode>
+							<label><![CDATA[<div class="notice-msg importantAZoption">ajaxZoomOpenMode</div>]]></label>
+							<comment>Determines how AJAX-ZOOM is opened when the user clicks on preview images / lens, possible values: 'fullscreen' (see also "fullScreenApi" option below), 'fancyboxFullscreen', 'fancybox', 'colorbox'; By editing $.mouseOverZoomInit you can extend the plugin to be used with different types of modal boxes to load AJAX-ZOOM into.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>31</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</ajaxZoomOpenMode>
+						<fancyBoxParam>
+							<label>fancyBoxParam</label>
+							<comment>If fancybox is used in "ajaxZoomOpenMode" option, Fancybox options</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>32</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</fancyBoxParam>
+						<colorBoxParam>
+							<label>colorBoxParam</label>
+							<comment>If colorbox is used in "ajaxZoomOpenMode" option, Colorbox options</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>33</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</colorBoxParam>
+						<example>
+							<label>example</label>
+							<comment>Configuration set which is passed to ajax-zoom when ajaxZoomOpenMode is 'fullscreen'</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>34</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</example>
+						<exampleFancyboxFullscreen>
+							<label>exampleFancyboxFullscreen</label>
+							<comment>Configuration set which is passed to ajax-zoom when ajaxZoomOpenMode is 'fancyboxFullscreen'</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>35</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</exampleFancyboxFullscreen>
+						<exampleFancybox>
+							<label>exampleFancybox</label>
+							<comment>Configuration set which is passed to ajax-zoom when ajaxZoomOpenMode is 'fancybox'</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>36</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</exampleFancybox>
+						<exampleColorbox>
+							<label>exampleColorbox</label>
+							<comment>Configuration set which is passed to ajax-zoom when ajaxZoomOpenMode is 'colorbox'</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>37</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</exampleColorbox>
+						<disableScrollAnm>
+							<label>disableScrollAnm</label>
+							<comment>Disable animation while zooming with AJAX-ZOOM</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>38</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</disableScrollAnm>
+
+						<fullScreenApi>
+							<label>fullScreenApi</label>
+							<comment>Try to open AJAX-ZOOM at browsers fullscreen mode, possible on modern browsers except IE &lt; 10 and mobile</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>39</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</fullScreenApi>
+
+						<axZmCallBacks>
+							<label>axZmCallBacks</label>
+							<comment><![CDATA[<div class="validation-advice">Attention: you are editing JavaScript object! Errors will lead to AJAX-ZOOM not working properly.</div><p class="note">AJAX-ZOOM has several callbacks, http://www.ajax-zoom.com/index.php?cid=docs#onBeforeStart</p>]]></comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>39</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</axZmCallBacks>
+						<azOptions>
+							<label><![CDATA[<div class="notice-msg importantAZoption">azOptions</div>]]></label>
+							<comment><![CDATA[<div class="validation-advice">Attention: you are editing JavaScript object! Errors will lead to AJAX-ZOOM not working properly.</div><p class="note">AJAX-ZOOM options can be set with JS when AJAX-ZOOM is inited. Normally you would be defining them in /axZm/zoomConfig.inc.php or /axZm/zoomConfigCustom.inc.php; this field is for convinience reasons. Example: {fullScreenCornerButton: false} - this would disable the button for fullscreen</p>]]></comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>40</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</azOptions>
+						<azOptions360>
+							<label><![CDATA[<div class="notice-msg importantAZoption">azOptions360</div>]]></label>
+							<comment><![CDATA[<div class="validation-advice">Attention: you are editing JavaScript object! Errors will lead to AJAX-ZOOM not working properly.</div><p class="note">Same as above but specifically for 360/3D</p>]]></comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>41</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</azOptions360>
+						<qualityThumb>
+							<label>qualityThumb</label>
+							<comment>Jpeg quality of the gallery thumbs</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>42</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</qualityThumb>
+						<quality>
+							<label>quality</label>
+							<comment>Jpeg quality of the preview image</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>42</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</quality>
+						<qualityZoom>
+							<label>qualityZoom</label>
+							<comment>Jpeg quality of the zoom image shown in the flyout window</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>43</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</qualityZoom>
+						<onLoad>
+							<label>onLoad</label>
+							<comment>Callback function</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>44</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</onLoad>
+						<onImageChange>
+							<label>onImageChange</label>
+							<comment>Callback function</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>45</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</onImageChange>
+						<onMouseOver>
+							<label>onMouseOver</label>
+							<comment>Callback function</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>46</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</onMouseOver>
+						<onMouseOut>
+							<label>onMouseOut</label>
+							<comment>Callback function</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>47</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</onMouseOut>
+						<spinner>
+							<label>spinner</label>
+							<comment>Use ajax loading spinner without gif files etc</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>48</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</spinner>
+						<spinnerParam>
+							<label>spinnerParam</label>
+							<comment>Spinner options, for more info see: http://fgnass.github.com/spin.js/</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>49</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</spinnerParam>
+					</fields>                 
+				</main>
+				<pinterest translate="label">
+					<label>Settings for pinterest button</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>4</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<enabled>
+							<label><![CDATA[<div class="notice-msg importantAZoption">enabled</div>]]></label>
+							<comment>Experimental feature - enable Pinterest button. Pinterest allows to collect visual bookmarks in the form of images collected on the internet.</comment>
+							<frontend_type>select</frontend_type>
+							<source_model>axzoom/yesno</source_model>
+							<sort_order>50</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</enabled>
+						<build>
+							<label>build</label>
+							<comment>Since images are changed the button needs to be repainted [...] In order to accomplish this the Pinterest API should be exposed to window object. This is done by setting data-pin-build attribute value in the script tag when pinterest JavaScript is included. &lt;script data-pin-build="parsePinBtns" type="text/javascript" src="//assets.pinterest.com/js/pinit.js"&gt;&lt;/script&gt; So if you do not have the data-pin-build, please add it to the script tag and if it is different from default ('parsePinBtns'), then change this "build" value. Otherwise the pinterest button will not work.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>51</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</build>
+						<wrapClass>
+							<label>wrapClass</label>
+							<comment>This is the class of the container where the button will be put into. On default it is at bottom right. To place the button somewhere else you can either change the css of the default class or define a different class.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>52</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</wrapClass>
+						<href>
+							<label>href</label>
+							<comment>href attribute before the button is build.</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>53</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</href>
+						<description>
+							<label>description</label>
+							<comment>Page title if null</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>54</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</description>
+						<url>
+							<label>url</label>
+							<comment>Will be set instantly if null</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>55</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</url>
+						<media>
+							<label>media</label>
+							<comment>Will be set to current selected image if null</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>56</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</media>
+						<btnSrc>
+							<label>btnSrc</label>
+							<comment>Source for the button</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>57</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</btnSrc>
+						<data>
+							<label>data</label>
+							<comment>Data attributes attached to the button before it is built. See pinterest API...</comment>
+							<frontend_type>text</frontend_type>
+							<sort_order>58</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</data>
+					</fields>
+				</pinterest>
+				<products translate="label">
+					<label>DISPLAY ONLY IN THESE PRODUCTS</label>
+					<frontend_type>text</frontend_type>
+					<sort_order>5</sort_order>
+					<show_in_default>1</show_in_default>
+					<show_in_website>1</show_in_website>
+					<show_in_store>1</show_in_store>
+					<fields>
+						<displayOnlyForThisProductID>
+							<label>displayOnlyForThisProductID</label>
+							<comment>CSV with product IDs for which AJAX-ZOOM will be only enabled. Leave blank to have it enabled for all products! This option can be usefull e.g. if you want to make A/B tests and enable AJAX-ZOOM only for certain products, e.g. 7,15 would enable AJAX-ZOOM only for products with ID 7 and 15</comment>
+							<frontend_type>textarea</frontend_type>
+							<sort_order>47</sort_order>
+							<show_in_default>1</show_in_default>
+							<show_in_website>1</show_in_website>
+							<show_in_store>1</show_in_store>
+						</displayOnlyForThisProductID>
+					</fields>
+				</products>
+			</groups>
+		</axzoom_options>
+	</sections>
+</config>

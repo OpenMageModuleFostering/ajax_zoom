@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/uploader.phtml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.1.0
-*  Date: 2016-03-03
-*  Review: 2016-03-03
+*  Version: 1.1.2
+*  Date: 2016-03-31
+*  Review: 2016-03-31
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -169,6 +169,13 @@ function return_bytes($val) {
 									$("#countImage").html(parseInt($("#countImage").html()) + 1);
 									$("#img" + id).remove();
 									$('#legend_1').val('');
+
+
+									// check if we need update an image
+									var elem = $('#imageTableSetsRows tr#' + response.id_360set + ' img');
+									if(elem.attr('src').search('no_image') != -1) {
+										elem.attr('src', response.path);
+									}
 								}
 							}
 

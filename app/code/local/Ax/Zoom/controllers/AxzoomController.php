@@ -244,6 +244,7 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
                 $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][$i], $move);
 
                 $sets[] = array(
+                    'id_360' => $id360,
                     'name' => $name,
                     'path' => $baseUrlJs . 'axzoom/axZm/zoomLoad.php?qq=1&azImg360=' . $this->rootFolder() . 'js/axzoom/pic/360/' . $productId . '/' . $id360 . '/' . $id360set . '&width=100&height=100&thumbMode=contain',
                     'id_360set' => $id360set

@@ -1,16 +1,16 @@
 <!--
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360.phtml
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.9
-*  Date: 2015-12-01
-*  Review: 2015-12-01
+*  Version: 1.0.12
+*  Date: 2016-03-02
+*  Review: 2016-03-02
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 -->
@@ -83,7 +83,7 @@
 		if (hookGetUrlParam('action', dataString) == 'deleteProductImage') {
 			var id_image = hookGetUrlParam('id_image', dataString);
 			//console.log('Send request to delete AJAX-ZOOM cache for this image ID: '+id_image);
-			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("axzoom/index/clearAzImageCache") ?>', { 
+			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/clearAzImageCache") ?>', { 
 				"deletedImgID" : id_image
 			 } );
 		}
@@ -134,7 +134,7 @@
 			var id_360set = $('#id_360set').val();
 			var ext = $(this).parent().parent().find('img').attr('src').split('.').pop();
 			if (confirm("<?php echo $this->__('Are you sure?') ?>"))
-			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("axzoom/index/deleteProductImage360") ?>', {
+			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/deleteProductImage360") ?>', {
 					"id_image":id,
 					'id_360set': id_360set,
 					"ext":ext,

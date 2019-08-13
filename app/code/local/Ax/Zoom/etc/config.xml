@@ -4,9 +4,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.11
-*  Date: 2016-02-05
-*  Review: 2015-02-05
+*  Version: 1.0.12
+*  Date: 2016-03-02
+*  Review: 2015-03-02
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -20,10 +20,10 @@
 
 	<modules>
 		<Ax_Zoom>
-			<version>1.0.11</version>
+			<version>1.0.12</version>
 		</Ax_Zoom>
 	</modules>
-	
+
 	<global>
 		<helpers>
 			<axzoom>
@@ -80,16 +80,6 @@
 			</modules>
 		</translate>
 
-       	<routers>
-			<axzoom>
-           		<use>standard</use>
-				<args>
-					<module>Ax_Zoom</module>
-					<frontName>axzoom</frontName>
-				</args>
-			</axzoom>
-		</routers>  
-
 		<layout>
 			<updates>
 				<ax_zoom>
@@ -121,6 +111,18 @@
 		</events>
 	</frontend>
 	
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Ax_Zoom before="Mage_Adminhtml">Ax_Zoom</Ax_Zoom>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>    
+
 	<adminhtml>
 		<translate>
 			<modules>

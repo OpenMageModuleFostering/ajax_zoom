@@ -164,6 +164,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $name       =   $get->getParam('name');
         $existing   =   $get->getParam('existing');
         $zip        =   $get->getParam('zip');
+        $delete        =   $get->getParam('delete');
         $arcfile    =   $get->getParam('arcfile');
         $newId = '';
         $newName = '';
@@ -190,7 +191,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $sets = array();
         
         if ($zip == 'true') {
-            $sets = $this->addImagesArc($arcfile, $productId, $id360, $id360set);
+            $sets = $this->addImagesArc($arcfile, $productId, $id360, $id360set, $delete);
         }
                 
         die(Mage::helper('core')->jsonEncode(array(
@@ -209,7 +210,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
     }
 
 
-    public function addImagesArc($arcfile, $productId, $id360, $id360set)
+    public function addImagesArc($arcfile, $productId, $id360, $id360set, $delete = '')
     {
         set_time_limit(0);
 
@@ -217,7 +218,8 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $baseUrlJs = Mage::getBaseUrl('js');
 
         $path = $baseDir . '/js/axzoom/zip/' . $arcfile;
-        $dst = $this->extractArc($path);
+        $dst = is_dir($path) ? $path : $this->extractArc($path);
+        @chmod($dst, 0777);
         $data = $this->getFolderData($dst);
         
         $name = Mage::getModel('axzoom/ax360')->load($id360)->getName();
@@ -248,7 +250,20 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
             }
         }
 
-        $this->deleteDirectory($dst);
+        
+        // delete temp directory which was created when zip extracted
+        if(!is_dir($path)) {
+            $this->deleteDirectory($dst);
+        }
+
+        // delete the sourece file (zip/dir) if checkbox is checked
+        if($delete == 'true') {
+            if(is_dir($path)) {
+                $this->deleteDirectory($dst);
+            } else {
+                @unlink($path);
+            }
+        }        
         return $sets;
     }
 
@@ -277,7 +292,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $folders = array();
         if ($handle = opendir($path)) {
             while (false !== ($entry = readdir($handle))) {
-                if ($entry != '.' && $entry != '..') {
+                if ($entry != '.' && $entry != '..' && $entry != '.htaccess' && $entry != '__MACOSX') {
                     if (is_dir($path . '/' . $entry)) {
                         array_push($folders, $entry);
                     } else {
@@ -308,7 +323,9 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
             $tmp = explode('.', $name);
             $ext = end($tmp);
             $dst = $folder . '/' . $name;
-            rename($path . '/' . $file, $dst);
+            if(@!rename($path.'/'.$file, $dst)) {
+                copy($path.'/'.$file, $dst);
+            }
         }
     }
 
@@ -318,7 +335,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
         $files = array();
         if ($handle = opendir($path)) {
             while (false !== ($entry = readdir($handle))) {
-                if ($entry != '.' && $entry != '..') {
+                if ($entry != '.' && $entry != '..' && $entry != '.htaccess' && $entry != '__MACOSX') {
                     $files[] = $entry;
                 }
             }

@@ -2,9 +2,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /js/axzoom/check_fallback.js
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.0
-*  Date: 2015-09-08
-*  Review: 2015-09-08
+*  Version: 1.0.2
+*  Date: 2015-10-09
+*  Review: 2015-10-09
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -13,7 +13,7 @@
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
-if (!mageAzJsUrl){mageAzJsUrl = '/js/axzoom/';}
+if (!window.mageAzJsUrl){mageAzJsUrl = '/js/axzoom/';}
 document.writeln(unescape("%3Cscript type='text/javascript' src='"+mageAzJsUrl+"check_jquery.js'%3E%3C/script%3E"));
 
 if (!jQuery.isFunction(jQuery.mouseOverZoomInit)){

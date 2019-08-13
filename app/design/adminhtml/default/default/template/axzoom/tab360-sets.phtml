@@ -83,7 +83,7 @@ $sets = $model->getSets($productId);
 							<td class="scope-label"><span class="nobr"></span></td>
 						</tr>
 						<tr class="field-arcfile" style="display:none;">
-							<td class="label"><label for="arcfile"><?php echo $this->__('Select ZIP archive') ?></label></td>
+							<td class="label"><label for="arcfile"><?php echo $this->__('Select ZIP archive or folder') ?></label></td>
 							<td class="value">
 								<?php if ($files): ?>
 								<select name="arcfile" id="arcfile">
@@ -98,7 +98,15 @@ $sets = $model->getSets($productId);
 							</td>
 							<td class="scope-label"><span class="nobr"></span></td>
 						</tr>
-						
+						<tr class="field-arcfile" style="display:none;">
+							<td class="label"><label for="zip"><?php echo $this->__('Delete Zip/Dir after import') ?></label></td>
+							<td class="value">
+								<input type="checkbox" id="delete" name="delete" value="1" />
+								<p class="note"><?php echo $this->__('') ?></p>
+							</td>
+							<td class="scope-label"><span class="nobr"></span></td>
+						</tr>
+
 						<tr>
 							<td></td>
 							<td>

@@ -4,9 +4,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.2
-*  Date: 2015-09-24
-*  Review: 2015-09-24
+*  Version: 1.0.3
+*  Date: 2015-10-09
+*  Review: 2015-10-09
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -19,7 +19,7 @@
 
 	<modules>
 		<Ax_Zoom>
-			<version>1.0.2</version>
+			<version>1.0.3</version>
 		</Ax_Zoom>
 	</modules>
 	
@@ -120,7 +120,6 @@
 		</events>
 	</frontend>
 	
-	
 	<adminhtml>
 		<translate>
 			<modules>
@@ -210,8 +209,9 @@
 			<main>
 				<divid>az_mouseOverZoomContainer</divid>
 				<galleryDivID>az_mouseOverZoomGallery</galleryDivID>
+				<galleryPosition>bottom</galleryPosition>
 				<hideGalleryOneImage>true</hideGalleryOneImage>
-				<disableAllMsg>false</disableAllMsg>
+				<hideGalleryAddClass>axZm_mouseOverNoMargin</hideGalleryAddClass>
 				<galleryHover>false</galleryHover>
 				<galleryAxZmThumbSlider>true</galleryAxZmThumbSlider>
 				<galleryAxZmThumbSliderParam>
@@ -251,12 +251,60 @@
 	}
 }
 				</galleryAxZmThumbSliderParam>
+				<galleryAxZmThumbSliderParam_vertical>
+{
+	orientation: "vertical",
+	scrollBy: 3,
+	smoothMove: 6,
+	quickerStop: true,
+	pressScrollSnap: true,
+	btn: true,
+	btnClass: "axZmThumbSlider_button_new",
+	btnBwdStyle: {marginTop: 0, marginBottom: 0},
+	btnFwdStyle: {marginTop: 0, marginBottom: 0},
+	btnLeftText: null, 
+	btnRightText: null, 
+	btnTopText: null, 
+	btnBottomText: null,
+	btnHidden: true,
+	mouseWheelScrollBy: 1,
+	wrapStyle: {
+ 		borderLeftWidth: 0, 
+ 		borderRightWidth: 0
+	},
+	scrollbar: false,
+
+	thumbLiSubClass: {
+ 		first: null,
+ 		last: null 
+	},
+	thumbImgStyle:{
+ 		maxHeight: "58px",
+ 		maxWidth: "58px",
+ 		borderRadius: 3
+	},
+	thumbLiStyle: {
+		width: 58, 
+		height: 58, 
+		lineHeight: "56px",
+		marginBottom: 2,
+		marginLeft: 3,
+		marginRight: 3,
+		borderRadius: 3
+	}
+}
+				</galleryAxZmThumbSliderParam_vertical>
 				<thumbW>58</thumbW>
 				<thumbH>58</thumbH>
 				<thumbRetina>true</thumbRetina>
+				<qualityThumb>100</qualityThumb>
+				<quality>90</quality>
+				<qualityZoom>80</qualityZoom>
 				<firstImageToLoad>1</firstImageToLoad>
+				<disableAllMsg>false</disableAllMsg>
 				<images360firstToLoad>false</images360firstToLoad>
 				<images360Thumb>true</images360Thumb>
+				<images360Overlay>true</images360Overlay>
 				<images360Preview>true</images360Preview>
 				<images360PreviewResponsive>true</images360PreviewResponsive>
 				<images360examplePreview>mouseOverExtension360</images360examplePreview>
@@ -290,51 +338,60 @@
 				<mouseOverZoomWidth>1200</mouseOverZoomWidth>
 				<mouseOverZoomHeight>1200</mouseOverZoomHeight>
 				<ajaxZoomOpenMode>fancyboxFullscreen</ajaxZoomOpenMode>
-				<fancyBoxParam>{}</fancyBoxParam>
-				<colorBoxParam>{}</colorBoxParam>
+				<fancyBoxParam>
+{
+	boxMargin: 0,
+	boxPadding: 10,
+	boxCenterOnScroll: true,
+	boxOverlayShow: true,
+	boxOverlayOpacity: 0.75,
+	boxOverlayColor: "#777",
+	boxTransitionIn: "fade",
+	boxTransitionOut: "fade",
+	boxSpeedIn: 300,
+	boxSpeedOut: 300,
+	boxEasingIn: "swing",
+	boxEasingOut: "swing",
+	boxShowCloseButton: true,
+	boxEnableEscapeButton: true,
+	boxOnComplete: function(){},
+	boxTitleShow: false,
+	boxTitlePosition: "float",
+	boxTitleFormat: null
+}
+				</fancyBoxParam>
+				<colorBoxParam>
+{
+	transition: "elastic",
+	speed: 300,
+	scrolling: true,
+	title: true,
+	opacity: 0.9,
+	className: false,
+	current: "image {current} of {total}",
+	previous: "previous",
+	next: "next",
+	close: "close",
+	onOpen: false,
+	onLoad: false,
+	onComplete: false,
+	onClosed: false,
+	overlayClose: true,
+	escKey: true
+}
+				</colorBoxParam>
 				<example>mouseOverExtension</example>
 				<exampleFancyboxFullscreen>mouseOverExtension</exampleFancyboxFullscreen>
 				<exampleFancybox>modal</exampleFancybox>
 				<exampleColorbox>modal</exampleColorbox>
+				<enforceFullScreenRes>768</enforceFullScreenRes>
+				<prevNextArrows>false</prevNextArrows>
 				<disableScrollAnm>true</disableScrollAnm>
 				<fullScreenApi>true</fullScreenApi>
 				<axZmCallBacks>{}</axZmCallBacks>
 				<azOptions>{}</azOptions>
 				<azOptions360>{}</azOptions360>
-				<qualityThumb>100</qualityThumb>
-				<quality>90</quality>
-				<qualityZoom>80</qualityZoom>
-				<onLoad>null</onLoad>
-				<onImageChange>null</onImageChange>
-				<onMouseOver>null</onMouseOver>
-				<onMouseOut>null</onMouseOut>
-				<spinner>1</spinner>
-				<spinnerParam>
-{
-	lines: 11, 
-	length: 3, 
-	width: 3, 
-	radius: 4, 
-	corners: 1, 
-	rotate: 0, 
-	color: "#FFFFFF",
-	speed: 1, 
-	trail: 90, 
-	shadow: false, 
-	hwaccel: false, 
-	className: "spinner",
-	zIndex: 2e9, 
-	top: 0, 
-	left: 1 
-}
-				</spinnerParam>
-				<slideInTime>200</slideInTime>
-				<slideInEasingCSS3>easeOutExpo</slideInEasingCSS3>
-				<slideInEasing>easeOutExpo</slideInEasing>
-				<slideInScale>0.8</slideInScale>
-				<slideOutScale>0.8</slideOutScale>
-				<slideOutOpacity>0</slideOutOpacity>
-				<slideOutDest>1</slideOutDest>
+				<postMode>true</postMode>
 			</main>
 			<pinterest>
 				<enabled>true</enabled>
@@ -361,7 +418,7 @@
 				<autoMargin>15</autoMargin>
 				<adjustX>13</adjustX>
 				<adjustY>-1</adjustY>
-				<lensOpacity>0.30</lensOpacity>
+				<lensOpacity>1</lensOpacity>
 				<lensStyle>{}</lensStyle>
 				<lensClass>false</lensClass>
 				<zoomAreaBorderWidth>1</zoomAreaBorderWidth>
@@ -388,14 +445,74 @@
 				<cursorPositionY>0.55</cursorPositionY>
 				<touchClickAbort>500</touchClickAbort>
 				<loading>true</loading>
-				<loadingMessage>Loading...</loadingMessage>
+				<loadingMessage>
+{
+	"en" : "Loading...",
+	"de": "Loading...",
+	"fr" : "Loading...",
+	"es" : "Loading..."
+}
+				</loadingMessage>
 				<loadingWidth>90</loadingWidth>
 				<loadingHeight>20</loadingHeight>
 				<loadingOpacity>1.0</loadingOpacity>
-				<zoomHintEnable>true</zoomHintEnable>
-				<zoomHintText>Zoom</zoomHintText>
-				<zoomMsgHover>Roll over image to zoom in, click to view expanded</zoomMsgHover>
-				<zoomMsgClick>Click to open expanded view</zoomMsgClick>
+				<zoomHintEnable>1</zoomHintEnable>
+				<zoomHintText>
+{  
+	"en" : "Zoom",
+	"de" : "Zoom",
+	"fr" : "Zoom",
+	"es" : "Zoom"
+}
+				</zoomHintText>
+				<zoomMsgHover>
+{  
+	"en" : "Roll over the image to zoom in",
+	"de" : "Für größere Ansicht mit der Maus über das Bild ziehen",
+	"fr" : "Survolez l'image pour zoomer",
+	"es" : "Pase el cursor sbore la imagen para hacer zoom con la rueda del ratón"
+}
+				</zoomMsgHover>
+				<zoomMsgClick>
+{  
+	"en" : "Click to open expanded view",
+	"de" : "Klicken Sie auf das Bild, um erweiterte Ansicht zu öffnen",
+	"fr" : "Cliquez sur l'image pour ouvrir la vue élargie",
+	"es" : "Haga clic para ampliar la imagen"
+}
+				</zoomMsgClick>
+				<slideInTime>200</slideInTime>
+				<slideInEasingCSS3>easeOutExpo</slideInEasingCSS3>
+				<slideInEasing>easeOutExpo</slideInEasing>
+				<slideInScale>0.8</slideInScale>
+				<slideOutScale>0.8</slideOutScale>
+				<slideOutOpacity>0.5</slideOutOpacity>
+				<slideOutDest>1</slideOutDest>
+				<onInit>null</onInit>
+				<onLoad>null</onLoad>
+				<onImageChange>null</onImageChange>
+				<onMouseOver>null</onMouseOver>
+				<onMouseOut>null</onMouseOut>
+				<spinner>true</spinner>
+				<spinnerParam>
+{
+	lines: 11,
+	length: 3,
+	width: 3,
+	radius: 4,
+	corners: 1,
+	rotate: 0,
+	color: "#FFFFFF",
+	speed: 1,
+	trail: 90,
+	shadow: false,
+	hwaccel: false,
+	className: "spinner",
+	zIndex: 2e9,
+	top: 0,
+	left: 1
+}
+				</spinnerParam>
 			</mouseOverZoomParam>
 			<products>
 				<displayOnlyForThisProductID></displayOnlyForThisProductID>

@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-sets.phtml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.7
-*  Date: 2015-11-15
-*  Review: 2015-11-15
+*  Version: 1.0.8
+*  Date: 2015-11-20
+*  Review: 2015-11-20
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -166,13 +166,12 @@ $conf = Mage::getStoreConfig('axzoom_options');
 
 
 <script>
-	var id_product = '<?php echo $productId ?>';
-    var mediaPath = '<?php echo parse_url(Mage::getBaseUrl('media'))['path'];?>catalog/product';
-    var mediaPathTmp = '<?php echo parse_url(Mage::getBaseUrl('media'))['path'];?>tmp/catalog/product';
+    var id_product = '<?php echo $productId;?>';
+    var mediaPath = '<?php $mageUrl = parse_url(Mage::getBaseUrl('media')); echo $mageUrl['path'];?>catalog/product';
+    var mediaPathTmp = '<?php $mageUrl = parse_url(Mage::getBaseUrl('media')); echo $mageUrl['path'];?>tmp/catalog/product';
     
-	jQuery(document).ready(function($){
-        
-        <?php if ($conf['magento']['magentoAdminThumb']): ?>
+    jQuery(document).ready(function($){        
+        <?php if ($conf['magento']['magentoAdminThumb'] == 'true'): ?>
             setInterval(function(){
                 $('tr td:first-child','#media_gallery_content_list').each(function(){
                     var el = $(this);

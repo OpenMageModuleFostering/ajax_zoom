@@ -1,16 +1,16 @@
 <?php
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Block/Adminhtml/System/Config/Fieldset/License.php
-*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2017 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.0
-*  Date: 2016-05-07
-*  Review: 2016-05-07
+*  Version: 1.3.0
+*  Date: 2017-06-25
+*  Review: 2017-06-25
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2017 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
@@ -22,6 +22,7 @@ class Ax_Zoom_Block_Adminhtml_System_Config_Fieldset_License extends Mage_Adminh
             'label' => Mage::helper('axzoom')->__('Domain'),
             'style' => 'width:200px'
         ));
+
         $this->addColumn('type', array(
             'label' => Mage::helper('axzoom')->__('License Type'),
             'renderer' => 'bla'
@@ -41,16 +42,16 @@ class Ax_Zoom_Block_Adminhtml_System_Config_Fieldset_License extends Mage_Adminh
             'label' => Mage::helper('axzoom')->__('Error300'),
             'style' => 'width:100px'
         ));
- 
+
         $this->_addAfter = false;
         $this->_addButtonLabel = Mage::helper('axzoom')->__('Add');
     }
 
     protected function _renderCellTemplate($columnName)
-    {    
+    {
         if ($columnName == 'type') {
             $el = $this->getElement();
-            
+
             $inputName  = $this->getElement()->getName() . '[#{_id}][' . $columnName . ']';
             $rendered = '<select id="licType" name="' . $inputName . '">';
             $rendered .= '<option value="evaluation" #{option_extra_attr_evaluation}>evaluation</option>';
@@ -62,7 +63,7 @@ class Ax_Zoom_Block_Adminhtml_System_Config_Fieldset_License extends Mage_Adminh
             $rendered .= '<option value="enterprise" #{option_extra_attr_enterprise}>enterprise</option>';
             $rendered .= '<option value="unlimited" #{option_extra_attr_unlimited}>unlimited</option>';
             $rendered .= '</select>';
-            
+
             return $rendered;
         }
         return parent::_renderCellTemplate($columnName);
@@ -74,6 +75,5 @@ class Ax_Zoom_Block_Adminhtml_System_Config_Fieldset_License extends Mage_Adminh
             'option_extra_attr_' . $row->getData('type'),
             'selected="selected"'
         );
-    }    
+    }
 }
-?>

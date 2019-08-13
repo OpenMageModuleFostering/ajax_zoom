@@ -1,37 +1,36 @@
 <?php
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Model/Observer.php
-*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2017 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.0
-*  Date: 2016-05-07
-*  Review: 2016-05-07
+*  Version: 1.3.0
+*  Date: 2017-06-25
+*  Review: 2017-06-25
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2017 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
-class Ax_Zoom_Model_Observer {
+class Ax_Zoom_Model_Observer
+{
     public function coreBlockBefore($observer)
     {
-        
         if ($observer->getBlock() instanceof Mage_Catalog_Block_Product_View_Media) {
 
             // if AJAX ZOOM is enabled for exact product then replace the product/view/media block
             $productId = Mage::app()->getRequest()->getParam('id');
-            
+
             $ax = Mage::getModel('axzoom/ax360');
             $active = $ax->isProductActive($productId);
 
-            if($active && $ax->isOnlyProductActive($productId)) {
+            if ($active && $ax->isOnlyProductActive($productId)) {
                 $observer->getBlock()->setTemplate('ax_zoom/catalog/product/view/media.phtml');
             }
         }
     }
-
 
     public function productBefore($observer)
     {
@@ -43,7 +42,7 @@ class Ax_Zoom_Model_Observer {
 
     public function productSaveAfter($observer)
     {
-    }    
+    }
 
     public function deleteProduct($observer)
     {
@@ -68,8 +67,8 @@ class Ax_Zoom_Model_Observer {
     public function save360($observer)
     {
         $productId = $observer->product->entity_id;
-    	$postData = Mage::app()->getRequest()->getPost();
-        
+        $postData = Mage::app()->getRequest()->getPost();
+
         // remove images from Ax cache if image checked as remove
         $images = Mage::helper('core')->jsonDecode($postData['product']['media_gallery']['images']);
         foreach ($images as $image) {
@@ -77,30 +76,30 @@ class Ax_Zoom_Model_Observer {
                 Mage::getModel('axzoom/ax360')->deleteImageAZcache(basename($image['file']));
             }
         }
-    	
-    	// save status 
-    	if (isset($postData['az_active']) && $postData['az_active'] == 1) {
-    		$this->activateAx($productId);
-    	} else {
-    		Mage::getModel('axzoom/axproducts')->setData(array('id_product' => $productId))->save();
-    	}
 
-    	// save settings
-    	if(isset($postData['settings'])) foreach ($postData['settings'] as $id_360 => $string) {
+        // save status 
+        if (isset($postData['az_active']) && $postData['az_active'] == 1) {
+            $this->activateAx($productId);
+        } else {
+            Mage::getModel('axzoom/axproducts')->setData(array('id_product' => $productId))->save();
+        }
 
-    		Mage::getModel('axzoom/ax360')->load($id_360)->addData(array(
+        // save settings
+        if (isset($postData['settings'])) foreach ($postData['settings'] as $id_360 => $string) {
+
+            Mage::getModel('axzoom/ax360')->load($id_360)->addData(array(
                 'settings' => urldecode($string),
                 'combinations' => urldecode($postData['comb'][$id_360])
-                ))->setId($id_360)->save();
-    	}
+            ))->setId($id_360)->save();
+        }
     }
-    
+
     public function activateAx($productId)
     {
-		$res = Mage::getSingleton('core/resource');
-		$con = $res->getConnection('core_write');
-		$table = $res->getTableName('axzoom/table_axproducts');
-		$query = "DELETE FROM {$table} WHERE id_product = " . (int)$productId;
-		$con->query($query);
+        $res = Mage::getSingleton('core/resource');
+        $con = $res->getConnection('core_write');
+        $table = $res->getTableName('axzoom/table_axproducts');
+        $query = "DELETE FROM {$table} WHERE id_product = " . (int)$productId;
+        $con->query($query);
     }
 }

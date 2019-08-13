@@ -1,6 +1,6 @@
 <?php
 /**
-*  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Model/Resource/Axproducts.php
+*  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/sql/axzoom_setup/upgrade-1.2.4-1.3.0.php
 *  Copyright: Copyright (c) 2010-2017 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
 *  Version: 1.3.0
@@ -14,10 +14,12 @@
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
-class Ax_Zoom_Model_Resource_Axproducts extends Mage_Core_Model_Mysql4_Abstract
-{
-    public function _construct()
-    {
-        $this->_init('axzoom/table_axproducts', null);
-    }
-}
+$installer = $this;
+$installer->startSetup();
+$db_prefix = (string)Mage::getConfig()->getTablePrefix();
+
+$installer->run("
+    DELETE FROM `".$db_prefix."core_config_data` WHERE `path` LIKE 'axzoom_options/%' AND `path` != 'axzoom_options/license/lic'
+");
+
+$installer->endSetup();

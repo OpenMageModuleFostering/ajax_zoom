@@ -2,97 +2,94 @@
 <!--
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/frontend/base/default/layout/axzoom.xml
-*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2017 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.0
-*  Date: 2016-05-07
-*  Review: 2016-05-07
+*  Version: 1.3.0
+*  Date: 2017-06-25
+*  Review: 2017-06-25
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2017 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 -->
-<layout version="0.1.0">
+<layout version="1.3.0">
     <catalog_product_view>
-    
-    	<!--
-    	<reference name="product.info.media">
-		    <action method="setTemplate">
-		        <template>ax_zoom/catalog/product/view/media.phtml</template>
-		    </action>
-    	</reference>
-    	-->
+
+        <!--
+        <reference name="product.info.media">
+        <action method="setTemplate">
+        <template>ax_zoom/catalog/product/view/media.phtml</template>
+        </action>
+        </reference>
+        -->
 
         <reference name="head">
-            <action method="addJs">
-            	<script>axzoom/check_jquery.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/check_jquery.js</script>
             </action>
-            <action method="addItem">
-               <type>js_css</type>
-               <name>axzoom/axZm/axZm.css</name>
+            <action method="addItem" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <type>js_css</type>
+                <name>axzoom/axZm/axZm.css</name>
             </action>
-            <action method="addJs">
-            	<script>axzoom/axZm/jquery.axZm.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/jquery.axZm.js</script>
             </action>
-            <action ifconfig="axzoom_options/main/galleryAxZmThumbSlider" method="addJs">
-            	<script>axzoom/axZm/extensions/axZmThumbSlider/lib/jquery.mousewheel.min.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/extensions/axZmThumbSlider/lib/jquery.mousewheel.min.js</script>
             </action>
-            <action ifconfig="axzoom_options/main/galleryAxZmThumbSlider" method="addItem">
-               <type>js_css</type>
-               <name>axzoom/axZm/extensions/axZmThumbSlider/skins/default/jquery.axZm.thumbSlider.css</name>
+            <action method="addItem" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <type>js_css</type>
+                <name>axzoom/axZm/extensions/axZmThumbSlider/skins/default/jquery.axZm.thumbSlider.css</name>
             </action>
-            <action ifconfig="axzoom_options/main/galleryAxZmThumbSlider" method="addJs">
-            	<script>axzoom/axZm/extensions/axZmThumbSlider/lib/jquery.axZm.thumbSlider.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/extensions/axZmThumbSlider/lib/jquery.axZm.thumbSlider.js</script>
             </action>
-            <action ifconfig="axzoom_options/mouseOverZoomParam/spinner" method="addJs">
-            	<script>axzoom/axZm/plugins/spin/spin.min.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <file helper="axzoom/Head/getSpinnerJS" />
             </action>
-            <action method="addItem">
-               <type>js_css</type>
-               <name>axzoom/axZm/extensions/jquery.axZm.expButton.css</name>
+            <action method="addItem" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <type>js_css</type>
+                <name>axzoom/axZm/extensions/jquery.axZm.expButton.css</name>
             </action>
-            <action method="addJs">
-            	<script>axzoom/axZm/extensions/jquery.axZm.expButton.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/extensions/jquery.axZm.expButton.js</script>
             </action>
-            <action method="addJs">
-            	<script>axzoom/axZm/extensions/jquery.axZm.imageCropLoad.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/extensions/jquery.axZm.imageCropLoad.js</script>
             </action>
-            <action method="addItem">
-               <type>js_css</type>
-               <name>axzoom/axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoom.4.css</name>
+            <action method="addItem" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <type>js_css</type>
+                <name>axzoom/axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoom.5.css</name>
             </action>
-            <action method="addItem">
-               <type>js_css</type>
-               <name>axzoom/axZm/extensions/axZmMouseOverZoom/mods/jquery.axZm.mouseOverZoomMagento.4.css</name>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoom.5.js</script>
             </action>
-            <action method="addJs">
-            	<script>axzoom/axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoom.4.js</script>
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoomInit.5.js</script>
             </action>
-            <action method="addJs">
-            	<script>axzoom/axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoomInit.4.js</script>
-            </action>
-            <action method="addItem">
-            	<type>js_css</type>
+            <action method="addItem" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <type>js_css</type>
                 <file helper="axzoom/Head/getFancyboxCss" />
             </action>
-            <action method="addJs">
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
                 <file helper="axzoom/Head/getFancyboxJS" />
             </action>
-            <action method="addJs">
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
                 <file helper="axzoom/Head/getFancyboxJSAX" />
             </action>
-            <action method="addItem">
+            <action method="addJs" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <script>axzoom/axZm/plugins/JSON/jquery.json-2.3.min.js</script>
+            </action>
+            <action method="addItem" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
                 <type>js_css</type>
-                <file helper="axzoom/Head/getColorboxCss" />
+                <name>axzoom/axzoom.css</name>
             </action>
-            <action method="addJs">
-                <file helper="axzoom/Head/getColorboxJS" />
-            </action>
-            <action method="addJs">
-            	<script>axzoom/axZm/plugins/JSON/jquery.json-2.3.min.js</script>
+            <action method="addItem" ifconfig="axzoom_options/plugin_settings/enableInFrontDetail">
+                <type>js_css</type>
+                <file helper="axzoom/Head/getPngModeCssFix" />
             </action>
         </reference>
     </catalog_product_view>

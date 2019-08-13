@@ -1,16 +1,16 @@
 <!--
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-sets.phtml
-*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2017 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.3
-*  Date: 2016-08-12
-*  Review: 2016-08-12
+*  Version: 1.3.0
+*  Date: 2017-06-25
+*  Review: 2017-06-25
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2017 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 -->
@@ -228,7 +228,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
     var mediaPathTmp = '<?php $mageUrl = parse_url(Mage::getBaseUrl('media')); echo $mageUrl['path'];?>tmp/catalog/product';
     
     jQuery(document).ready(function($){        
-        <?php if ($conf['magento']['magentoAdminThumb'] == 'true'): ?>
+        <?php if ($conf['plugin_settings']['magentoAdminThumb'] == 'true'): ?>
             setInterval(function(){
                 $('tr td:first-child','#media_gallery_content_list').each(function(){
                     var el = $(this);

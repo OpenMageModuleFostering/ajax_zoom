@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/controllers/IndexController.php
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.0
-*  Date: 2015-09-08
-*  Review: 2015-09-08
+*  Version: 1.0.7
+*  Date: 2015-11-15
+*  Review: 2015-11-15
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -232,15 +232,17 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
                 'status' => '1'
                 ));
 
+        $move = is_dir($path) ? false : true;
+
         if (count($data['folders']) == 0) { // files (360)
-            $this->copyImages($productId, $id360, $id360set, $dst);
+            $this->copyImages($productId, $id360, $id360set, $dst, $move);
         } elseif (count($data['folders']) == 1) { // 1 folder (360)
-            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0]);
+            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0], $move);
         } else { // 3d
-            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0]);
+            $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][0], $move);
             for ($i=1; $i < count($data['folders']); $i++) { 
                 $id360set = Mage::getModel('axzoom/ax360set')->setData(array('id_360' => $id360, 'sort_order' => 0))->save()->getId();
-                $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][$i]);
+                $this->copyImages($productId, $id360, $id360set, $dst . '/' . $data['folders'][$i], $move);
 
                 $sets[] = array(
                     'name' => $name,
@@ -312,7 +314,7 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
             );
     }
 
-    public function copyImages($productId, $id360, $id360set, $path)
+    public function copyImages($productId, $id360, $id360set, $path, $move)
     {
         $files = $this->getFilesFromFolder($path);
         $folder = $this->createProduct360Folder($productId, $id360set);
@@ -323,7 +325,12 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
             $tmp = explode('.', $name);
             $ext = end($tmp);
             $dst = $folder . '/' . $name;
-            if(@!rename($path.'/'.$file, $dst)) {
+
+            if($move) {
+                if(@!rename($path.'/'.$file, $dst)) {
+                    copy($path.'/'.$file, $dst);
+                }
+            } else {
                 copy($path.'/'.$file, $dst);
             }
         }

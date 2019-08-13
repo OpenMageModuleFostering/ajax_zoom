@@ -134,7 +134,7 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 		}
 
 		$json .= '}';
-
+		$json = str_replace('\\n', '', $json);
 		return $json;
 	}
 

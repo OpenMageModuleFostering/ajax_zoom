@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/controllers/IndexController.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.1
-*  Date: 2016-05-15
-*  Review: 2016-05-15
+*  Version: 1.2.2
+*  Date: 2016-08-03
+*  Review: 2016-08-03
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -162,16 +162,17 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
 		$id_360 = $get->getParam('id_360');
 		
 		$db = Mage::getSingleton('core/resource')->getConnection('core_write');
-		$check_crop_field = $db->query('SHOW FIELDS FROM `ajaxzoom360`');
+		$db_prefix = (string)Mage::getConfig()->getTablePrefix();
+		$check_crop_field = $db->query('SHOW FIELDS FROM `'.$db_prefix.'ajaxzoom360`');
 		if ($check_crop_field){
 			$check_crop_field_fetch = $check_crop_field->fetchAll(PDO::FETCH_COLUMN);
 			// Update table
 			if (!in_array('crop', $check_crop_field_fetch)){
-				$db->query('ALTER TABLE `ajaxzoom360` ADD `crop` TEXT NOT NULL');
+				$db->query('ALTER TABLE `'.$db_prefix.'ajaxzoom360` ADD `crop` TEXT NOT NULL');
 			}
 		}
 		
-		$row = $db->fetchAll('SELECT * FROM `ajaxzoom360` WHERE id_360 = '.(int)$id_360.' LIMIT 1');
+		$row = $db->fetchAll('SELECT * FROM `'.$db_prefix.'ajaxzoom360` WHERE id_360 = '.(int)$id_360.' LIMIT 1');
 		if ($row[0]['crop']){
 			die(stripslashes($row[0]['crop']));
 		}else{
@@ -183,9 +184,9 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
 	{
 		$json = $this->getRequest()->getPost('json');
 		$id_360 = Mage::app()->getRequest()->getParam('id_360');
-
+		$db_prefix = (string)Mage::getConfig()->getTablePrefix();
 		$db = Mage::getSingleton('core/resource')->getConnection('core_write');
-		$query = 'UPDATE `ajaxzoom360` SET crop = \''.addslashes($json).'\' WHERE  id_360 = '.(int)$id_360;
+		$query = 'UPDATE `'.$db_prefix.'ajaxzoom360` SET crop = \''.addslashes($json).'\' WHERE  id_360 = '.(int)$id_360;
 		$result = $db->query($query);
 
 		die(Mage::helper('core')->jsonEncode(array(

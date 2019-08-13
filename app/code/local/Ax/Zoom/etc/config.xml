@@ -4,7 +4,7 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.4
+*  Version: 1.0.5
 *  Date: 2015-10-26
 *  Review: 2015-10-26
 *  URL: http://www.ajax-zoom.com
@@ -19,7 +19,7 @@
 
 	<modules>
 		<Ax_Zoom>
-			<version>1.0.4</version>
+			<version>1.0.5</version>
 		</Ax_Zoom>
 	</modules>
 	

@@ -1,16 +1,16 @@
 <?php
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Model/Ax360.php
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.0
-*  Date: 2015-09-08
-*  Review: 2015-09-08
+*  Version: 1.2.0
+*  Date: 2016-05-07
+*  Review: 2016-05-07
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
@@ -74,11 +74,21 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 				if (!empty($settings)) $settings = ", $settings";
 
 				if ($group['qty'] > 0) {
+					
+					$crop = empty($group['crop']) ? '[]' : trim(preg_replace('/\s+/', ' ', $group['crop']));
+					
 					if ($group['qty'] == 1) {
-						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $productId . "/" . $group['id_360'] . "/" . $group['id_360set'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]}";
+						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $productId . "/" . $group['id_360'] . "/" . $group['id_360set'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]";
 					} else {
-						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $productId . "/" . $group['id_360'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]}";
+						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $productId . "/" . $group['id_360'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]";
 					}
+					
+					if ($crop && $crop != '[]') {
+						$json .= ', "crop": '.$crop;
+					}
+					
+					$json .= '}';
+					
 					$cnt++;
 					if ($cnt != count($setsGroups)+1) $json .= ',';
 				}
@@ -86,27 +96,38 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 		}
 
 		$cnt = 1;
-		if ($extraGroups) foreach ($extraGroups as $id360) {
+		if ($extraGroups) {
+			foreach ($extraGroups as $id360) {
 			
-			$setsGroup = $this->getSetsGroup($id360);
-			$group = $setsGroup[0];
+				$setsGroup = $this->getSetsGroup($id360);
+				$group = $setsGroup[0];
 
-			if ($group['status'] == 0)
-				continue;
+				if ($group['status'] == 0)
+					continue;
 
-			$settings = $this->prepareSettings($group['settings']);
-			if (!empty($settings)) $settings = ", $settings";
+				$settings = $this->prepareSettings($group['settings']);
+				if (!empty($settings)) $settings = ", $settings";
 
-			if ($group['qty'] > 0) {
-				if ($group['qty'] == 1) {
-					$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $group['id_product'] . "/" . $group['id_360'] . "/" . $group['id_360set'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]}";
-				} else {
-					$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $group['id_product'] . "/" . $group['id_360'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]}";
+				if ($group['qty'] > 0) {
+					$crop = empty($group['crop']) ? '[]' : trim(preg_replace('/\s+/', ' ', $group['crop']));
+
+					if ($group['qty'] == 1) {
+						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $group['id_product'] . "/" . $group['id_360'] . "/" . $group['id_360set'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]";
+					} else {
+						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $group['id_product'] . "/" . $group['id_360'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]";
+					}
+					
+					if ($crop && $crop != '[]') {
+						$json .= ', "crop": '.$crop;
+					}
+					
+					$json .= '}';
+					
+					$cnt++;
+					if ($cnt != count($extraGroups)+1) $json .= ',';
 				}
-				$cnt++;
-				if ($cnt != count($extraGroups)+1) $json .= ',';
+
 			}
-			  
 		}
 		
 		$json .= '}';

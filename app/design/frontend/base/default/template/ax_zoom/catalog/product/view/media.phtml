@@ -3,14 +3,14 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/frontend/base/default/template/ax_zoom/catalog/product/view/media.phtml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.10
-*  Date: 2016-01-09
-*  Review: 2016-01-09
+*  Version: 1.2.0
+*  Date: 2016-05-07
+*  Review: 2016-05-07
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
@@ -145,7 +145,7 @@ if ($product->isConfigurable()) {
 
 		$pairs = array();
 		$labels = array();
-		
+
 		foreach ($attributesCodes as $code) { // $code is e.g. color or size
 			$pairs[] = $mapAttributesCodeId[$code] . ':' . $data[$code]; // generate pairs of attribures
 			$attr = $product->getResource()->getAttribute($code);
@@ -157,7 +157,7 @@ if ($product->isConfigurable()) {
 				// This would return language specific values
 				$option_label = $attr->getSource()->getOptionText($data[$code]);
 			}
-			
+
 			array_push($labels, trim($option_label));
 		}
 
@@ -201,7 +201,7 @@ if ($product->isConfigurable()) {
 		} else {
 			$res[$idx]['images'] = new stdClass();
 		}
-		
+
 		$extraGroups = empty($map[$data['entity_id']]) ? array() : $map[$data['entity_id']];
 		$res[$idx]['images360'] = Mage::helper('core')->jsonDecode(str_replace("'", '"', $ax->images360Json($data['entity_id'], $extraGroups)));
 	}
@@ -223,7 +223,7 @@ if (count($this->getGalleryImages()) > 0) {
 		foreach ($this->getGalleryImages() as $image) {
 			
 			$check_image = false;
-			
+
 			if (method_exists($this, 'isGalleryImageVisible')) {
 				$check_image = $this->isGalleryImageVisible($image);
 			} else {
@@ -254,8 +254,15 @@ echo $this->getChildHtml('after');
 
 <!-- AJAX-ZOOM js block -->
 <script type="text/javascript">
+/*!
+*  Module: jQuery AJAX-ZOOM for Magento
+*  Info: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
+*  @license http://www.ajax-zoom.com/index.php?cid=download
+*/
+
 ;(function($){
-	
+
 	// Load plugin settings
 	<?php
 	$exclParArray = array('LICENSE_LIC');
@@ -264,17 +271,17 @@ echo $this->getChildHtml('after');
 			$groupKey = strtoupper($group . '_' . $key);
 			if (!in_array($groupKey, $exclParArray)){
 				if ($value == 'false' || $value == 'true' || $value == 'null' || is_numeric($value) || substr(trim($value), 0, 1) == '{' || substr(trim($value), 0, 1) == '['){
-					echo '	var AJAXZOOM_' . $groupKey . ' = ' . $value . '; ' . "\n";
+					echo '	var AJAXZOOM_' . $groupKey . ' = ' . $value . '; ';// . "\n";
 				} else {
-					echo '	var AJAXZOOM_' . $groupKey . ' = "' . str_replace('"', '&#34;', $value) . '"; ' . "\n";
+					echo '	var AJAXZOOM_' . $groupKey . ' = "' . str_replace('"', '&#34;', $value) . '"; ';// . "\n";
 				}
 			}
 		}
 	}
 	?>
-	
+
 	var AXZMPATH = '<?php echo $axZmPath; ?>';
-	
+
 	// Colors / attributes
 	var axAssociated = jQuery.parseJSON('<?php echo Mage::helper('core')->jsonEncode($res); ?>');
 
@@ -284,18 +291,18 @@ echo $this->getChildHtml('after');
 	<?php } else { ?>
 		var IMAGES_JSON = {<?php echo implode(',', $imagesJson);?>};
 	<?php } ?>	
-	
+
 	// All images
 	var IMAGES_ALL_JSON = <?php echo $ax->imagesJsonAll($imagesJsonAll);?>;
 
 	// Default 360
 	var IMAGES_360_JSON = <?php echo $images360Json; ?>;
-	
+
 	// Need that later for not reloading if images are the same
 	var IMAGES_AND_360_LOADED = JSON.stringify({
 		images: jQuery.extend(true, {}, IMAGES_JSON),
 		images360: jQuery.extend(true, {}, IMAGES_360_JSON)
-	});	
+	});
 
 	// AJAX-ZOOM mouseover and other parameters
 	var zoomParams = {
@@ -314,6 +321,12 @@ echo $this->getChildHtml('after');
 		qualityThumb: AJAXZOOM_MAIN_QUALITYTHUMB,
 		quality: AJAXZOOM_MAIN_QUALITY,
 		qualityZoom: AJAXZOOM_MAIN_QUALITYZOOM,
+		cropAxZmThumbSliderParam: AJAXZOOM_PRODUCTTOUR_CROPAXZMTHUMBSLIDERPARAM,
+		cropSliderPosition: AJAXZOOM_PRODUCTTOUR_CROPSLIDERPOSITION,
+		cropSliderDimension: AJAXZOOM_PRODUCTTOUR_CROPSLIDERDIMENSION,
+		cropSliderThumbAutoSize: AJAXZOOM_PRODUCTTOUR_CROPSLIDERTHUMBAUTOSIZE,
+		cropSliderThumbAutoMargin: AJAXZOOM_PRODUCTTOUR_CROPSLIDERTHUMBAUTOMARGIN,
+		cropSliderThumbDescr: AJAXZOOM_PRODUCTTOUR_CROPSLIDERTHUMBDESCR,
 		images: IMAGES_JSON,
 		firstImageToLoad: AJAXZOOM_MAIN_FIRSTIMAGETOLOAD,
 		images360: IMAGES_360_JSON,
@@ -429,7 +442,7 @@ echo $this->getChildHtml('after');
 			spinnerParam: AJAXZOOM_MOUSEOVERZOOMPARAM_SPINNERPARAM
 		}
 	};
-	
+
 	// Swatches
 	var resetAxZoom = function() {
 		if (JSON.stringify({images: IMAGES_JSON, images360: IMAGES_360_JSON}) == IMAGES_AND_360_LOADED) { 

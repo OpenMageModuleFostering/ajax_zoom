@@ -3,11 +3,6 @@ require_once('../../../app/Mage.php');
 umask(0);
 Mage::app();
 
-
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-
 function getIssetMod($par){
 	return isset($par);
 }

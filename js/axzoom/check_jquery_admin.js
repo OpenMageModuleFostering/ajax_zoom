@@ -2,9 +2,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /js/axzoom/check_jquery_admin.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.1.1
-*  Date: 2016-03-16
-*  Review: 2015-03-16
+*  Version: 1.2.0
+*  Date: 2016-05-07
+*  Review: 2016-05-07
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *

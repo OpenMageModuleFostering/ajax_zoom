@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-sets.phtml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.1.4
-*  Date: 2016-04-22
-*  Review: 2016-04-22
+*  Version: 1.2.0
+*  Date: 2016-05-07
+*  Review: 2016-05-07
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -50,6 +50,11 @@ $conf = Mage::getStoreConfig('axzoom_options');
 	#imageTableSetsRows .preview_set>span {
 		padding-left: 20px;
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAA8klEQVQoU43MoUsEYRAF8Mclg4hsMB0iF8QgIqZDLi5m8yEGEf8CwyFWg4gYRIxy0b/gohhNJrkkKmK6tLret9/OzPsMG2TXvcM3ZYb3Y4D/Z9y0Z5Ni9PBvvcChXha7dfS+Wkf2GIKdFRc3K+Bz1h4YGGR3AmBXB1ns24Br+U46p6t6VwHSB5IZvWUIgV+yl7ZqgJ4wybfdop7T/FoJhK70ARvqKQC8NuxNj2s+2JNeAMCoYR/aqwF6RCf7fkNvaNlyCUjMF14n83pFYaAxSPkD4GPZcetAGo1Xvpt8p+VbmJy8Tc9RtjSFyIENXDQF/OYHw2GYt0Xo/PcAAAAASUVORK5CYII=);
+		background-repeat: no-repeat;
+	}
+	#imageTableSetsRows .crop_set>span {
+		padding-left: 20px;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAABX0lEQVQYGXXBPyiEcRgH8O/wJunSdRkvGSSZDDJckmSQZDCYrhskg0xGm3RJBoMMMkoGww2XJBkMMhh06XqTZJDOFV3e+/e+v+d5fo97ryuu+HzwmxnmIzOFdkWnHEeDF6WUPKragpkvOvjB11b5lLN8SatmQQpmkZYoy+laXzniT5YjkJKq/arNoOGtg47R5I/QgXyqSh5mVIr+OB9wxk9UBziNFi9uVdUSAHbRUOvlPb6nja8uk/QTtCJPfCEuJQGwixazxhl5VbXKx9Ue3g8mEGIXTZU+W+c0bVm1pXoc4Nx7B0LsAl6E1ilL23REh3xVjgG1QckgxLtW+ITOg2k00R7ngkmvm3doCSG5UBXXi6KFbypDtCEFVZNCqBoL5mhZHoIxNHgxzgP1Xnmz1WACP/wBvqXND8ckedfM8mW9P+eg3YdDm/JsRV5ov9SJv8mdqpVSDP8xY3xGK2jzDTL14vqSI1apAAAAAElFTkSuQmCC);
 		background-repeat: no-repeat;
 	}
 	
@@ -176,7 +181,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 								<th><?php echo $this->__('Cover Image'); ?></th>
 								<th><?php echo $this->__('Name'); ?></th>
 								<th><?php echo $this->__('Active'); ?></th>
-								<th class="last" style="width:240px;"><?php echo $this->__('Actions'); ?></th>
+								<th class="last" style="width:400px;"><?php echo $this->__('Actions'); ?></th>
 							</tr>
 						</thead>
 						<tbody id="imageTableSetsRows">
@@ -201,6 +206,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 							<button class="delete_set scalable delete"><span><?php echo $this->__('Delete'); ?></span></button>
 							<button class="images_set scalable"><span><?php echo $this->__('Images'); ?></span></button>
 							<button class="scalable preview_set hide_class"><span><?php echo $this->__('Preview'); ?></span></button>
+							<button class="crop_set scalable"><span><?php echo $this->__('360° Product Tour'); ?></span></button>
 						</td>
 					</tr>
 				</table>
@@ -322,6 +328,12 @@ $conf = Mage::getStoreConfig('axzoom_options');
 				imageLine360(data.images[i]['id'], data.images[i]['thumb'], '', "", "", "");
 			};
 			
+            var pppPos = $('#product-images360').offset();
+
+            if ($.scrollTo && pppPos && pppPos.top){
+            	$.scrollTo(pppPos.top - 50);
+            }
+			
 		}
 
 
@@ -370,6 +382,17 @@ $conf = Mage::getStoreConfig('axzoom_options');
 
 			$.openAjaxZoomInFancyBox({href: '<?php echo Mage::getBaseUrl('js') ?>axzoom/preview/preview.php?3dDir=<?php echo Mage::getModel('axzoom/ax360')->rootFolder() ?>js/axzoom/pic/360/' + id_product + '/' + id360+'&group='+id360+'&id='+id360set, iframe: true});
 		});
+		
+
+        $('.crop_set').die().live('click', function(e) {
+            e.preventDefault();
+
+            var id360 = $(this).parent().parent().data('group');
+            var id360set = $(this).parent().parent().attr('id');
+			
+            $.openAjaxZoomInFancyBox({href: '<?php echo Mage::getBaseUrl('js') ?>axzoom/preview/cropeditor.php?&3dDir=<?php echo Mage::getModel('axzoom/ax360')->rootFolder() ?>js/axzoom/pic/360/' + id_product + '/' + id360+'&group='+id360+'&id='+id360set+'&url_get=<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/getCropJson") ?>&url_set=<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/setCropJson") ?>&form_key=<?php echo $this->getFormKey();?>', iframe: true, scrolling: 1});
+
+        });
 
 		$('.images_set').die().live('click', function(e) {
 			e.preventDefault();
@@ -385,7 +408,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 					"id_product" : <?php echo $productId ?>,
 					"id_360set" : id}, afterGetImages
 			);
-			
+
 			$('#id_360set').val(id);
 			$('#product-images360').show();
 		});

@@ -1,19 +1,19 @@
 <?php
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/controllers/IndexController.php
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.7
-*  Date: 2015-11-15
-*  Review: 2015-11-15
+*  Version: 1.2.0
+*  Date: 2016-05-07
+*  Review: 2016-05-07
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
-//Mage_Core_Controller_Front_Action
+
 class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action  
 {
     public function AddProductImage360Action()
@@ -22,7 +22,7 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
         $id360set = $this->getRequest()->getPost('id_360set');
         $id360 = Mage::getModel('axzoom/ax360set')->load($id360set)->getId_360();
         $folder = $this->createProduct360Folder($productId, $id360set);
-        
+
         if (isset($_FILES['file360']['name'][0]) && $_FILES['file360']['name'][0] != '') {
             try {
                 $fileName       = $_FILES['file360']['name'][0];
@@ -40,7 +40,7 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
                 $uploader->setAllowedExtensions(array('png', 'jpg')); //allowed extensions
                 $uploader->setAllowRenameFiles(false);
                 $uploader->setFilesDispersion(false);
-                
+
                 $uploader->save($folder, $fileName );
             } catch (Exception $e) {
                 echo $e->getMessage();
@@ -144,9 +144,9 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
     public function Set360StatusAction()
     {
         $get = Mage::app()->getRequest();
-        $productId =   $get->getParam('id_product');
-        $id360     =   $get->getParam('id_360');
-        $status     =   $get->getParam('status');
+        $productId = $get->getParam('id_product');
+        $id360 = $get->getParam('id_360');
+        $status = $get->getParam('status');
 
         Mage::getModel('axzoom/ax360')->load($id360)->addData(array('status' => $status))->setId($id360)->save();
 
@@ -155,16 +155,53 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
             'confirmations' => array('The status has been updated.' . $status . '-' . $id360)
             )));
     }
+	
+	public function GetCropJsonAction()
+	{
+		$get = Mage::app()->getRequest();
+		$id_360 = $get->getParam('id_360');
+		
+		$db = Mage::getSingleton('core/resource')->getConnection('core_write');
+		$check_crop_field = $db->query('SHOW FIELDS FROM `ajaxzoom360`');
+		if ($check_crop_field){
+			$check_crop_field_fetch = $check_crop_field->fetchAll(PDO::FETCH_COLUMN);
+			// Update table
+			if (!in_array('crop', $check_crop_field_fetch)){
+				$db->query('ALTER TABLE `ajaxzoom360` ADD `crop` TEXT NOT NULL');
+			}
+		}
+		
+		$row = $db->fetchAll('SELECT * FROM `ajaxzoom360` WHERE id_360 = '.(int)$id_360.' LIMIT 1');
+		if ($row[0]['crop']){
+			die(stripslashes($row[0]['crop']));
+		}else{
+			die('[]');
+		}
+	}
+
+	public function SetCropJsonAction()
+	{
+		$json = $this->getRequest()->getPost('json');
+		$id_360 = Mage::app()->getRequest()->getParam('id_360');
+
+		$db = Mage::getSingleton('core/resource')->getConnection('core_write');
+		$query = 'UPDATE `ajaxzoom360` SET crop = \''.addslashes($json).'\' WHERE  id_360 = '.(int)$id_360;
+		$result = $db->query($query);
+
+		die(Mage::helper('core')->jsonEncode(array(
+			'status' => $result->rowCount()
+		)));
+	}
 
     public function AddSetAction()
     {
         $get = Mage::app()->getRequest();
-        $productId =   $get->getParam('id_product');
-        $name       =   $get->getParam('name');
-        $existing   =   $get->getParam('existing');
-        $zip        =   $get->getParam('zip');
-        $delete        =   $get->getParam('delete');
-        $arcfile    =   $get->getParam('arcfile');
+        $productId = $get->getParam('id_product');
+        $name = $get->getParam('name');
+        $existing = $get->getParam('existing');
+        $zip = $get->getParam('zip');
+        $delete = $get->getParam('delete');
+        $arcfile = $get->getParam('arcfile');
         $newId = '';
         $newName = '';
         $newSettings = '';
@@ -207,7 +244,6 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
             'new_settings' => urlencode($newSettings)
             )));        
     }
-
 
     public function addImagesArc($arcfile, $productId, $id360, $id360set, $delete = '')
     {
@@ -252,7 +288,6 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
             }
         }
 
-        
         // delete temp directory which was created when zip extracted
         if(!is_dir($path)) {
             $this->deleteDirectory($dst);
@@ -335,7 +370,6 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
             }
         }
     }
-
 
     public function getFilesFromFolder($path)
     {

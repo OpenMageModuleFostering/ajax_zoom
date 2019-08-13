@@ -1,6 +1,6 @@
 <?php
 /**
-*  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Model/Yesno.php
+*  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Model/Position4.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
 *  Version: 1.2.0
@@ -14,14 +14,15 @@
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
-class Ax_Zoom_Model_Yesno
+class Ax_Zoom_Model_Position4
 {
     public function toOptionArray()
     {
         return array(
-            array('value'=>'false', 'label'=>Mage::helper('axzoom')->__('No')),
-            array('value'=>'true', 'label'=>Mage::helper('axzoom')->__('Yes'))
+            array('value'=>'top', 'label'=>Mage::helper('axzoom')->__('top')),
+            array('value'=>'right', 'label'=>Mage::helper('axzoom')->__('right')),
+            array('value'=>'bottom', 'label'=>Mage::helper('axzoom')->__('bottom')),
+            array('value'=>'left', 'label'=>Mage::helper('axzoom')->__('left'))
         );
     }
-
 }

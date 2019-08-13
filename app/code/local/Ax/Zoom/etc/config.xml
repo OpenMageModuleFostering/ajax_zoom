@@ -4,9 +4,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.1.4
-*  Date: 2016-04-22
-*  Review: 2015-04-22
+*  Version: 1.2.0
+*  Date: 2016-05-07
+*  Review: 2016-05-07
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -20,7 +20,7 @@
 
 	<modules>
 		<Ax_Zoom>
-			<version>1.1.4</version>
+			<version>1.2.0</version>
 		</Ax_Zoom>
 	</modules>
 
@@ -407,6 +407,14 @@
 				<btnSrc>//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_gray_20.png</btnSrc>
 				<data>{}</data>
 			</pinterest>
+			<producttour>
+				<cropAxZmThumbSliderParam></cropAxZmThumbSliderParam>
+				<cropSliderPosition>left</cropSliderPosition>
+				<cropSliderDimension>86</cropSliderDimension>
+				<cropSliderThumbAutoSize>true</cropSliderThumbAutoSize>
+				<cropSliderThumbAutoMargin>7</cropSliderThumbAutoMargin>
+				<cropSliderThumbDescr>true</cropSliderThumbDescr>
+			</producttour>
 			<mouseOverZoomParam>
 				<position>right</position>
 				<posAutoInside>150</posAutoInside>

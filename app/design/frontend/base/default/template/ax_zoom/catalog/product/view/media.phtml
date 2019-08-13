@@ -1,11 +1,11 @@
 <?php
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/frontend/base/default/template/ax_zoom/catalog/product/view/media.phtml
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.4
-*  Date: 2015-10-26
-*  Review: 2015-10-26
+*  Version: 1.0.10
+*  Date: 2016-01-09
+*  Review: 2016-01-09
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -14,7 +14,9 @@
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
-$productId = Mage::app()->getRequest()->getParam('id');
+$_product = $this->getProduct();
+$productId = $_product->getId();
+//$productId = Mage::app()->getRequest()->getParam('id');
 $ax = Mage::getModel('axzoom/ax360');
 $conf = Mage::getStoreConfig('axzoom_options');
 $axZmPath = Mage::getBaseUrl('js') . 'axzoom/axZm/';
@@ -25,7 +27,6 @@ $imagesJsonAll = array();
 $az_gallery_position = $conf['main']['galleryPosition'];
 if (!$az_gallery_position){$az_gallery_position = 'bottom';}
 ?>
-
 
 <script type="text/javascript">
 	// Fallback if catalog_product_view reference name="head" is not loaded
@@ -247,13 +248,8 @@ else if ($conf['magento']['magentoNoImage'])
 }
 
 
-
-?>
-
-
-<?php 
-	//MAIN_GALLERYPOSITION 
-	echo $this->getChildHtml('after'); 
+//MAIN_GALLERYPOSITION 
+echo $this->getChildHtml('after'); 
 ?>
 
 <!-- AJAX-ZOOM js block -->
@@ -434,12 +430,9 @@ else if ($conf['magento']['magentoNoImage'])
 		}
 	};
 	
-	// Init AJAX-ZOOM
-	jQuery.mouseOverZoomInit(zoomParams);
-
 	// Swatches
 	var resetAxZoom = function() {
-		if (JSON.stringify({images: IMAGES_JSON, images360: IMAGES_360_JSON}) == IMAGES_AND_360_LOADED){
+		if (JSON.stringify({images: IMAGES_JSON, images360: IMAGES_360_JSON}) == IMAGES_AND_360_LOADED) { 
 			return;
 		} 
 		
@@ -452,12 +445,8 @@ else if ($conf['magento']['magentoNoImage'])
 		});
 	};
 	
-	// Shortcut for maybe other applications or additional functionality
-	// window.resetAxZoom() will reset AJAX-ZOOM to the state when article is loaded without attribute selection
-	window.resetAxZoom = resetAxZoom;
-	
 	// Change values
-	var updateAxZoomAction = function(idxSel){
+	var updateAxZoomAction = function(idxSel, checkout) { 
 		//JSON.stringify(obj1) === JSON.stringify(obj2) 
 		if ( (jQuery.isPlainObject(idxSel.images) && !jQuery.isEmptyObject(idxSel.images) ) 
 			|| (jQuery.isPlainObject(idxSel.images360) && !jQuery.isEmptyObject(idxSel.images360) )) {
@@ -468,39 +457,50 @@ else if ($conf['magento']['magentoNoImage'])
 			
 			IMAGES_AND_360_LOADED = JSON.stringify({images: idxSel.images, images360: idxSel.images360});
 			
-			jQuery.mouseOverZoomInit.replaceImages( { 
-				divID: AJAXZOOM_MAIN_DIVID,
-				galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
-				images: idxSel.images,
-				images360: idxSel.images360
-			} );
+			if (checkout){
+				zoomParams.images = idxSel.images;
+				zoomParams.images360 = idxSel.images360;
+				jQuery.mouseOverZoomInit(zoomParams);
+			} else {
+				jQuery.mouseOverZoomInit.replaceImages( { 
+					divID: AJAXZOOM_MAIN_DIVID,
+					galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
+					images: idxSel.images,
+					images360: idxSel.images360
+				} );
+			}
 		} else { // show initial images
 			resetAxZoom();
 		}
 	};
 	
-	var updateAxZoom = function(e) {
+	var updateAxZoom = function(e, check) {
 		var obj = jQuery(this);
-
-		setTimeout(function(){
-							
-			if(e.type == 'change' && obj.val() == '') {
+		var requestSet = function() {
+			if (!spConfig){
+				return;
+			}
+		
+			if((!check && e && e.type == 'change' && obj.val() == '')) {
 				resetAxZoom();
 				return;
 			}
 
 			var pairs = [];
-			
-			for (var k in spConfig.state){
-				if (typeof spConfig.state[k] !== 'function' && typeof spConfig.state[k] !== 'object' &&  spConfig.state[k] != false) {
-					pairs.push(k + ':' + spConfig.state[k]);
+			var inWhichObj = (check ? (spConfig.values ? spConfig.values : spConfig.state) : spConfig.state);
+			for (var k in inWhichObj) { 
+				if (typeof spConfig.state[k] !== 'function' && typeof spConfig.state[k] !== 'object' && (spConfig.state[k] != false || (spConfig.values && check))) {
+					pairs.push(k + ':' + inWhichObj[k]);
 				}
 			}
-			
+
 			var idx = pairs.join(',');
-							
 			var idxSel = axAssociated[idx];
-			
+
+			if (check) { 
+				return idxSel;
+			}
+
 			if (idxSel) {
 				updateAxZoomAction(idxSel);
 			} else {
@@ -512,14 +512,35 @@ else if ($conf['magento']['magentoNoImage'])
 					}
 				})
 			}
+		};
+		
+		if (check){
+			return requestSet();
+		}else{
+			setTimeout(function(){
+				requestSet();
+			}, 50);		
+		}
+	
+	};
+	
+	// Shortcut for maybe other applications or additional functionality
+	// window.resetAxZoom() will reset AJAX-ZOOM to the state when article is loaded without attribute selection
+	window.resetAxZoom = resetAxZoom;
+	window.updateAxZoom = updateAxZoom;
+	
+	// Init AJAX-ZOOM
+	jQuery.mouseOverZoomInit(zoomParams);
 
-		}, 50);
-	
-	}
-	
 	jQuery(document).ready(function() {
 		jQuery('.swatch-label').click(updateAxZoom); // version 1.9.1 or more
 		jQuery('.super-attribute-select').change(updateAxZoom);
+		if (window.spConfig && spConfig.values) { 
+			var aaa = window.updateAxZoom(null, true);
+			if (aaa){
+				updateAxZoomAction(aaa);
+			}
+		}
 	});
 	
 })(jQuery);

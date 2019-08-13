@@ -13,12 +13,11 @@
 *  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
-
-class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
+//Mage_Core_Controller_Front_Action
+class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action  
 {
     public function AddProductImage360Action()
     {
-
         $productId = Mage::app()->getRequest()->getParam('id_product');
         $id360set = $this->getRequest()->getPost('id_360set');
         $id360 = Mage::getModel('axzoom/ax360set')->load($id360set)->getId_360();

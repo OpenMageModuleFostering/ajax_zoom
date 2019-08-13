@@ -1,16 +1,16 @@
 <!--
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/uploader.phtml
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.9
-*  Date: 2015-12-01
-*  Review: 2015-12-01
+*  Version: 1.1.0
+*  Date: 2016-03-03
+*  Review: 2016-03-03
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 -->
@@ -18,7 +18,7 @@
 <?php
 $id = 'file360';
 $name = 'file360';
-$url = Mage::helper("adminhtml")->getUrl("axzoom/index/addProductImage360", array('id_product' => $productId));
+$url = Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/addProductImage360", array('id_product' => $productId)) . '?isAjax=true&form_key=' . $this->getFormKey();
 $postMaxSize = return_bytes(ini_get('post_max_size'));
 $maxFiles = 120;
 

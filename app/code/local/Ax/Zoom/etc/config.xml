@@ -2,16 +2,16 @@
 <!--
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.9
-*  Date: 2015-12-01
-*  Review: 2015-12-01
+*  Version: 1.1.0
+*  Date: 2016-03-03
+*  Review: 2015-03-03
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 -->
@@ -20,10 +20,10 @@
 
 	<modules>
 		<Ax_Zoom>
-			<version>1.0.9</version>
+			<version>1.1.0</version>
 		</Ax_Zoom>
 	</modules>
-	
+
 	<global>
 		<helpers>
 			<axzoom>
@@ -80,16 +80,6 @@
 			</modules>
 		</translate>
 
-       	<routers>
-			<axzoom>
-           		<use>standard</use>
-				<args>
-					<module>Ax_Zoom</module>
-					<frontName>axzoom</frontName>
-				</args>
-			</axzoom>
-		</routers>  
-
 		<layout>
 			<updates>
 				<ax_zoom>
@@ -121,6 +111,18 @@
 		</events>
 	</frontend>
 	
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Ax_Zoom before="Mage_Adminhtml">Ax_Zoom</Ax_Zoom>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>    
+
 	<adminhtml>
 		<translate>
 			<modules>
@@ -395,7 +397,7 @@
 				<postMode>true</postMode>
 			</main>
 			<pinterest>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 				<build>parsePinBtns</build>
 				<wrapClass>axZm_mouseOverPinterest</wrapClass>
 				<href>//en.pinterest.com/pin/create/button/</href>

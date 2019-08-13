@@ -1,16 +1,16 @@
 <!--
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-sets.phtml
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.9
-*  Date: 2015-12-01
-*  Review: 2015-12-01
+*  Version: 1.0.12
+*  Date: 2016-03-02
+*  Review: 2016-03-02
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 -->
@@ -126,7 +126,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 							<td class="label"><label for="zip"><?php echo $this->__('Add images from ZIP archive') ?></label></td>
 							<td class="value">
 								<input type="checkbox" id="zip" name="zip" value="1" />
-								<p class="note"><?php echo $this->__('This is the most easy and quick way of adding 360 views to your product! Upload over FTP your 360\'s zipped (each images set in one zip file) to /modules/ajaxzoom/zip/ directory. After you did so these zip files will instantly appear in the select field below. All you have to do then is select one of the zip files and press \'add\' button. Images from the selected zip file will be instantly imported.') ?></p>
+								<p class="note"><?php echo $this->__('This is the most easy and quick way of adding 360 views to your product! Upload over FTP your 360\'s zipped (each images set in one zip file) to /js/axzoom/zip/ directory. After you did so these zip files will instantly appear in the select field below. All you have to do then is select one of the zip files and press \'add\' button. Images from the selected zip file will be instantly imported.') ?></p>
 							</td>
 							<td class="scope-label"><span class="nobr"></span></td>
 						</tr>
@@ -354,7 +354,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 			var status = $(this).val();
 			var group_id = $(this).parent().parent().parent().data('group');
 
-			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("axzoom/index/set360Status") ?>', {
+			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/set360Status") ?>', {
 					"id_product" : <?php echo $productId ?>,
 					"id_360" : group_id,
 					"status" : status}, afterUpdateStatus
@@ -381,7 +381,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 
 			var id = $(this).parent().parent().attr('id');
 
-			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("axzoom/index/getImages") ?>', {
+			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/getImages") ?>', {
 					"id_product" : <?php echo $productId ?>,
 					"id_360set" : id}, afterGetImages
 			);
@@ -396,7 +396,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 			if (!$('#set_name').val()){
                 $('#set_name').val('no_name_'+(new Date().getTime()));  
             }
-			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("axzoom/index/addSet") ?>', {
+			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/addSet") ?>', {
 					"name":$('#set_name').val(),
 					"existing":$('#existing').val(),
 					"zip":$('#zip').is(':checked'),
@@ -416,7 +416,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 
 			var id = $(this).parent().parent().attr('id');
 			if (confirm("<?php echo $this->__('Are you sure?') ?>"))
-			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("axzoom/index/deleteSet") ?>', {
+			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/deleteSet") ?>', {
 					"id_360set":id,
 					"id_product" : <?php echo $productId ?>}, afterDeleteSet
 			);

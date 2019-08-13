@@ -2,16 +2,16 @@
 <!--
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/system.xml
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.9
-*  Date: 2015-12-01
-*  Review: 2015-12-01
+*  Version: 1.1.0
+*  Date: 2016-03-03
+*  Review: 2015-03-03
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 -->
@@ -814,8 +814,7 @@
 								You can specify an integer which will represent the time in ms to wait for switching after the mouse enters the thumb; 
 								true defaults to 200
 							</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>axzoom/yesno</source_model>
+							<frontend_type>text</frontend_type>
 							<sort_order>60</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>

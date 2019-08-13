@@ -64,7 +64,7 @@ if (strpos($_SERVER['HTTP_USER_AGENT'],"iPhone")){
 	p {text-align: justify; text-justify: newspaper;}
 </style>
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="../axZm/plugins/jquery-1.8.3.min.js"></script>
 <link rel="stylesheet" type="text/css" href="../axZm/axZm.css" media="all" />
 <script type="text/javascript" src="../axZm/jquery.axZm.js"></script>
 </head>

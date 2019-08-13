@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-sets.phtml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.1
-*  Date: 2016-05-14
-*  Review: 2016-05-14
+*  Version: 1.2.3
+*  Date: 2016-08-12
+*  Review: 2016-08-12
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -57,13 +57,18 @@ $conf = Mage::getStoreConfig('axzoom_options');
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAABX0lEQVQYGXXBPyiEcRgH8O/wJunSdRkvGSSZDDJckmSQZDCYrhskg0xGm3RJBoMMMkoGww2XJBkMMhh06XqTZJDOFV3e+/e+v+d5fo97ryuu+HzwmxnmIzOFdkWnHEeDF6WUPKragpkvOvjB11b5lLN8SatmQQpmkZYoy+laXzniT5YjkJKq/arNoOGtg47R5I/QgXyqSh5mVIr+OB9wxk9UBziNFi9uVdUSAHbRUOvlPb6nja8uk/QTtCJPfCEuJQGwixazxhl5VbXKx9Ue3g8mEGIXTZU+W+c0bVm1pXoc4Nx7B0LsAl6E1ilL23REh3xVjgG1QckgxLtW+ITOg2k00R7ngkmvm3doCSG5UBXXi6KFbypDtCEFVZNCqBoL5mhZHoIxNHgxzgP1Xnmz1WACP/wBvqXND8ckedfM8mW9P+eg3YdDm/JsRV5ov9SJv8mdqpVSDP8xY3xGK2jzDTL14vqSI1apAAAAAElFTkSuQmCC);
 		background-repeat: no-repeat;
 	}
-	
+	#imageTableSetsRows .hotspot_set>span {
+		padding-left: 20px;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAllBMVEUAAADs7Ozy8vL29vb29vb39/f4+Pj4+Pj4+Pj4+Pj4+Pj5+fn5+fn4+Pj5+fn6+vr6+vr6+vr6+vr5+fn6+vr6+vr6+vr8/Pz8/Pz8/Pz9/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f39/f3+/v7+/v7+/v79/f3+/v7+/v7+/v7+/v7+/v7////Ln3C7AAAAMHRSTlMABA4SGhoiJCYqLjA2ODg4PEBESEhMUHyBmaOpr7O3u72/yc/R19/j5+vx9/f5+/1Qz7jwAAAAcUlEQVR4AXXBBw6CQBBA0W8vYFfsRexl3Jn7X85NEIRE3+O3YPOQXY9M/6mejEmd7BhNYruUSDRValC5a0iio2e8g45IlMUF0BBX5WNut9n0aktS9Zd6rk1mod6ar5Yz0y45K9U9eaHakIJtTNEg4o83rY4LEIWzwoYAAAAASUVORK5CYII=);
+		background-repeat: no-repeat;
+	}
+
 	#file360-add-button span{
 		padding-left: 20px;
 		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAulBMVEUAAADj4+Pi4uLk5OTm5ubn5+fo6Ojy8vLn5+fv7+/w8PDo6Oj29vbv7+/29vb19fX39/f7+/v6+vr8/Pz7+/v+/v77+/v8/Pz8/Pz7+/v7+/v8/Pz9/f38/Pz9/f38/Pz8/Pz9/f37+/v9/f39/f38/Pz9/f38/Pz9/f3+/v7////7+/v8/Pz9/f39/f39/f39/f39/f39/f39/f38/Pz8/Pz9/f39/f3+/v7+/v79/f3+/v7+/v7///84WsHxAAAAPHRSTlMAAgQEBAQEBAYIDBAYHBweLD5ESlBgbnJ4h42PkZmdn6Ghp6eztbm7u729y8vP1dvd3+Hp7e/v8fP3+f27bAlAAAAAjklEQVR42mXIxwKCMBRE0WfvqIiKYseCFWyAZvL/v+WLISvurOZQvsPNtNMAdwQJ1TcDfy11Gbgz01jDdGOaaACkmvzs5xr0xbZt9a0/+McTb9FcCYhlg2EwVFU9xLUYHoOQ3L2URhc6RykDVNcWOmWqdMHwVBAXQ7zphZChUFeRI5JeIhwGkx08Apvy/QCdyxpVfEL2sAAAAABJRU5ErkJggg==);
 		background-repeat: no-repeat;
 	}
-
+	
 	.link_add{
 		margin-top: 2px;
 		margin-bottom: 2px;
@@ -180,8 +185,8 @@ $conf = Mage::getStoreConfig('axzoom_options');
 							<tr class="headings">
 								<th><?php echo $this->__('Cover Image'); ?></th>
 								<th><?php echo $this->__('Name'); ?></th>
-								<th><?php echo $this->__('Active'); ?></th>
-								<th class="last" style="width:400px;"><?php echo $this->__('Actions'); ?></th>
+								<th style="width: 100px;"><?php echo $this->__('Active'); ?></th>
+								<th class="last" style="width: 250px;"><?php echo $this->__('Actions'); ?></th>
 							</tr>
 						</thead>
 						<tbody id="imageTableSetsRows">
@@ -203,10 +208,11 @@ $conf = Mage::getStoreConfig('axzoom_options');
 							</span>
 						</td>
 						<td>
-							<button class="delete_set scalable delete"><span><?php echo $this->__('Delete'); ?></span></button>
 							<button class="images_set scalable"><span><?php echo $this->__('Images'); ?></span></button>
 							<button class="scalable preview_set hide_class"><span><?php echo $this->__('Preview'); ?></span></button>
-							<button class="crop_set scalable"><span><?php echo $this->__('360° Product Tour'); ?></span></button>
+							<button class="delete_set scalable delete"><span><?php echo $this->__('Delete'); ?></span></button>
+							<button class="hotspot_set scalable" style="margin-top: 5px"><span><?php echo $this->__('Hotspots'); ?></span></button>
+							<button class="crop_set scalable" style="margin-top: 5px"><span><?php echo $this->__('360° Product Tour'); ?></span></button>
 						</td>
 					</tr>
 				</table>
@@ -377,25 +383,56 @@ $conf = Mage::getStoreConfig('axzoom_options');
 
 			var id360 = $(this).parent().parent().data('group');
 			var id360set = $(this).parent().parent().attr('id');
-
-			$.openAjaxZoomInFancyBox({href: '<?php echo Mage::getBaseUrl('js') ?>axzoom/preview/preview.php?3dDir=<?php echo Mage::getModel('axzoom/ax360')->rootFolder() ?>js/axzoom/pic/360/' + id_product + '/' + id360+'&group='+id360+'&id='+id360set, iframe: true});
+			var qty = $('tr[data-group=' + id360 + ']').length;
+			
+			var href = '<?php echo Mage::getBaseUrl('js') ?>axzoom/preview/preview.php?';
+				href += '3dDir=<?php echo Mage::getModel('axzoom/ax360')->rootFolder() ?>js/axzoom/pic/360/' + id_product + '/' + id360;
+		        if (qty < 2){
+        			href += '/' + id360set;
+				}
+				href += '&group='+id360+'&id='+id360set;
+			$.openAjaxZoomInFancyBox({href: href, iframe: true});
 		});
 		
-
         $('.crop_set').die().live('click', function(e) {
             e.preventDefault();
 
             var id360 = $(this).parent().parent().data('group');
             var id360set = $(this).parent().parent().attr('id');
-
+			var qty = $('tr[data-group=' + id360 + ']').length;
+			
 			var cropHref = '<?php echo Mage::getBaseUrl('js'); ?>axzoom/preview/cropeditor.php?';
 				cropHref += '3dDir=<?php echo Mage::getModel('axzoom/ax360')->rootFolder(); ?>js/axzoom/pic/360/' + id_product + '/' + id360;
+		        if (qty < 2){
+        			cropHref += '/' + id360set;
+				}
 				cropHref += '&group='+id360+'&id='+id360set;
 				cropHref += '&url_get=<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/getCropJson"); ?>';
 				cropHref += '&url_set=<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/setCropJson"); ?>';
 				cropHref += '&form_key=<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>';
-
+				cropHref += '&hs_get=<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/getHotspotJson"); ?>';
+				
             $.openAjaxZoomInFancyBox({href: cropHref, iframe: true, scrolling: 1});
+
+        });
+        
+        $('.hotspot_set').die().live('click', function(e) {
+            e.preventDefault();
+
+            var id360 = $(this).parent().parent().data('group');
+            var id360set = $(this).parent().parent().attr('id');
+			var qty = $('tr[data-group=' + id360 + ']').length;
+			
+			var hotspotHref = '<?php echo Mage::getBaseUrl('js'); ?>axzoom/preview/hotspoteditor.php?';
+				hotspotHref += '3dDir=3dDir=<?php echo Mage::getModel('axzoom/ax360')->rootFolder(); ?>js/axzoom/pic/360/' + id_product + '/' + id360;
+		        if (qty < 2){
+        			hotspotHref += '/' + id360set;
+				}
+				hotspotHref += '&group='+id360+'&id='+id360set;
+				hotspotHref += '&url_get=<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/getHotspotJson"); ?>';
+				hotspotHref += '&url_set=<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/setHotspotJson"); ?>';
+				hotspotHref += '&form_key=<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>';
+             $.openAjaxZoomInFancyBox({href: hotspotHref, iframe: true, scrolling: 1});
 
         });
 

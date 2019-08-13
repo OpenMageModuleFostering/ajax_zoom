@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /jss/axzoom/preview.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.1
-*  Date: 2016-05-15
-*  Review: 2016-05-15
+*  Version: 1.2.3
+*  Date: 2016-08-12
+*  Review: 2016-08-12
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -31,7 +31,11 @@
 	}
 	
 	/* Set to true to remove certain things not needed if included in shops / cms */
+	$editor_version = '2.0.1';
+	$last_updated = '2016-08-05';
 	$axzm_cms_mode = true;
+	$axzm_tpl_mode = false;
+	$axzm_path = '../axZm/';
 	$first_load360_dir = Mage::app()->getRequest()->getParam('3dDir');
 	$default_thumb_size = $axzm_cms_mode ? 140 : 180;
 	$player_responsive = $axzm_cms_mode ? true : false;
@@ -52,92 +56,94 @@
 	$id_360set = Mage::app()->getRequest()->getParam('id');
 	$first_load_crop_json = Mage::app()->getRequest()->getParam('url_get')."?id_360set=$id_360set&id_360=$id_360";
 	$save_crop_json = Mage::app()->getRequest()->getParam('url_set')."?id_360set=$id_360set&id_360=$id_360&form_key=".Mage::app()->getRequest()->getParam('form_key');
+	
+	// hotspots
+	$first_load_hotspot_json = Mage::app()->getRequest()->getParam('hs_get')."?id_360set=$id_360set&id_360=$id_360";
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/">
-<head>
-	<title>jCrop AJAX-ZOOM zoomTo and crop on large images</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta http-equiv="imagetoolbar" content="no">
-
 <?php
-if (!$axzm_cms_mode)
+if (!$axzm_tpl_mode)
 {
 ?>
-	<meta property="og:type" content="article"/>
-	<meta property="og:title" content="jCrop AJAX-ZOOM"/>
-	<meta property="og:description" content="Crop high resolution images with jCrop and AJAX-ZOOM."/>
-	<meta name="description" content="Crop high resolution images with jCrop and AJAX-ZOOM." />
-	<meta property="og:image" content="http://www.ajax-zoom.com/pic/layout/image-zoom_35.jpg"/>
-<?php
-}
-?>
+
+	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+	<html xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://opengraphprotocol.org/schema/">
+	<head>
+		<title>jCrop AJAX-ZOOM zoomTo and crop on large images</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="imagetoolbar" content="no">
 
 	<?php
+	if (!$axzm_cms_mode)
+	{
+	?>
+		<meta property="og:type" content="article"/>
+		<meta property="og:title" content="jCrop AJAX-ZOOM"/>
+		<meta property="og:description" content="Crop high resolution images with jCrop and AJAX-ZOOM."/>
+		<meta name="description" content="Crop high resolution images with jCrop and AJAX-ZOOM." />
+		<meta property="og:image" content="http://www.ajax-zoom.com/pic/layout/image-zoom_35.jpg"/>
+	<?php
+	}
+
 	if (strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone'))
 		echo '<meta name="viewport" content="width=device-width, minimum-scale=0.5, maximum-scale=0.5, user-scalable=no">';
 	else
 		echo '<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no">';
-	?>
+
+}
+?>
+
 	<!-- jQuery core -->
-	<script type="text/javascript" src="../axZm/plugins/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/jquery-1.8.3.min.js"></script>
 
 	<!-- AJAX-ZOOM -->
-	<link rel="stylesheet" href="../axZm/axZm.css" type="text/css" media="screen">
-	<script type="text/javascript" src="../axZm/jquery.axZm.js"></script>
+	<link name="az_editor_css_scripts" rel="stylesheet" href="<?php echo $axzm_path;?>axZm.css" type="text/css" media="screen">
+	<script type="text/javascript" src="<?php echo $axzm_path;?>jquery.axZm.js"></script>
 
 	<!-- jCrop (external jQuery plugin utilized for this crop editor) -->
-	<link type="text/css" href="../axZm/plugins/jCrop/css/jquery.Jcrop.css" rel="stylesheet" />
-	<script type="text/javascript" src="../axZm/plugins/jCrop/js/jquery.Jcrop.js"></script>
+	<link name="az_editor_css_scripts" type="text/css" href="<?php echo $axzm_path;?>plugins/jCrop/css/jquery.Jcrop.css" rel="stylesheet" />
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/jCrop/js/jquery.Jcrop.js"></script>
 
 	<!-- Include mousewheel script -->
-	<script type="text/javascript" src="../axZm/extensions/axZmThumbSlider/lib/jquery.mousewheel.min.js"></script>
+	<script type="text/javascript" src="<?php echo $axzm_path;?>extensions/axZmThumbSlider/lib/jquery.mousewheel.min.js"></script>
 
 	<!-- Only needed for the 360 hotspot example where fancybox is applied for one hotspot click event -->
-	<link href="../axZm/plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.zIndex.css" type="text/css" media="screen" rel="stylesheet">
-	<script type="text/javascript" src="../axZm/plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.js"></script>
-	
+	<link name="az_editor_css_scripts" href="<?php echo $axzm_path;?>plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.zIndex.css" type="text/css" media="screen" rel="stylesheet">
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.js"></script>
+
 	<!-- Include thumbSlider CSS && JS. -->
-	<link rel="stylesheet" type="text/css" href="../axZm/extensions/axZmThumbSlider/skins/default/jquery.axZm.thumbSlider.css" />
-	<script type="text/javascript" src="../axZm/extensions/axZmThumbSlider/lib/jquery.axZm.thumbSlider.js"></script>
+	<link name="az_editor_css_scripts" rel="stylesheet" type="text/css" href="<?php echo $axzm_path;?>extensions/axZmThumbSlider/skins/default/jquery.axZm.thumbSlider.css" />
+	<script type="text/javascript" src="<?php echo $axzm_path;?>extensions/axZmThumbSlider/lib/jquery.axZm.thumbSlider.js"></script>
 
 	<!-- Set of functions for this image cropping tool -->
-	<link rel="stylesheet" type="text/css" href="../axZm/extensions/jquery.axZm.imageCropEditor.css">
-	<script type="text/javascript" src="../axZm/extensions/jquery.axZm.imageCropEditor.js"></script>
+	<link name="az_editor_css_scripts" rel="stylesheet" type="text/css" href="<?php echo $axzm_path;?>extensions/jquery.axZm.imageCropEditor.css">
+	<script type="text/javascript" src="<?php echo $axzm_path;?>extensions/jquery.axZm.imageCropEditor.js"></script>
 
 	<!-- A small function to add title button which will expend to full description -->
-	<link rel="stylesheet" type="text/css" href="../axZm/extensions/jquery.axZm.expButton.css">
-	<script type="text/javascript" src="../axZm/extensions/jquery.axZm.expButton.js"></script>
+	<link name="az_editor_css_scripts" rel="stylesheet" type="text/css" href="<?php echo $axzm_path;?>extensions/jquery.axZm.expButton.css">
+	<script type="text/javascript" src="<?php echo $axzm_path;?>extensions/jquery.axZm.expButton.js"></script>
 
 	<!-- Some other JavaScripts for the editor -->
-	<script type="text/javascript" src="../axZm/plugins/JSON/jquery.json-2.3.min.js"></script>
-	<script type="text/javascript" src="../axZm/plugins/js-beautify/beautify-all.min.js"></script>
-	<script type="text/javascript" src="../axZm/plugins/jquery.scrollTo.min.js"></script>
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/JSON/jquery.json-2.3.min.js"></script>
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/js-beautify/beautify-all.min.js"></script>
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/jquery.scrollTo.min.js"></script>
 
 	<!-- Because of "sortable" used here, only needed for the editor! -->
-	<link href="../axZm/plugins/jquery.ui/themes/ajax-zoom/jquery-ui.css" type="text/css" rel="stylesheet" />
-	<script type="text/javascript" src="../axZm/plugins/jquery.ui/js/jquery-ui-1.8.24.custom.min.js"></script>
+	<link name="az_editor_css_scripts" href="<?php echo $axzm_path;?>plugins/jquery.ui/themes/ajax-zoom/jquery-ui.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/jquery.ui/js/jquery-ui-1.8.24.custom.min.js"></script>
 
 	<!-- CLEditor - WYSIWYG Editor (external jQuery plugin) -->
-	<link rel="stylesheet" type="text/css" href="../axZm/plugins/CLEditor/jquery.cleditor.css" />
-	<script type="text/javascript" src="../axZm/plugins/CLEditor/jquery.cleditor.min.js"></script>
-	<script type="text/javascript" src="../axZm/plugins/CLEditor/jquery.cleditor.table.min.js"></script>
+	<link name="az_editor_css_scripts" rel="stylesheet" type="text/css" href="<?php echo $axzm_path;?>plugins/CLEditor/jquery.cleditor.css" />
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/CLEditor/jquery.cleditor.min.js"></script>
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/CLEditor/jquery.cleditor.table.min.js"></script>
 
 	<?php
 	if (!$axzm_cms_mode)
 	{
 	?>
 	<!-- Javascript to style the syntax, not needed! -->
-	<link href="../axZm/plugins/demo/syntaxhighlighter/styles/shCore.css" type="text/css" rel="stylesheet" />
-	<link href="../axZm/plugins/demo/syntaxhighlighter/styles/shThemeCustom.css" type="text/css" rel="stylesheet" />
-	<style type="text/css">.syntaxhighlighter .line .number code{width: auto !important;} </style>
-	<script type="text/javascript" src="../axZm/plugins/demo/syntaxhighlighter/src/shCore.js"></script>
-	<script type="text/javascript" src="../axZm/plugins/demo/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-	<script type="text/javascript" src="../axZm/plugins/demo/syntaxhighlighter/scripts/shBrushPhp.js"></script>
-	<script type="text/javascript" src="../axZm/plugins/demo/syntaxhighlighter/scripts/shBrushCss.js"></script>
-	<script type="text/javascript" src="../axZm/plugins/demo/syntaxhighlighter/scripts/shBrushXml.js"></script>
-	<script type="text/javascript">SyntaxHighlighter.all();</script>
+	<link name="az_editor_css_scripts" rel="stylesheet" href="<?php echo $axzm_path;?>plugins/demo/prism/prism.css" type="text/css" media="screen">
+	<script type="text/javascript" src="<?php echo $axzm_path;?>plugins/demo/prism/prism.min.js"></script>
 	<?php
 	}
 	?>
@@ -151,13 +157,27 @@ if (!$axzm_cms_mode)
 		echo 'jQuery.aZcropEd.errors = false;';
 	?>
 	</script>
-	
+<?php
+if (!$axzm_tpl_mode)
+{
+?>
 </head>
 <body>
 
 <?php
 if (!$axzm_cms_mode)
 	include ('navi.php');
+
+}
+else
+{
+?>
+<script type="text/javascript">
+	// Move css to head if template mode
+	jQuery('*[name=az_editor_css_scripts]').appendTo('head');
+</script>
+<?php	
+}
 ?>
 
 <div id="outerWrap" style="width: 821px; margin: 0 auto;">
@@ -201,9 +221,9 @@ if (!$axzm_cms_mode)
 		<ul>
 			<li><a href="#aZcR_tabs-about">About</a></li>
 			<li><a href="#aZcR_tabs-sel">Crop settings</a></li>
-			<li><a href="#aZcR_tabs-crops">Cropped images</a></li>
-			<li><a href="#aZcR_tabs-descr">Description / Settings</a></li>
-			<li><a href="#aZcR_tabs-import"><?php echo !$axzm_cms_mode ? 'Import' : 'Save'; ?></a></li>
+			<li><a href="#aZcR_tabs-crops">Crops</a></li>
+			<li><a href="#aZcR_tabs-descr">Descriptions</a></li>
+			<li><a href="#aZcR_tabs-import"><?php echo !$axzm_cms_mode ? 'Import / Save' : 'Save'; ?></a></li>
 			<?php 
 			if (!$axzm_cms_mode)
 			{
@@ -221,7 +241,10 @@ if (!$axzm_cms_mode)
 			if (!$axzm_cms_mode)
 			{
 			?>
-				<div class="legend">About AJAX-ZOOM crop editor [Last updated: 2016-04-25]</div>
+				<div class="legend" style="line-height: 60%;">About AJAX-ZOOM crop editor <br>
+					<span style="font-size: 50%">[Editor version: <?php echo $editor_version; ?>, date: <?php echo $last_updated; ?>]</span>
+				</div>
+				
 				<p>With this tool you can easily create several crops from 2D images / galleries, 
 					360 spins or 3D multirow which are loaded into AJAX-ZOOM player. 
 					Besides other thinkable purposes the goal here is to make a "crop gallery" placed outside of the AJAX-ZOOM player. 
@@ -259,15 +282,15 @@ if (!$axzm_cms_mode)
 					</script>
 					<div class="legend">Demo other content</div>
 					<p>Press on the buttons below to load a different content into the player.</p>
-					<input type="button" value="360 example" 
+					<input type="button" value="360 example" autocomplete="off" 
 						onclick="jQuery.aZcropEd.changeAxZmContentPHP(loadDemo[1])">
-					<input type="button" value="2d example (single image)" 
+					<input type="button" value="2d example (single image)" autocomplete="off"
 						onclick="jQuery.aZcropEd.changeAxZmContentPHP(loadDemo[2])">
-					<input type="button" value="2d gallery (many images)" 
+					<input type="button" value="2d gallery (many images)" autocomplete="off" 
 						onclick="jQuery.aZcropEd.changeAxZmContentPHP(loadDemo[3])">
-					<input type="button" value="3d example (multirow)" 
+					<input type="button" value="3d example (multirow)" autocomplete="off" 
 						onclick="jQuery.aZcropEd.changeAxZmContentPHP(loadDemo[4])">
-					<input type="button" value="360 with hotspots" 
+					<input type="button" value="360 with hotspots" autocomplete="off" 
 						onclick="jQuery.aZcropEd.changeAxZmContentPHP(loadDemo[5])">
 				</div>
 			<?php
@@ -280,17 +303,17 @@ if (!$axzm_cms_mode)
 			<div class="legend">How to</div>
 			<ol>
 				<li style="margin-bottom: 10px">
-					<img src="../axZm/icons/default/button_iPad_settings.png" width="25" style="vertical-align: middle; margin: 2px 5px 2px 0px"> 
+					<img src="<?php echo $axzm_path;?>icons/default/button_iPad_settings.png" width="25" style="vertical-align: middle; margin: 2px 5px 2px 0px"> 
 					Optionally hit crop settings button or 
 						<a class="linkShowTab" href="javascript: void(0)" onclick="jQuery('#aZcR_tabs').tabs('select','#aZcR_tabs-sel');">
 						Crop settings</a>tab to adjust crop selector e.g. set aspect ratio and output parameters for the thumbnail.
 				</li>
 				<li style="margin-bottom: 10px">
-					<img src="../axZm/icons/default/button_iPad_jcrop.png" width="25" style="vertical-align: middle; margin: 2px 5px 2px 0px"> 
+					<img src="<?php echo $axzm_path;?>icons/default/button_iPad_jcrop.png" width="25" style="vertical-align: middle; margin: 2px 5px 2px 0px"> 
 					Hit the crop button to toggle crop and select region to crop. 
 				</li>
 				<li style="margin-bottom: 10px">
-					<img src="../axZm/icons/default/button_iPad_fire.png" width="25" style="vertical-align: middle; margin: 2px 5px 2px 0px"> 
+					<img src="<?php echo $axzm_path;?>icons/default/button_iPad_fire.png" width="25" style="vertical-align: middle; margin: 2px 5px 2px 0px"> 
 					When ready hit the red "fire crop" button. 
 				</li>
 				<li style="margin-bottom: 10px">
@@ -301,7 +324,7 @@ if (!$axzm_cms_mode)
 				<li style="margin-bottom: 10px">
 					Optionally add thumb title, title and description to the crop regions in 
 					<a class="linkShowTab" href="javascript: void(0)" 
-						onclick="jQuery('#aZcR_tabs').tabs('select','#aZcR_tabs-descr');">Description / Settings</a> tab.
+						onclick="jQuery('#aZcR_tabs').tabs('select','#aZcR_tabs-descr');">Descriptions</a> tab.
 				</li>
 				<li>
 					<a class="linkShowTab" href="javascript: void(0)" 
@@ -339,28 +362,28 @@ if (!$axzm_cms_mode)
 				<div class="azMsg clearfix">
 					<a href="example35_clean.php">
 						<img src="http://www.ajax-zoom.com/pic/layout/image-zoom_35_clean.jpg" 
-							width="100" align="left" style="margin-right: 10px; vertical-align: top; border: 2px groove #ffffff;">
+							width="100" align="left" style="margin: -5px 10px -5px -5px; vertical-align: top;">
 					</a>
 					<a href="example35_clean.php">example35_clean.php</a> basically has the same setup as this editor but without the toolbar under the player.
 				</div>
 				<div class="azMsg clearfix">
 					<a href="example35_clean_horizontal.php">
 						<img src="http://www.ajax-zoom.com/pic/layout/image-zoom_35_clean_horizontal.jpg" 
-							width="100" align="left" style="margin-right: 10px; vertical-align: top; border: 2px groove #ffffff;">
+							width="100" align="left" style="margin: -5px 10px -5px -5px; vertical-align: top;">
 					</a>
 					If you want to have a horizontal gallery please check out <a href="example35_clean_horizontal.php">example35_clean_horizontal.php</a>
 				</div>
 				<div class="azMsg clearfix">
 					<a href="example35_responsive.php">
 						<img src="http://www.ajax-zoom.com/pic/layout/image-zoom_35_responsive.jpg" 
-							width="100" align="left" style="margin-right: 10px; vertical-align: top; border: 2px groove #ffffff;">
+							width="100" align="left" style="margin: -5px 10px -5px -5px; vertical-align: top;">
 					</a>
 					For responsive integrations please use <a href="example35_responsive.php">example35_responsive.php</a>
 				</div>
 				<div class="azMsg clearfix">
 					<a href="example35_gallery.php">
 						<img src="http://www.ajax-zoom.com/pic/layout/image-zoom_35_gallery.jpg" 
-							width="100" align="left" style="margin-right: 10px; vertical-align: top; border: 2px groove #ffffff;">
+							width="100" align="left" style="margin: -5px 10px -5px -5px; vertical-align: top;">
 					</a>
 					Of course the cropped thumbnails do not need to be loaded into the thumb slider. 
 					In <a href="example35_gallery.php">example35_gallery.php</a> they are appended to some div.
@@ -368,16 +391,15 @@ if (!$axzm_cms_mode)
 				<div class="azMsg clearfix">
 					<a href="example32_responsive.php">
 						<img src="http://www.ajax-zoom.com/pic/layout/image-zoom_32_responsive.jpg" 
-							width="100" align="left" style="margin-right: 10px; vertical-align: top; border: 2px groove #ffffff;">
+							width="100" align="left" style="margin: -5px 10px -5px -5px; vertical-align: top;">
 					</a>
 					<a href="example32_responsive.php">example32_responsive.php</a> 
 						optionally loads the results of this crop editor into mouseover zoom / 360 combination 
 						and instantly attaches the crop gallery to the player. Very convenient for e-commerce.
 				</div>
 
-				<div class="azMsg"><a href="http://www.ajax-zoom.com/index.php?cid=contact">On request</a> 
+				<a href="http://www.ajax-zoom.com/index.php?cid=contact">On request</a> 
 					AJAX-ZOOM team will deliver to you exactly what you need as a different example or integrated into your page layout / html.
-				</div>
 
 				<div class="legend">The final code example</div>
 				The only difference between basic AJAX-ZOOM implementation / example 
@@ -386,7 +408,7 @@ if (!$axzm_cms_mode)
 				the thumbsnails; all codes for implementing can be also found in the example35_*.php files.
 				<div class="legend">JavaScript & CSS files in Head</div>
 				<?php
-				echo "<pre class='brush: html'>";
+				echo '<pre class="brush: html"><code class="language-markup">';
 				echo htmlspecialchars ('
 <!-- jQuery core -->
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -407,12 +429,12 @@ if (!$axzm_cms_mode)
 <link rel="stylesheet" href="../axZm/extensions/jquery.axZm.expButton.css" type="text/css" />
 <script type="text/javascript" src="../axZm/extensions/jquery.axZm.expButton.js"></script>
 				');
-				echo '</pre>';
+				echo '</code></pre>';
 				?>
 
 				<div class="legend">CSS</div>
 				<?php
-				echo '<pre class="brush: css">';
+				echo '<pre class="brush: html"><code class="language-css">';
 				echo htmlspecialchars ('
 #playerInnerWrap{
 	position: relative; border-left: 1px solid #AAAAAA; border-top: 1px solid #AAAAAA; border-bottom: 1px solid #AAAAAA; 
@@ -431,12 +453,12 @@ if (!$axzm_cms_mode)
 }
 
 				');
-				echo '</pre>';
+				echo '</code></pre>';
 				?>
 
 				<div class="legend">HTML markup (taken from <a href="http://www.ajax-zoom.com/examples/example35_clean.php">example35_clean.php</a>)</div>
 				<?php
-				echo "<pre class='brush: html'>";
+				echo '<pre class="brush: html"><code class="language-markup">';
 				echo htmlspecialchars ('
 <div id="playerInnerWrap" style="min-height: 480px;">
 	<div id="azPlayer" style="width: 721px;">
@@ -452,12 +474,12 @@ if (!$axzm_cms_mode)
 	</div>	
 </div>
 				');
-				echo '</pre>';
+				echo '</code></pre>';
 				?>
 
 				<div class="legend">Javascript</div>
 				<?php
-				echo "<pre class='brush: js'>";
+				echo '<pre class="brush: html"><code class="language-js">';
 				echo htmlspecialchars ('
 // Init the slider
 // Thumbs will be appended instantly
@@ -494,7 +516,7 @@ ajaxZoom.parameter = "example=spinIpad&3dDir=../pic/zoom3d/Canon_1100D";
 
 // Id of element where AJAX-ZOOM will be loaded into
 ajaxZoom.divID = "azPlayer";
-	 
+
 // Define callbacks, for complete list check the docs
 ajaxZoom.opt = {
 	onLoad: function(){ 
@@ -581,28 +603,8 @@ jQuery.fn.axZm.load({
 //window.fullScreenStartSplash = {enable: false, className: false, opacity: 0.75};
 //jQuery.fn.axZm.openFullScreen(ajaxZoom.path, ajaxZoom.parameter, ajaxZoom.opt, ajaxZoom.divID, false, false);
 				');
-				echo '</pre>';
+				echo '</code></pre>';
 				?>
-
-				<div class="legend">Is it free?</div>
-
-				<ul style="margin: 0;">
-					<li style="margin-top: 10px">
-					The answer is Yes and No. AJAX-ZOOM has it's own 
-						<a href="http://www.ajax-zoom.com/index.php?cid=download#heading_4">License Agreement</a>, please read!
-					</li>
-					<li style="margin-top: 10px">
-					Under certain conditions You can use it totally for free!
-					</li>
-					<li style="margin-top: 10px">
-					In any case you can and should <a href="http://www.ajax-zoom.com/index.php?cid=download" target="_blank">download</a> 
-					and test AJAX-ZOOM without any further obligations. If you like it and would have certain features enabled - You can buy it.
-					</li>
-					<li style="margin-top: 10px">
-					In case after all you have any doubts or questions please contact the 
-						<a href="http://www.ajax-zoom.com/index.php?cid=contact" target="_blank">support</a>.
-					</li>
-				</ul>
 
 				<?php
 				/* This include is just for the demo, you can remove it */
@@ -629,28 +631,37 @@ jQuery.fn.axZm.load({
 					</div>
 					<div id="cropOpt_ratioBox" style="clear: both; margin: 5px 0px 5px 0px;">
 						<label>Aspect ratio:</label>
-						W: <input id="cropOpt_ratio1" type="text" value="1" style="width: 50px" onchange="jQuery.aZcropEd.jCropAspectRatio()"> 
-						<input type="button" style="width: 30px;" value="&#8660;" onclick="jQuery.aZcropEd.jCropAspectFlipValues()">
-						H: <input id="cropOpt_ratio2" type="text" value="1" style="width: 50px" onchange="jQuery.aZcropEd.jCropAspectRatio()"> 
+						W: <input id="cropOpt_ratio1" type="text" value="1" autocomplete="off" 
+							style="width: 50px" onchange="jQuery.aZcropEd.jCropAspectRatio()"> 
+						<input type="button" style="width: 30px;" value="&#8660;" autocomplete="off" 
+							onclick="jQuery.aZcropEd.jCropAspectFlipValues()">
+						H: <input id="cropOpt_ratio2" type="text" value="1" autocomplete="off" 
+							style="width: 50px" onchange="jQuery.aZcropEd.jCropAspectRatio()"> 
 						<div>
 							<label></label>
-							<input type="button" value="as thumb" style="margin-top: 3px; width: 80px;" onclick="jQuery.aZcropEd.jCropAspectAsThumb()">
-							<input type="button" value="as image" style="margin-top: 3px; width: 80px;" onclick="jQuery.aZcropEd.jCropAspectAsImage()">
+							<input type="button" value="as thumb" autocomplete="off" 
+								style="margin-top: 3px; width: 80px;" onclick="jQuery.aZcropEd.jCropAspectAsThumb()">
+							<input type="button" value="as image" autocomplete="off" 
+								style="margin-top: 3px; width: 80px;" onclick="jQuery.aZcropEd.jCropAspectAsImage()">
 						</div>
 					</div>
 					<div id="cropOpt_sizeBox" style="clear: both; margin: 5px 0px 5px 0px; display: none;">
 						<label>Fixed size:</label>
-						W: <input id="cropOpt_sizeW" type="text" value="" style="width: 50px" onchange="jQuery.aZcropEd.jCropFixedSize()"> 
-						H: <input id="cropOpt_sizeH" type="text" value="" style="width: 50px" onchange="jQuery.aZcropEd.jCropFixedSize()"> px
+						W: <input id="cropOpt_sizeW" type="text" value="" autocomplete="off" 
+							style="width: 50px" onchange="jQuery.aZcropEd.jCropFixedSize()"> 
+						H: <input id="cropOpt_sizeH" type="text" value="" autocomplete="off" 
+							style="width: 50px" onchange="jQuery.aZcropEd.jCropFixedSize()"> px
 					</div>
 
 					<div class="legend">Thumbnail settings</div>
 
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
 						<label>Thumbnail size:</label>
-						W: <input id="cropOpt_thumbSizeW" type="text" value="<?php echo $default_thumb_size; ?>" 
+						W: <input id="cropOpt_thumbSizeW" type="text" 
+							value="<?php echo $default_thumb_size; ?>" autocomplete="off"
 							style="width: 50px" onchange="jQuery.aZcropEd.jCropInitSettings()">  
-						H: <input id="cropOpt_thumbSizeH" type="text" value="<?php echo $default_thumb_size; ?>" 
+						H: <input id="cropOpt_thumbSizeH" type="text" 
+							value="<?php echo $default_thumb_size; ?>" autocomplete="off"
 							style="width: 50px" onchange="jQuery.aZcropEd.jCropInitSettings()"> px
 					</div>
 
@@ -665,20 +676,22 @@ jQuery.fn.axZm.load({
 
 					<div id="cropOpt_colorBox" style="clear: both; margin: 5px 0px 5px 0px; display: none;">
 						<label>Background color (hex):</label>
-						#<input id="cropOpt_backColor" type="text" value="FFFFFF" style="width: 100px" onchange="jQuery.aZcropEd.jCropInitSettings()">
+						#<input id="cropOpt_backColor" type="text" value="FFFFFF" autocomplete="off" 
+							style="width: 100px" onchange="jQuery.aZcropEd.jCropInitSettings()">
 					</div>
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
 						<label>Jpeg quality:</label>
-						<input id="cropOpt_jpgQual" type="text" value="90" style="width: 40px" onchange="jQuery.aZcropEd.jCropInitSettings()"> 
+						<input id="cropOpt_jpgQual" type="text" value="90" style="width: 40px" autocomplete="off" 
+							onchange="jQuery.aZcropEd.jCropInitSettings()"> 
 						(10 - 100)
 					</div>	
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
 						<label>Cache (can be set later):</label>
-						<input id="cropOpt_cache" type="checkbox" value="1" onchange="jQuery.aZcropEd.jCropInitSettings()">
+						<input id="cropOpt_cache" type="checkbox" value="1" autocomplete="off" 
+							onchange="jQuery.aZcropEd.jCropInitSettings()">
 					</div>
 				</div>
 			</div>
-
 		</div>
 
 		<!-- Cropped images -->
@@ -702,7 +715,8 @@ jQuery.fn.axZm.load({
 			if (!$axzm_cms_mode)
 			{
 			?>
-				<div class="azMsg">Drag & drop to reorder the thumbs, click to get the paths and other information (see below), 
+				<div class="azMsg">Drag & drop to reorder the thumbs, 
+				click to get the paths and other information (see below), 
 				double click to zoom.
 				</div>
 			<?php
@@ -711,7 +725,8 @@ jQuery.fn.axZm.load({
 
 			<!-- Crop results real size -->
 			<div id="aZcR_cropResults"></div>
-			<input type="button" value="Reamove all crops" style="margin-top: 5px" onclick="jQuery.aZcropEd.clearAll()" /> 
+			<input type="button" value="Reamove all crops" autocomplete="off" 
+				style="margin-top: 5px" onclick="jQuery.aZcropEd.clearAll()" /> 
 			<?php 
 			if (!$axzm_cms_mode)
 			{
@@ -722,19 +737,22 @@ jQuery.fn.axZm.load({
 
 				<div style="clear: both; margin: 5px 0px 5px 0px;">
 					<label>Query string:</label>
-					<input id="aZcR_qString" type="text" onClick="this.select();" style="margin-bottom: 5px; width: 100%" value="">
+					<input id="aZcR_qString" type="text" onClick="this.select();" autocomplete="off" 
+						style="margin-bottom: 5px; width: 100%" value="">
 				</div>
 
 				<div style="clear: both; margin: 5px 0px 5px 0px;">
 					<label>Url:</label>
 					(please note that full Url might differ if this editor is implemented in a backend of some CMS)
-					<input id="aZcR_url" type="text" onClick="this.select();" style="margin-bottom: 5px; width: 100%" value="">
+					<input id="aZcR_url" type="text" onClick="this.select();" autocomplete="off" 
+						style="margin-bottom: 5px; width: 100%" value="">
 				</div>
 
 				<div style="clear: both; margin: 5px 0px 5px 0px;">
 					<label>Cached image url:</label>
 					(only available if "cache" option is chacked under "crop settings" tab)
-					<input id="aZcR_contentLocation" type="text" onClick="this.select();" style="margin-bottom: 5px; width: 100%" value="">
+					<input id="aZcR_contentLocation" type="text" onClick="this.select();" autocomplete="off" 
+						style="margin-bottom: 5px; width: 100%" value="">
 				</div>
 			<?php
 			}
@@ -743,12 +761,9 @@ jQuery.fn.axZm.load({
 
 		<!-- Description -->
 		<div id="aZcR_tabs-descr">
-			<div class="legend">Crop description</div>
+			<div class="legend">Crop descriptions / settings</div>
 
 			<div class="azMsg">
-				<img border="0" style="position: relative; cursor: pointer; float: right; margin-right: -5px; margin-top: -5px;" 
-					alt="close this box" title="close this message" onclick="jQuery(this).parent().remove()" src="../axZm/icons/default/zoombutton_close.png">
-
 				<?php 
 				if (!$axzm_cms_mode)
 				{
@@ -757,19 +772,21 @@ jQuery.fn.axZm.load({
 					In this editor and also in the derived "clean" examples like 
 					<a href="example35_clean.php">example35_clean.php</a> 
 					we use "axZmEb" - expandable button (AJAX-ZOOM additional plugin) to display these titles || descriptions 
-					over the image respectively inside the player. You could however easily change the usage of title || description in your implementation, 
+					over the image respectively inside the player. 
+					You could however easily change the usage of title || description in your implementation, 
 					e.g. display them under the player or whatever. Just change the "handleTexts" property of the options object 
-					when passing it to jQuery.axZmImageCropLoad - see source code of e.g. <a href="example35_clean.php">example35_clean.php</a>;<br><hr />
+					when passing it to jQuery.axZmImageCropLoad - see source code of e.g. 
+					<a href="example35_clean.php">example35_clean.php</a>;<br><br>
 					
 					Besides HTML or your text you could also load external content in iframe! The prefix for the source is "iframe:"<br><br>
-					e.g. to load an extennal page simply put something like this in the descripion:<br> 
-					iframe://www.canon.co.uk/For_Home/Product_Finder/Cameras/Digital_SLR/EOS_1100D
+					e.g. to load an external page simply put something like this in the descripion:<br> 
+					<code>iframe://www.canon.co.uk/For_Home/Product_Finder/Cameras/Digital_SLR/EOS_1100D</code>
 					<br><br>
 					To load a YouTube video you could put this (replace eLvvPr6WPdg with your video code): <br>
-					iframe://www.youtube.com/embed/eLvvPr6WPdg?feature=player_detailpage
+					<code>iframe://www.youtube.com/embed/eLvvPr6WPdg?feature=player_detailpage</code>
 					<br><br>
 					To load some dynamic content over AJAX use "ajax:" as prefix, e.g.<br>
-					ajax:/test/some_content_data.php?req=123
+					<code>ajax:/test/some_content_data.php?req=123</code>
 					<br><br>
 					If you do not define the title, then the content will be loaded instantly as soon as the spin animation finishes.
 					
@@ -781,7 +798,7 @@ jQuery.fn.axZm.load({
 					Optionally add a title and/or description. 
 					Besides HTML or your text you could also load external content in iframe! 
 					The prefix for the source is "iframe:"<br><br>
-					e.g. to load an extennal page simply put something like this in the descripion:<br> 
+					e.g. to load an external page simply put something like this in the descripion:<br> 
 					iframe://www.canon.co.uk/For_Home/Product_Finder/Cameras/Digital_SLR/EOS_1100D
 					<br><br>
 					To load a YouTube video you could put this (replace eLvvPr6WPdg with your video code): <br>
@@ -831,31 +848,32 @@ jQuery.fn.axZm.load({
 				if (!$axzm_cms_mode)
 				{
 				?>
-					<input type="button" value="Get all" onclick="jQuery.aZcropEd.getAllThumbs()">
+					<input type="button" value="Get all" autocomplete="off" onclick="jQuery.aZcropEd.getAllThumbs()">
 
-					<select onchange="jQuery.aZcropEd.getAllThumbs()" autocomplete=off>
+					<select onchange="jQuery.aZcropEd.getAllThumbs()" autocomplete="off">
 						<option value="qString">Query string</option>
 						<option value="url">Url</option>
 						<option value="contentLocation">Cached image url</option>
 					</select> 
 
-					<select onchange="handleDisplayLongLine(this)" autocomplete=off>
+					<select onchange="handleDisplayLongLine(this)" autocomplete="off">
 						<option value="JSON_data">JSON with data</option>
 						<option value="JSON">JSON</option>
 						<option value="CSV">CSV</option>
 					</select>
 
-					<span style="display: none;">separated with <input type="text" value="|" style="width: 20px;" onchange="jQuery.aZcropEd.getAllThumbs()"></span> 
+					<span style="display: none;">separated with <input type="text" value="|" style="width: 20px;" autocomplete="off" 
+						onchange="jQuery.aZcropEd.getAllThumbs()"></span> 
 					<br>and convert to be cached 
-					<input type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs()" checked="true" autocomplete=off>
+					<input type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs()" checked="true" autocomplete="off">
 					and replace thumb size 
-					<input type="checkbox" value="1" onclick="jQuery(this).next().toggle(); jQuery.aZcropEd.getAllThumbs();" autocomplete=off>
+					<input type="checkbox" value="1" onclick="jQuery(this).next().toggle(); jQuery.aZcropEd.getAllThumbs();" autocomplete="off">
 					<span style="display: none">
-						W: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete=off>
-						H: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete=off> px
+						W: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete="off">
+						H: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete="off"> px
 					</span>
 					<br>and convert px coordinates to percentage 
-					<input type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs();" autocomplete=off>
+					<input type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs();" autocomplete="off">
 				<?php
 				}
 				else
@@ -863,13 +881,13 @@ jQuery.fn.axZm.load({
 				?>
 					<input type="button" value="Refresh" onclick="jQuery.aZcropEd.getAllThumbs()">
 
-					<select style="display: none;" onchange="jQuery.aZcropEd.getAllThumbs()" autocomplete=off>
+					<select style="display: none;" onchange="jQuery.aZcropEd.getAllThumbs()" autocomplete="off">
 						<option value="qString">Query string</option>
 						<option value="url">Url</option>
 						<option value="contentLocation">Cached image url</option>
 					</select> 
 
-					<select style="display: none;" onchange="handleDisplayLongLine(this)" autocomplete=off>
+					<select style="display: none;" onchange="handleDisplayLongLine(this)" autocomplete="off">
 						<option value="JSON_data">JSON with data</option>
 						<option value="JSON">JSON</option>
 						<option value="CSV">CSV</option>
@@ -877,30 +895,30 @@ jQuery.fn.axZm.load({
 
 					<span style="display: none;"> <input type="text" value="|" style="width: 20px; display: none;" 
 						onchange="jQuery.aZcropEd.getAllThumbs()" autocomplete=off></span> 
-					<input style="display: none;" type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs()" checked="true" autocomplete=off>
+					<input style="display: none;" type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs()" checked="true" autocomplete="off">
 					and replace thumb size 
-					<input type="checkbox" value="1" onclick="jQuery(this).next().toggle(); jQuery.aZcropEd.getAllThumbs();" autocomplete=off>
+					<input type="checkbox" value="1" onclick="jQuery(this).next().toggle(); jQuery.aZcropEd.getAllThumbs();" autocomplete="off">
 					<span style="display: none">
-						W: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete=off>
-						H: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete=off> px
+						W: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete="off">
+						H: <input type="text" style="width: 50px" onchange="jQuery.aZcropEd.getAllThumbs();" autocomplete="off"> px
 					</span>
-					<input style="display: none;" type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs();" autocomplete=off>
+					<input style="display: none;" type="checkbox" value="1" onclick="jQuery.aZcropEd.getAllThumbs();" autocomplete="off">
 
 				<?php
 				}
 				?>
 			</div>
 
-			<form <?php echo !$axzm_cms_mode ? 'action="../axZm/saveCropJSON.php"' : ''; ?> id="aZcR_saveJSON">
-				<textarea id="aZcR_getAllThumbs" style="width: 100%; height: 350px; font-size: 10px; margin-top: 5px;" spellcheck="false"></textarea>
+			<form <?php echo !$axzm_cms_mode ? 'action="'.$axzm_path.'saveCropJSON.php"' : ''; ?> id="aZcR_saveJSON">
+				<textarea id="aZcR_getAllThumbs" style="width: 100%; height: 350px; font-size: 10px; margin-top: 5px;" 
+					spellcheck="false" autocomplete="off"></textarea>
 			</form>
-
 				<?php
 				if ($axzm_cms_mode)
 				{
 				?>
-				<input type="button" value="Save into database" id="btnSaveJSON"> 
-				<input type="button" value="Remove line breaks" style="margin-top: 5px;" 
+				<input type="button" value="Save into database" id="btnSaveJSON" autocomplete="off"> 
+				<input type="button" value="Remove line breaks" style="margin-top: 5px;" autocomplete="off" 
 					onclick="jQuery('#aZcR_getAllThumbs').val(jQuery('#aZcR_getAllThumbs').val().replace(/(\r\n|\n|\r|\t)/gm,''))">
 				
 				<div id="dialog-saveJSON" title="JSON saved" style="display: none;">
@@ -934,8 +952,9 @@ jQuery.fn.axZm.load({
 			{
 			?>
 				<!-- Just a button to select text in the textarea above, can be removed -->
-				<input type="button" value="Select text" style="margin-top: 5px;" onclick="jQuery('#aZcR_getAllThumbs')[0].select()">
-				<input type="button" value="Remove line breaks" style="margin-top: 5px;" 
+				<input type="button" value="Select text" style="margin-top: 5px;" autocomplete="off" 
+					onclick="jQuery('#aZcR_getAllThumbs')[0].select()">
+				<input type="button" value="Remove line breaks" style="margin-top: 5px;" autocomplete="off" 
 					onclick="jQuery('#aZcR_getAllThumbs').val(jQuery('#aZcR_getAllThumbs').val().replace(/(\r\n|\n|\r|\t)/gm,''))">
 
 				<!-- Save -->
@@ -948,8 +967,8 @@ jQuery.fn.axZm.load({
 				<div style="margin-top: 10px"><label>Create backup:</label><input type="checkbox" id="aZcR_jsBackUp" value="1" checked> - 
 					creates backup of the current JSON file if present with a timestamp in file name</div>
 				<div style="margin-top: 10px"><label>Save JSON:</label>
-				<input style="width: 100px;" type="button" value="Save" onClick="jQuery.aZcropEd.saveJSONtoFile();"> 
-				to <input type="text" value="" id="aZcR_jsFileName">.json (a-zA-Z0-9-_)
+				<input style="width: 100px;" type="button" value="Save" autocomplete="off" onClick="jQuery.aZcropEd.saveJSONtoFile();"> 
+				to <input type="text" value="" id="aZcR_jsFileName" autocomplete="off">.json (a-zA-Z0-9-_)
 				</div>
 
 				<div style="margin-top: 10px"><label></label>
@@ -962,11 +981,8 @@ jQuery.fn.axZm.load({
 				</div>
 
 				<div class="legend">Notes</div>
-				<ul>
-					<li>In your final frontend presentation you can compose url out of query string with js 
-						<code>jQuery.fn.axZm.installPath()+'zoomLoad.php?'+queryString</code>
-					</li>
-				</ul>
+				In your final frontend presentation you can compose url out of query string with js 
+				<code>jQuery.fn.axZm.installPath()+'zoomLoad.php?'+queryString</code>
 			<?php
 			}
 			?>
@@ -986,43 +1002,43 @@ jQuery.fn.axZm.load({
 					</div>
 
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
-					<label>1. Path for 2D:</label> <input type="text" value="" id="aZcR_pathToLoad2D" style="width: 400px;">  or
+					<label>1. Path for 2D:</label> <input type="text" value="" 
+						id="aZcR_pathToLoad2D" style="width: 400px;" autocomplete="off">  or
 					</div>
 
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
-					<label>2. Path for 360 or 3D:</label> <input type="text" value="" id="aZcR_pathToLoad360" style="width: 400px;"> 
+					<label>2. Path for 360 or 3D:</label> <input type="text" value="" 
+						id="aZcR_pathToLoad360" style="width: 400px;" autocomplete="off"> 
 					</div>
 
 					<div style="clear: both; margin: 15px 0px 5px 0px;">
-					<label>3. Hotspot file path:</label> <input type="text" value="" id="aZcR_hotspotFileToLoad" style="width: 350px;"> (optional)
+					<label>3. Hotspot file path:</label> <input type="text" value="" 
+						id="aZcR_hotspotFileToLoad" style="width: 350px;" autocomplete="off"> (optional)
 					</div>
 
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
-					<label>4. Crop file path:</label> <input type="text" value="" id="aZcR_cropFileToLoad" style="width: 350px;"> (optional)
+					<label>4. Crop file path:</label> <input type="text" value="" 
+						id="aZcR_cropFileToLoad" style="width: 350px;" autocomplete="off"> (optional)
 					</div>
 
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
-					<input type="button" value="LOAD" onClick="jQuery.aZcropEd.changeAxZmContentPHP();">&nbsp;&nbsp;
-					<input type="button" value="GET" onClick="jQuery.aZcropEd.getLoadedParameters();">
+					<input type="button" value="LOAD" onClick="jQuery.aZcropEd.changeAxZmContentPHP();" autocomplete="off">&nbsp;&nbsp;
+					<input type="button" value="GET" onClick="jQuery.aZcropEd.getLoadedParameters();" autocomplete="off">
 					</div>
 
 					<div id="aZcR_pathToParameter"></div>
 
 				<div class="legend">How does it work:</div>
-
 					<div style="clear: both; margin: 5px 0px 5px 0px;">
 						<ol> 
 							<li>
-								<ul>
-									<li><strong>For 2D</strong> (single image or gallery with more images) 
-									please enter local path(s) to the image(s), e.g. <br>
-									"<code>/pic/zoom/animals/test_animals1.png</code>"<br>
-									or image set with image paths separated with vertical dash e.g.<br>
-									"<code>/pic/zoom/animals/test_animals1.png|/pic/zoom/animals/test_animals2.png</code>"<br> 
-									If you want to load all images from a folder please just enter the path to this folder e.g. <br>
-									"<code>/pic/zoom/animals</code>"
-									</li>
-								</ul>
+								<strong>For 2D</strong> (single image or gallery with more images) 
+								please enter local path(s) to the image(s), e.g. <br>
+								"<code>/pic/zoom/animals/test_animals1.png</code>"<br>
+								or image set with image paths separated with vertical dash e.g.<br>
+								"<code>/pic/zoom/animals/test_animals1.png|/pic/zoom/animals/test_animals2.png</code>"<br> 
+								If you want to load all images from a folder please just enter the path to this folder e.g. <br>
+								"<code>/pic/zoom/animals</code>"
 							</li>
 							<li style="margin-top: 10px;">
 								<ul>
@@ -1040,37 +1056,28 @@ jQuery.fn.axZm.load({
 								</ul>
 							</li>
 							<li style="margin-top: 10px;">
-								<ul>
-									<li style="margin-top: 5px;">
-										<strong>Hotspot file path</strong> is the path to the file with hotspot configurations and positions, e.g.<br>
-										"<code>../pic/hotspotJS/eos_1100D.js</code>"<br> 
-										You can create such a file in <a href="example33.php">example33.php</a>
-									</li>
-								</ul>
+								<strong>Hotspot file path</strong> is the path to the file with hotspot configurations and positions, e.g.<br>
+								"<code>../pic/hotspotJS/eos_1100D.js</code>"<br> 
+								You can create such a file in <a href="example33.php">example33.php</a>
 							</li>
-							
 							<li style="margin-top: 10px;">
-								<ul>
-									<li style="margin-top: 5px;">
-										<strong>Crop file path</strong> is the path to the file with crop data which can be created with this editor, e.g.<br>
-										"<code>../pic/hotspotJS/eos_1100d.json</code>"<br> 
-
-									</li>
-								</ul>
+								<strong>Crop file path</strong> is the path to the file with crop data which can be created with this editor, e.g.<br>
+								"<code>../pic/hotspotJS/eos_1100d.json</code>"<br> 
 							</li>
 						</ol>
 					</div>
 
 				<div class="legend">Load only JSON data from file into editor</div>
-					<div style="margin-top: 10px">
-						<label>Crop JSON file path:</label>
-						<input type="text" value="" id="aZcR_onlyJSONcropFile" style="width: 350px;">
-					</div>
-					<label></label>e.g.: "../pic/cropJSON/eos_1100d.json"
-					<div style="margin-top: 10px">
-						<label></label>
-						<input type="button" value="Load" onclick="jQuery.aZcropEd.getJSONdataFromFile(jQuery('#aZcR_onlyJSONcropFile').val())">
-					</div>
+				<div style="margin-top: 10px">
+					<label>Crop JSON file path:</label>
+					<input type="text" value="" id="aZcR_onlyJSONcropFile" style="width: 350px;" autocomplete="off">
+				</div>
+				<label></label>e.g.: "<code>../pic/cropJSON/eos_1100d.json</code>"
+				<div style="margin-top: 10px">
+					<label></label>
+					<input type="button" value="Load" autocomplete="off" 
+						onclick="jQuery.aZcropEd.getJSONdataFromFile(jQuery('#aZcR_onlyJSONcropFile').val())">
+				</div>
 
 			</div>
 
@@ -1093,6 +1100,18 @@ jQuery.fn.axZm.load({
 		// First json to load
 		onLoad: function(){ // onSpinPreloadEnd
 			jQuery.aZcropEd.getJSONdataFromFile('<?php echo $first_load_crop_json;?>');
+			<?php 
+			if (isset($first_load_hotspot_json) && $first_load_hotspot_json) 
+			{
+			?>
+			setTimeout(function(){
+				jQuery.fn.axZm.loadHotspotsFromJsFile('<?php echo $first_load_hotspot_json; ?>', false, function(){
+					
+				});
+			}, 1000);
+			<?php
+			}
+			?>
 		},
 
 		onCropEnd: function(){
@@ -1106,7 +1125,7 @@ jQuery.fn.axZm.load({
 			}
 		},
 
-		onBeforeStart: function(){
+		onBeforeStart: function(){			
 			// Set background color, can also be done in css file
 			jQuery('.axZm_zoomContainer').css({backgroundColor: '#FFFFFF'});	
 
@@ -1245,7 +1264,7 @@ jQuery.fn.axZm.load({
 	};
 
 	// Define the path to the axZm folder, adjust the path if needed!
-	ajaxZoom.path = "../axZm/"; 
+	ajaxZoom.path = "<?php echo $axzm_path;?>"; 
 
 	// Define your custom parameter query string
 	// example=spinIpad has many presets for 360 images
@@ -1331,6 +1350,12 @@ jQuery.fn.axZm.load({
 	});
 
 </script>
-
+<?php
+if (!$axzm_tpl_mode)
+{
+?>
 </body>
 </html>
+<?php
+}
+?>

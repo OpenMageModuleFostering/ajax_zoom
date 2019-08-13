@@ -413,7 +413,6 @@ class Ax_Zoom_IndexController extends Mage_Core_Controller_Front_Action
     
     public function rootFolder()
     {
-        $p = parse_url(Mage::getBaseUrl());
-        return str_replace('index.php/', '', $p['path']);
+        return preg_replace('|js/$|', '', parse_url(Mage::getBaseUrl('js'), PHP_URL_PATH));
     }
 }

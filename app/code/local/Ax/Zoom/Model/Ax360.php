@@ -180,8 +180,7 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 
     public function rootFolder()
     {
-        $p = parse_url(Mage::getBaseUrl());
-        return str_replace('index.php/', '', $p['path']);
+        return preg_replace('|js/$|', '', parse_url(Mage::getBaseUrl('js'), PHP_URL_PATH));
     }
 
 	public function isProductActive($productId)

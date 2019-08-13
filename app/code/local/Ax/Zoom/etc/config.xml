@@ -1,9 +1,25 @@
 <?xml version="1.0"?>
+<!--
+/**
+*  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
+*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
+*  Version: 1.0.0
+*  Date: 2015-09-08
+*  Review: 2015-09-08
+*  URL: http://www.ajax-zoom.com
+*  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
+*
+*  @author    AJAX-ZOOM <support@ajax-zoom.com>
+*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @license   http://www.ajax-zoom.com/index.php?cid=download
+*/
+-->
 <config>
 
 	<modules>
 		<Ax_Zoom>
-			<version>0.0.1</version>
+			<version>1.0.0</version>
 		</Ax_Zoom>
 	</modules>
 	
@@ -194,10 +210,10 @@
 			<main>
 				<divid>az_mouseOverZoomContainer</divid>
 				<galleryDivID>az_mouseOverZoomGallery</galleryDivID>
-				<hideGalleryOneImage>1</hideGalleryOneImage>
-				<disableAllMsg >0</disableAllMsg >
+				<hideGalleryOneImage>true</hideGalleryOneImage>
+				<disableAllMsg>false</disableAllMsg>
 				<galleryHover></galleryHover>
-				<galleryAxZmThumbSlider>1</galleryAxZmThumbSlider>
+				<galleryAxZmThumbSlider>true</galleryAxZmThumbSlider>
 				<galleryAxZmThumbSliderParam>
 {
 	orientation: "horizontal",
@@ -237,21 +253,21 @@
 				</galleryAxZmThumbSliderParam>
 				<thumbW>58</thumbW>
 				<thumbH>58</thumbH>
-				<thumbRetina>1</thumbRetina>
+				<thumbRetina>true</thumbRetina>
 				<firstImageToLoad>1</firstImageToLoad>
-				<images360firstToLoad>0</images360firstToLoad>
+				<images360firstToLoad>false</images360firstToLoad>
 				<images360Opt>["spinReverse", "spinReverseZ", "spinBounce", "spinDemoRounds", "spinDemoTime", "spinWhilePreload"]</images360Opt>
-				<images360Thumb>1</images360Thumb>
-				<images360Preview>1</images360Preview>
-				<images360PreviewResponsive>1</images360PreviewResponsive>
+				<images360Thumb>true</images360Thumb>
+				<images360Preview>true</images360Preview>
+				<images360PreviewResponsive>true</images360PreviewResponsive>
 				<images360examplePreview>mouseOverExtension360</images360examplePreview>
 				<zoomMsg360>Drag to spin 360°, scroll to zoom in and out</zoomMsg360>
-				<preloadMouseOverImages>0</preloadMouseOverImages>
+				<preloadMouseOverImages>false</preloadMouseOverImages>
 				<noImageAvailableClass>axZm_mouseOverNoImage</noImageAvailableClass>
 				<width>auto</width>
 				<height>auto</height>
-				<responsive>1</responsive>
-				<oneSrcImg>0</oneSrcImg>
+				<responsive>true</responsive>
+				<oneSrcImg>false</oneSrcImg>
 				<heightRatio>1.0</heightRatio>
 				<heightMaxWidthRatio>["960|0.8", "700|0.7"]</heightMaxWidthRatio>
 				<widthRatio>false</widthRatio>
@@ -266,8 +282,8 @@
 				<exampleFancyboxFullscreen>mouseOverExtension</exampleFancyboxFullscreen>
 				<exampleFancybox>modal</exampleFancybox>
 				<exampleColorbox>modal</exampleColorbox>
-				<disableScrollAnm>1</disableScrollAnm>
-				<fullScreenApi>0</fullScreenApi>
+				<disableScrollAnm>true</disableScrollAnm>
+				<fullScreenApi>true</fullScreenApi>
 				<axZmCallBacks>{}</axZmCallBacks>
 				<azOptions>{}</azOptions>
 				<azOptions360>{}</azOptions360>
@@ -282,7 +298,7 @@
 				<spinnerParam>{}</spinnerParam>
 			</main>
 			<pinterest>
-				<enabled>1</enabled>
+				<enabled>true</enabled>
 				<build>parsePinBtns</build>
 				<wrapClass>axZm_mouseOverPinterest</wrapClass>
 				<href>//en.pinterest.com/pin/create/button/</href>
@@ -297,8 +313,8 @@
 				<posAutoInside>150</posAutoInside>
 				<posInsideArea>0.2</posInsideArea>
 				<autoFlip>120</autoFlip>
-				<biggestSpace>0</biggestSpace>
-				<zoomFullSpace>0</zoomFullSpace>
+				<biggestSpace>false</biggestSpace>
+				<zoomFullSpace>false</zoomFullSpace>
 				<zoomWidth>.product-shop|+2</zoomWidth>
 				<zoomHeight>.product-img-box</zoomHeight>
 				<autoMargin>15</autoMargin>
@@ -318,19 +334,19 @@
 				<flyBackSpeed>false</flyBackSpeed>
 				<flyBackTransition>linear</flyBackTransition>
 				<flyBackOpacity>0.2</flyBackOpacity>
-				<autoScroll>0</autoScroll>
+				<autoScroll>false</autoScroll>
 				<smoothMove>6</smoothMove>
 				<tint>false</tint>
 				<tintOpacity>0.3</tintOpacity>
 				<tintFilter>false</tintFilter>
-				<tintLensBack>1</tintLensBack>
-				<showTitle>1</showTitle>
+				<tintLensBack>true</tintLensBack>
+				<showTitle>true</showTitle>
 				<titleOpacity>0.5</titleOpacity>
 				<titlePosition>top</titlePosition>
 				<cursorPositionX>0.5</cursorPositionX>
 				<cursorPositionY>0.55</cursorPositionY>
 				<touchClickAbort>500</touchClickAbort>
-				<loading>1</loading>
+				<loading>true</loading>
 				<loadingMessage>Loading...</loadingMessage>
 				<loadingWidth>90</loadingWidth>
 				<loadingHeight>20</loadingHeight>
@@ -343,6 +359,10 @@
 			<products>
 				<displayOnlyForThisProductID></displayOnlyForThisProductID>
 			</products>
+			<magento>
+				<magentoAllImagesStart>false</magentoAllImagesStart>
+				<magentoNoImage>false</magentoNoImage>
+			</magento>
 		</axzoom_options>
 	</default>
 	

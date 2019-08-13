@@ -1,5 +1,20 @@
 <?xml version="1.0"?>
-
+<!--
+/**
+*  Module: jQuery AJAX-ZOOM for Magento, /app/design/frontend/rwd/default/layout/axzoom.xml
+*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
+*  Version: 1.0.0
+*  Date: 2015-09-08
+*  Review: 2015-09-08
+*  URL: http://www.ajax-zoom.com
+*  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
+*
+*  @author    AJAX-ZOOM <support@ajax-zoom.com>
+*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @license   http://www.ajax-zoom.com/index.php?cid=download
+*/
+-->
 <layout version="0.1.0">
     <catalog_product_view>
         <reference name="head">
@@ -32,7 +47,7 @@
             </action>
             <action method="addItem">
                <type>js_css</type>
-               <name>axzoom/axZm/extensions/axZmMouseOverZoom/mods/jquery.axZm.mouseOverZoomPrestashop.4.css</name>
+               <name>axzoom/axZm/extensions/axZmMouseOverZoom/mods/jquery.axZm.mouseOverZoomMagento.4.css</name>
             </action>
             <action method="addJs">
             	<script>axzoom/axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoom.4.js</script>

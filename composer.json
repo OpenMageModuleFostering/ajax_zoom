@@ -1,12 +1,12 @@
 {
     "name": "OpenMageModuleFostering/AJAX_ZOOM",
     "type": "magento-module",
-    "license": "Commercial",
+    "license": "Commercial,-demoware",
     "homepage": "",
-    "description": "AJAX-ZOOM - Image Zoom & Pan + 360° Object Rotate (Spin), Fullscreen product image view, iPad",
+    "description": "Responsive product detail view mousehover zoom extension with optional 360° spins or multilevel 3D",
     "authors": [
     {
-        "name": "vadus vadus",
+        "name": "AJAX-ZOOM",
         "email": "support@ajax-zoom.com"
     }
 ],

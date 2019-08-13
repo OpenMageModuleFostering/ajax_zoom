@@ -1,31 +1,43 @@
 <?php
+/**
+*  Module: jQuery AJAX-ZOOM for Magento, /app/design/frontend/rwd/default/template/ax_zoom/catalog/product/view/media.phtml
+*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
+*  Version: 1.0.0
+*  Date: 2015-09-08
+*  Review: 2015-09-08
+*  URL: http://www.ajax-zoom.com
+*  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
+*
+*  @author    AJAX-ZOOM <support@ajax-zoom.com>
+*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @license   http://www.ajax-zoom.com/index.php?cid=download
+*/
+
 $productId = Mage::app()->getRequest()->getParam('id');
 $ax = Mage::getModel('axzoom/ax360');
-
 $conf = Mage::getStoreConfig('axzoom_options');
 $tmp = parse_url(Mage::getBaseUrl());
 $axZmPath = str_replace('index.php/', '', $tmp['path']) . 'js/axzoom/axZm/';
-$product = Mage::getModel('catalog/product')->load($productId); //product id here
+$product = Mage::getModel('catalog/product')->load($productId);
 $images360Json = $ax->images360Json($productId);
-
-
-
+$imagesJsonAll = array();
 
 // 360 assigned from configurable products to Simple products
 $map = array();
-if ($groups = $ax->getCollection()->addFieldToFilter('id_product', $productId)->getData()) foreach ($groups as $group) {
-	$comp = Mage::helper('core')->jsonDecode($group['combinations']);
-	if ($comp) {
-		foreach ($comp as $pid) {
-			if (!isset($map[$pid])) {
-				$map[$pid] = array();
+if ($groups = $ax->getCollection()->addFieldToFilter('id_product', $productId)->getData()) {
+	foreach ($groups as $group) {
+		$comp = Mage::helper('core')->jsonDecode($group['combinations']);
+		if ($comp) {
+			foreach ($comp as $pid) {
+				if (!isset($map[$pid])) {
+					$map[$pid] = array();
+				}
+				array_push($map[$pid], $group['id_360']);
 			}
-			array_push($map[$pid], $group['id_360']);
 		}
-		
 	}
 }
-
 
 // all attributes map
 $mapAttributesCodeId = array();
@@ -44,12 +56,11 @@ if ($product->type_id == 'configurable') {
 	}
 }
 
-
 // get associated products
 $res = array();
 if ($product->isConfigurable()) {
-	$childProducts = Mage::getModel('catalog/product_type_configurable')
-		->getUsedProducts(null,$product);
+	$childProducts = Mage::getModel('catalog/product_type_configurable')->getUsedProducts(null, $product);
+
 	foreach ($childProducts as $child) {
 
 		$data = $child->getData();
@@ -57,41 +68,54 @@ if ($product->isConfigurable()) {
 
 		$pairs = array();
 		$labels = array();
-		foreach ($attributesCodes as $code) {
-			$pairs[] = $mapAttributesCodeId[$code] . ':' . $data[$code];
-
+		
+		foreach ($attributesCodes as $code) { // $code is e.g. color or size
+			$pairs[] = $mapAttributesCodeId[$code] . ':' . $data[$code]; // generate pairs of attribures
 			$attr = $product->getResource()->getAttribute($code);
-			$option_label = $attr->getSource()->getOptionText($data[$code]);
+			
+			// We need to get default label value and not language value - getAllOptions(false, true) will return default values
+			// http://docs.magentocommerce.com/Mage_Eav/Mage_Eav_Model_Entity_Attribute_Source_Table.html
+			$option_label = $ax->findDefaultLabelValue($attr->getSource()->getAllOptions(false, true), $data[$code]);
+			if ($option_label == false){
+				// This would return language specific values
+				$option_label = $attr->getSource()->getOptionText($data[$code]);
+			}
+			
 			array_push($labels, trim($option_label));
 		}
-		  
+
 		$idx = implode(',', $pairs);
 		$res[$idx] = array();
 		
 		$obj = null;
 		$cnt = 0;
+		
 		// add native images
 		foreach ($p->getMediaGalleryImages() as $image) {
-			
 			$tmp = parse_url($image->getUrl());
 			if (!$obj) $obj = new stdClass;
 			$params = new stdClass;
 			$params->img = $tmp['path'];
+			array_push($imagesJsonAll, $tmp['path']);
 			$params->title = '';
 			$obj->$cnt = $params; 
 			$cnt++;
 		}
 
-		// add related images via labels
+		// add related images via labels (images from configurable product)
 		foreach ($product->getMediaGalleryImages() as $image) {
-			if ($image->label_default != '' && in_array(trim($image->label_default), $labels)) {
+			if ($image->label_default != '' && in_array(trim($image->label_default), $labels)) {	
 				$tmp = parse_url($image->getUrl());
 				if (!$obj) $obj = new stdClass;
 				$params = new stdClass;
 				$params->img = $tmp['path'];
+				array_push($imagesJsonAll, $tmp['path']);
 				$params->title = '';
 				$obj->$cnt = $params; 
 				$cnt++;
+			}else{
+				$tmp = parse_url($image->getUrl());
+				array_push($imagesJsonAll, $tmp['path']);
 			}
 		}
 
@@ -100,93 +124,80 @@ if ($product->isConfigurable()) {
 		} else {
 			$res[$idx]['images'] = new stdClass();
 		}
+		
 		$extraGroups = empty($map[$data['entity_id']]) ? array() : $map[$data['entity_id']];
 		$res[$idx]['images360'] = Mage::helper('core')->jsonDecode(str_replace("'", '"', $ax->images360Json($data['entity_id'], $extraGroups)));
 	}
 }
 
-//$helper = Mage::helper('configurableswatches/mediafallback');
-//$imageFallback = $helper->getConfigurableImagesFallbackArray($product, array('image'), null);
-//print_r($imageFallback);
-
-
-/* OLD (based on labels)
-// swatches
-$swatches = array();
-if (version_compare(Mage::getVersion(), '1.9.1') >= 0) {
-	$helper = Mage::helper('configurableswatches/mediafallback');
-	if ($labelMapping = $product->getChildAttributeLabelMapping() && $imageFallback = $helper->getConfigurableImagesFallbackArray($product, array('image'), null)) {
-
-		foreach ($imageFallback['option_labels'] as $label => $data) {
-			$swatches[$label] = array();
-			$cnt = 1;
-			$extraGroups = array();
-			foreach ($data['products'] as $pid) {
-				$p = Mage::getModel('catalog/product')->load($pid);
-				$obj = null;
-				foreach ($p->getMediaGalleryImages() as $image) {
-					
-					$tmp = parse_url($image->getUrl());
-					$obj = new stdClass;
-					$params = new stdClass;
-					$params->img = $tmp['path'];
-					$params->title = '';
-					$obj->$cnt = $params; 
-					$cnt++;
-				}
-				if ($obj != null){
-					$swatches[$label]['images'] = $obj;
-				}
-				if (isset($map[$pid])) {
-					$extraGroups = array_merge($extraGroups, $map[$pid]);
-				}
-			}
-			$swatches[$label]['images360'] = Mage::helper('core')->jsonDecode(str_replace("'", '"', $ax->images360Json($data['products'], $extraGroups)));
-		}
-	}
-}
-*/
-
-
+// Prepare json for AJAX-ZOOM
 $cnt = 0;
 $imagesJson = array();
+$imagesJsonAll = array_unique($imagesJsonAll);
+
+// Some images present
 if (count($this->getGalleryImages()) > 0) {
 	
-	foreach ($this->getGalleryImages() as $image) {
+	// If no base image is defined and there is only one image in the gallery and there is a 360 view for this product, then we do not show this image at all. 
+	// You can change it by setting the radio button "Base Image" under product configuration -> Images 
+	if (!($images360Json != '{}' && count($this->getGalleryImages()) == 1 && $product->getImage() == 'no_selection')){
 		
-		$check_image = true;
-		if(method_exists($this, 'isGalleryImageVisible')) {
-			$check_image = $this->isGalleryImageVisible($image);
-		}
+		// Loop over gallery images
+		foreach ($this->getGalleryImages() as $image) {
+			
+			$check_image = false;
+			
+			if (method_exists($this, 'isGalleryImageVisible')) {
+				$check_image = $this->isGalleryImageVisible($image);
+			} else {
+				$check_image = true;
+			}
 
-		if ($check_image) {
-			$cnt++;
-			$tmp = parse_url($image->getUrl());
-			array_push($imagesJson, $cnt . ': {img: "' . $tmp['path'] . '", title: ""}');
+			if ($check_image) {
+				$cnt++;
+				$tmp = parse_url($image->getUrl());
+				array_push($imagesJson, $cnt . ': {img: "' . $tmp['path'] . '", title: ""}');
+			}
 		}
 	}
-} else {
-	if($image_url = $this->helper('catalog/image')->init($product, 'image')) {
+} 
+// No images present
+else if ($conf['magento']['magentoNoImage'])
+{
+	if ($image_url = $this->helper('catalog/image')->init($product, 'image')) {
 		$tmp = parse_url($image_url);
 		array_push($imagesJson, '1: {img: "' . $tmp['path'] . '", title: ""}');
 	}
 }
 ?>
-<div id="az_mouseOverZoomParent" style="margin-bottom: 20px;">
+
+<script type="text/javascript">
+	// Fallback if catalog_product_view reference name="head" is not loaded
+	var mageAzJsUrl = '<?php echo Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_JS).'axzoom/'; ?>';
+	document.writeln(unescape("%3Cscript type='text/javascript' src='"+mageAzJsUrl+"check_fallback.js'%3E%3C/script%3E"));
+</script>
+
+<div id="az_mouseOverZoomParent">
 	<!-- Container for mouse over image -->
-	<div id="az_mouseOverZoomContainer" style="position: relative; border: #AAA 1px solid;">
-	    Mouseover Zoom loading...
+	<div id="az_mouseOverZoomContainer">
+	    Zoom loading...
 	</div>
 
 	<!-- gallery with thumbs (will be filled with thumbs by javascript) -->
-	<div id="az_mouseOverZoomGallery" style="position: relative; margin-top: 20px; height: 76px; width: 100%; display: none;">
+	<div id="az_mouseOverZoomGallery">
 	    Gellery loading...
 	</div>
 </div>
 
-<?php echo $this->getChildHtml('after'); ?>
+<?php 
+	echo $this->getChildHtml('after'); 
+?>
 
+<!-- AJAX-ZOOM js block -->
 <script type="text/javascript">
+;(function($){
+	
+	// Load plugin settings
 	<?php
 	$exclParArray = array('LICENSE_LIC');
 	foreach ($conf as $group => $data){
@@ -202,17 +213,32 @@ if (count($this->getGalleryImages()) > 0) {
 		}
 	}
 	?>
+	
 	var AXZMPATH = '<?php echo $axZmPath; ?>';
 	
-	// colors
+	// Colors / attributes
 	var axAssociated = jQuery.parseJSON('<?php echo Mage::helper('core')->jsonEncode($res); ?>');
-		
-	// default 360
+
+	// Default plain images
+	<?php if ($conf['magento']['magentoAllImagesStart'] == 'true'){ ?>
+		var IMAGES_JSON = <?php echo $ax->imagesJsonAll($imagesJsonAll);?>;
+	<?php } else { ?>
+		var IMAGES_JSON = {<?php echo implode(',', $imagesJson);?>};
+	<?php } ?>	
+	
+	// All images
+	var IMAGES_ALL_JSON = <?php echo $ax->imagesJsonAll($imagesJsonAll);?>;
+
+	// Default 360
 	var IMAGES_360_JSON = <?php echo $images360Json; ?>;
 	
-	// default plain images
-	var IMAGES_JSON = {<?php echo implode(',', $imagesJson);?>};
-	
+	// Need that later for not reloading if images are the same
+	var IMAGES_AND_360_LOADED = JSON.stringify({
+		images: jQuery.extend(true, {}, IMAGES_JSON),
+		images360: jQuery.extend(true, {}, IMAGES_360_JSON)
+	});	
+
+	// AJAX-ZOOM mouseover and other parameters
 	var zoomParams = {
 		disableAllMsg: AJAXZOOM_MAIN_DISABLEALLMSG,
 		axZmPath: AXZMPATH,
@@ -339,85 +365,95 @@ if (count($this->getGalleryImages()) > 0) {
 			zoomMsgClick: AJAXZOOM_MOUSEOVERZOOMPARAM_ZOOMMSGCLICK,
 			spinner: AJAXZOOM_MAIN_SPINNER
 		}
-
 	};
-
+	
+	// Init AJAX-ZOOM
 	jQuery.mouseOverZoomInit(zoomParams);
 
-	jQuery.axZm_psh = { };
-	jQuery.axZm_psh.prevPid = null;
-	jQuery.axZm_psh.compVersions = function(strV1, strV2) { 
-	    var nRes = 0, parts1 = strV1.split('.'), parts2 = strV2.split('.'), nLen = Math.max(parts1.length, parts2.length); 
-	    for (var i = 0; i < nLen; i++) { 
-	        var nP1 = (i < parts1.length) ? parseInt(parts1[i], 10) : 0, nP2 = (i < parts2.length) ? parseInt(parts2[i], 10) : 0;
-	        if (isNaN(nP1)) { nP1 = 0; } if (isNaN(nP2)) { nP2 = 0; } 
-	        if (nP1 != nP2) { nRes = (nP1 > nP2) ? 1 : -1; break; } 
-	    } 
-	    return nRes; 
+	// Swatches
+	var resetAxZoom = function() {
+		if (JSON.stringify({images: IMAGES_JSON, images360: IMAGES_360_JSON}) == IMAGES_AND_360_LOADED){
+			return;
+		} 
+		
+		IMAGES_AND_360_LOADED = JSON.stringify({images: IMAGES_JSON, images360: IMAGES_360_JSON});
+		jQuery.mouseOverZoomInit.replaceImages( { 
+			divID: AJAXZOOM_MAIN_DIVID,
+			galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
+			images: IMAGES_JSON,
+			images360: IMAGES_360_JSON
+		});
 	};
 	
-	<?php //if (version_compare(Mage::getVersion(), '1.9.1') >= 0): ?>
+	// Shortcut for maybe other applications or additional functionality
+	// window.resetAxZoom() will reset AJAX-ZOOM to the state when article is loaded without attribute selection
+	window.resetAxZoom = resetAxZoom;
 	
-	
-	// Swatches
-	jQuery(function($) {
-
-		var resetAxZoom = function() {
-			$.mouseOverZoomInit.replaceImages( { 
+	// Change values
+	var updateAxZoomAction = function(idxSel){
+		//JSON.stringify(obj1) === JSON.stringify(obj2) 
+		if ( (jQuery.isPlainObject(idxSel.images) && !jQuery.isEmptyObject(idxSel.images) ) 
+			|| (jQuery.isPlainObject(idxSel.images360) && !jQuery.isEmptyObject(idxSel.images360) )) {
+			
+			if (JSON.stringify({images: idxSel.images, images360: idxSel.images360}) == IMAGES_AND_360_LOADED){
+				return;
+			} 
+			
+			IMAGES_AND_360_LOADED = JSON.stringify({images: idxSel.images, images360: idxSel.images360});
+			
+			jQuery.mouseOverZoomInit.replaceImages( { 
 				divID: AJAXZOOM_MAIN_DIVID,
 				galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
-				images: IMAGES_JSON,
-				images360: IMAGES_360_JSON
-			});
-		};
-		
-		window.resetAxZoom = resetAxZoom;
-
-		var updateAxZoom = function(e) {
-
-			var obj = $(this);
-
-			setTimeout(function(){
-
-				if(e.type == 'change' && obj.val() == '') {
-					resetAxZoom();
-					return;
-				}
-
-				var pairs = [];
-				for (var k in spConfig.state){
-					if (typeof spConfig.state[k] !== 'function' && typeof spConfig.state[k] !== 'object' &&  spConfig.state[k] != false) {
-						pairs.push(k + ':' + spConfig.state[k]);
-					}
-				}
-				var idx = pairs.join(',');
-				
-				//console.log(idx, axAssociated);
-
-				if(axAssociated[idx]) {
-					
-					if( ($.isPlainObject(axAssociated[idx].images) && !$.isEmptyObject(axAssociated[idx].images)) 
-						|| 
-						($.isPlainObject(axAssociated[idx].images360) && !$.isEmptyObject(axAssociated[idx].images360))
-						) {
-						$.mouseOverZoomInit.replaceImages( { 
-							divID: AJAXZOOM_MAIN_DIVID,
-							galleryDivID: AJAXZOOM_MAIN_GALLERYDIVID,
-							images: axAssociated[idx].images,
-							images360: axAssociated[idx].images360
-						});
-					} else { // show initial images
-						resetAxZoom();
-					}
-				}
-
-			}, 100);
-		
+				images: idxSel.images,
+				images360: idxSel.images360
+			} );
+		} else { // show initial images
+			resetAxZoom();
 		}
+	};
+	
+	var updateAxZoom = function(e) {
+		var obj = jQuery(this);
 
-		$('.swatch-label').click(updateAxZoom); // version 1.9.1 or more
-		$('.super-attribute-select').change(updateAxZoom);
+		setTimeout(function(){
+							
+			if(e.type == 'change' && obj.val() == '') {
+				resetAxZoom();
+				return;
+			}
+
+			var pairs = [];
+			
+			for (var k in spConfig.state){
+				if (typeof spConfig.state[k] !== 'function' && typeof spConfig.state[k] !== 'object' &&  spConfig.state[k] != false) {
+					pairs.push(k + ':' + spConfig.state[k]);
+				}
+			}
+			
+			var idx = pairs.join(',');
+							
+			var idxSel = axAssociated[idx];
+			
+			if (idxSel) {
+				updateAxZoomAction(idxSel);
+			} else {
+				// try to find whatever
+				jQuery.each(axAssociated, function(k, v){
+					if (k.indexOf(idx) != -1){
+						updateAxZoomAction(v);
+						return false;
+					}
+				})
+			}
+
+		}, 50);
+	
+	}
+	
+	jQuery(document).ready(function() {
+		jQuery('.swatch-label').click(updateAxZoom); // version 1.9.1 or more
+		jQuery('.super-attribute-select').change(updateAxZoom);
 	});
 	
-	<?php //endif; ?>
+})(jQuery);
 </script>

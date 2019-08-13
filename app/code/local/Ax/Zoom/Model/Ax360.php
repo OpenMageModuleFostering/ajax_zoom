@@ -1,4 +1,19 @@
 <?php
+/**
+*  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Model/Ax360.php
+*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
+*  Version: 1.0.0
+*  Date: 2015-09-08
+*  Review: 2015-09-08
+*  URL: http://www.ajax-zoom.com
+*  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
+*
+*  @author    AJAX-ZOOM <support@ajax-zoom.com>
+*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @license   http://www.ajax-zoom.com/index.php?cid=download
+*/
+
 class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 {
 	static $axZmH;
@@ -203,7 +218,27 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 			return true;
 		}
 		return false;
-	}	
+	}
+	
+	public function imagesJsonAll($arr)
+	{
+		$imagesJson = array();
+		foreach ($arr as $k=>$v){
+			array_push($imagesJson, '{img: "' .$v . '", title: ""}');
+		}
+		return '[' .implode(', ', $imagesJson). ']';
+	}
+	
+	public function findDefaultLabelValue($arr, $key)
+	{
+		if (!is_array($arr)){return false;}
+		foreach ($arr as $k=>$v){
+			if (isset($v['value']) && $v['value'] == $key && isset($v['label'])){
+				return $v['label'];
+			}
+		}
+		return false;
+	}
 }
 
 Ax_Zoom_Model_Ax360::$axZmH;

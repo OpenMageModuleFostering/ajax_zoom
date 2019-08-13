@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-settings.phtml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.0
-*  Date: 2015-09-08
-*  Review: 2015-09-08
+*  Version: 1.0.4
+*  Date: 2015-10-26
+*  Review: 2015-10-26
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -58,9 +58,9 @@ if ($product->isConfigurable()) {
 					<tr>
 						<td class="label"><label for="meta_title"><?php echo $this->__('AJAX ZOOM enabled for this product\'s detail view') ?></label></td>
 						<td class="value">
-							<input type="radio" name="az_active" id="az_active_on" value="1" <? if($active == 1):?>checked="checked"<? endif ?>/>
+							<input type="radio" name="az_active" id="az_active_on" value="1" <?php if($active == 1):?>checked="checked"<?php endif ?>/>
 							<label class="t" for="az_active_on"><?php echo $this->__('Yes') ?></label>
-							<input type="radio" name="az_active" id="az_active_off" value="0" <? if($active == 0):?>checked="checked"<? endif ?>/>
+							<input type="radio" name="az_active" id="az_active_off" value="0" <?php if($active == 0):?>checked="checked"<?php endif ?>/>
 							<label class="t" for="az_active_off"><?php echo $this->__('No') ?></label>
 						</td>
 						<td class="scope-label"><span class="nobr"></span></td>
@@ -150,7 +150,7 @@ if ($product->isConfigurable()) {
 
 							<?php foreach ($associated as $id => $name): ?>
 							<input type="checkbox" name="combinations[]" value="<?php echo $id ?>" class="settings-combinations"> <?php echo $name ?><br>
-							<? endforeach; ?>
+							<?php endforeach; ?>
 							
 							<div class="" style="display: block; margin-top: 10px;">
 								<?php echo $this->__('Same as with images you can define which 360 should be shown in conjunction with which combinations.') ?>
@@ -158,7 +158,7 @@ if ($product->isConfigurable()) {
 							</div>							
 						</td>
 					</tr>
-					<? endif; ?>
+					<?php endif; ?>
 				</tbody>
 			</table>
 		</div>

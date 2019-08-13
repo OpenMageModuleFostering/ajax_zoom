@@ -2,7 +2,7 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /js/axzoom/check_fallback.js
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.2
+*  Version: 1.0.4
 *  Date: 2015-10-09
 *  Review: 2015-10-09
 *  URL: http://www.ajax-zoom.com
@@ -21,7 +21,7 @@ if (!jQuery.isFunction(jQuery.mouseOverZoomInit)){
 	document.writeln(unescape("%3Clink rel='stylesheet' type='text/css' href='"+mageAzJsUrl+"axZm/extensions/axZmThumbSlider/skins/default/jquery.axZm.thumbSlider.css' %3E"));
 	document.writeln(unescape("%3Clink rel='stylesheet' type='text/css' href='"+mageAzJsUrl+"axZm/extensions/axZmMouseOverZoom/jquery.axZm.mouseOverZoom.4.css' %3E"));
 	document.writeln(unescape("%3Clink rel='stylesheet' type='text/css' href='"+mageAzJsUrl+"axZm/extensions/axZmMouseOverZoom/mods/jquery.axZm.mouseOverZoomMagento.4.css' %3E"));
-
+	
 	if (!jQuery.isFunction(jQuery.fancybox)){
 		document.writeln(unescape("%3Clink rel='stylesheet' type='text/css' href='"+mageAzJsUrl+"axZm/plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.css' %3E"));
 		document.writeln(unescape("%3Cscript type='text/javascript' src='"+mageAzJsUrl+"axZm/plugins/demo/jquery.fancybox/jquery.fancybox-1.3.4.pack.js'%3E%3C/script%3E"));

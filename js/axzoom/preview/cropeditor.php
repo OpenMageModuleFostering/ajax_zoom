@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /jss/axzoom/preview.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.0
-*  Date: 2016-05-07
-*  Review: 2016-05-07
+*  Version: 1.2.1
+*  Date: 2016-05-15
+*  Review: 2016-05-15
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -13,11 +13,23 @@
 *  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
-
 	require_once('../../../app/Mage.php');
 	umask(0);
 	Mage::app();
 
+	/* This is not full protection and is not ment to be full protection */
+	$sess = false;
+	$sess_id = isset($_COOKIE['adminhtml']) ? $_COOKIE['adminhtml'] : false;
+
+	if ($sess_id){
+	    $sess = Mage::getSingleton('core/resource_session')->read($sess_id);
+	}
+
+	if (!($sess && stristr($sess, 'Mage_Admin_Model_User'))){
+		echo 'Oops. Something went wrong. If you are the admin of this website and you are logged in, please contact AJAX-ZOOM support.';
+		exit;
+	}
+	
 	/* Set to true to remove certain things not needed if included in shops / cms */
 	$axzm_cms_mode = true;
 	$first_load360_dir = Mage::app()->getRequest()->getParam('3dDir');

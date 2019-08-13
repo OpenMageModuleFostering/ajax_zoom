@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Model/Ax360.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.0
-*  Date: 2016-05-07
-*  Review: 2016-05-07
+*  Version: 1.2.1
+*  Date: 2016-05-15
+*  Review: 2016-05-15
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -67,26 +67,27 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 			$setsGroups = $this->getSetsGroups($productId);
 			foreach ($setsGroups as $group) {
 
-				if ($group['status'] == 0)
+				if ($group['status'] == 0){
 					continue;
-
+				}
+				
 				$settings = $this->prepareSettings($group['settings']);
 				if (!empty($settings)) $settings = ", $settings";
 
 				if ($group['qty'] > 0) {
-					
+
 					$crop = empty($group['crop']) ? '[]' : trim(preg_replace('/\s+/', ' ', $group['crop']));
-					
+
 					if ($group['qty'] == 1) {
 						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $productId . "/" . $group['id_360'] . "/" . $group['id_360set'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]";
 					} else {
 						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $productId . "/" . $group['id_360'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]";
 					}
-					
+
 					if ($crop && $crop != '[]') {
 						$json .= ', "crop": '.$crop;
 					}
-					
+
 					$json .= '}';
 					
 					$cnt++;
@@ -98,12 +99,13 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 		$cnt = 1;
 		if ($extraGroups) {
 			foreach ($extraGroups as $id360) {
-			
+
 				$setsGroup = $this->getSetsGroup($id360);
 				$group = $setsGroup[0];
 
-				if ($group['status'] == 0)
+				if ($group['status'] == 0){
 					continue;
+				}
 
 				$settings = $this->prepareSettings($group['settings']);
 				if (!empty($settings)) $settings = ", $settings";
@@ -116,20 +118,21 @@ class Ax_Zoom_Model_Ax360 extends Mage_Core_Model_Abstract
 					} else {
 						$json .= "'" . $group['id_360'] . "'" . ":  {'path': '" . $this->rootFolder() . "js/axzoom/pic/360/" . $group['id_product'] . "/" . $group['id_360'] . "'" . $settings . ", 'combinations': [" . $group['combinations'] . "]";
 					}
-					
+
 					if ($crop && $crop != '[]') {
-						$json .= ', "crop": '.$crop;
+						// this goes over parseJson
+						$crop = str_replace('\\', '\\\\', $crop);
+  						$json .= ', "crop": '.$crop;
 					}
-					
+
 					$json .= '}';
-					
+
 					$cnt++;
 					if ($cnt != count($extraGroups)+1) $json .= ',';
 				}
-
 			}
 		}
-		
+
 		$json .= '}';
 
 		return $json;

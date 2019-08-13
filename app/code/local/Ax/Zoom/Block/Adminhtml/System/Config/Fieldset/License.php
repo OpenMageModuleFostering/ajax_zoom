@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/Block/Adminhtml/System/Config/Fieldset/License.php
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.3
-*  Date: 2015-10-09
-*  Review: 2015-10-09
+*  Version: 1.0.0
+*  Date: 2015-09-08
+*  Review: 2015-09-08
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -20,26 +20,27 @@ class Ax_Zoom_Block_Adminhtml_System_Config_Fieldset_License extends Mage_Adminh
     {
         $this->addColumn('domain', array(
             'label' => Mage::helper('axzoom')->__('Domain'),
-            'style' => 'width:200px'
+            'style' => 'width:100px',
         ));
         $this->addColumn('type', array(
             'label' => Mage::helper('axzoom')->__('License Type'),
+            'style' => 'width:100px',
             'renderer' => 'bla'
         ));
 
         $this->addColumn('license', array(
             'label' => Mage::helper('axzoom')->__('License Key'),
-            'style' => 'width:200px'
+            'style' => 'width:100px',
         ));
 
         $this->addColumn('error200', array(
             'label' => Mage::helper('axzoom')->__('Error200'),
-            'style' => 'width:100px'
+            'style' => 'width:100px',
         ));
 
         $this->addColumn('error300', array(
             'label' => Mage::helper('axzoom')->__('Error300'),
-            'style' => 'width:100px'
+            'style' => 'width:100px',
         ));
  
         $this->_addAfter = false;

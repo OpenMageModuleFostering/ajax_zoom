@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, install-0.0.1.php
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.9
-*  Date: 2015-12-01
-*  Review: 2015-12-01
+*  Version: 1.0.0
+*  Date: 2015-09-08
+*  Review: 2015-09-08
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -35,15 +35,13 @@ foreach (array('360', 'cache', 'zoomgallery', 'zoommap', 'zoomthumb', 'zoomtiles
 if (!file_exists(Mage::getBaseDir() . '/js/axzoom/axZm') && ini_get('allow_url_fopen') ) {
     $remoteFileContents = file_get_contents('http://www.ajax-zoom.com/download.php?ver=latest');
     $localFilePath = Mage::getBaseDir() . '/js/axzoom/pic/tmp/jquery.ajaxZoom_ver_latest.zip';
+
+    file_put_contents($localFilePath, $remoteFileContents);
     
-    if ($remoteFileContents !== false){
-        file_put_contents($localFilePath, $remoteFileContents);
-        
-        $zip = new ZipArchive;
-        $res = $zip->open($localFilePath);
-        $zip->extractTo(Mage::getBaseDir() . '/js/axzoom/pic/tmp/');
-        $zip->close();
-        
-        rename(Mage::getBaseDir() . '/js/axzoom/pic/tmp/axZm', Mage::getBaseDir() . '/js/axzoom/axZm');
-    }
+    $zip = new ZipArchive;
+    $res = $zip->open($localFilePath);
+    $zip->extractTo(Mage::getBaseDir() . '/js/axzoom/pic/tmp/');
+    $zip->close();
+    
+    rename(Mage::getBaseDir() . '/js/axzoom/pic/tmp/axZm', Mage::getBaseDir() . '/js/axzoom/axZm');
 }

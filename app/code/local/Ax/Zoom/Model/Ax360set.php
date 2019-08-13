@@ -48,6 +48,7 @@ class Ax_Zoom_Model_Ax360set extends Mage_Core_Model_Abstract
 
     public function rootFolder()
     {
-    	return preg_replace('|js/$|', '', parse_url(Mage::getBaseUrl('js'), PHP_URL_PATH));
+        $p = parse_url(Mage::getBaseUrl());
+        return str_replace('index.php/', '', $p['path']);
     }
 }

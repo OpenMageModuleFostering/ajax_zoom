@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-settings.phtml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.7
-*  Date: 2015-11-15
-*  Review: 2015-11-15
+*  Version: 1.0.9
+*  Date: 2015-12-01
+*  Review: 2015-12-01
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -42,8 +42,17 @@ if ($product->isConfigurable()) {
 }
 
 #pairRows textarea{
-	resize:vertical;
+	resize: vertical;
 }
+
+#pairRows td:nth-child(3){
+	padding-right: 10px;
+}
+
+.link_add_option{
+	margin-top: 5px;
+}
+
 </style>
 
 
@@ -53,7 +62,7 @@ if ($product->isConfigurable()) {
 	</div>
 	<div class="fieldset fieldset-wide" id="group_fields9">
 		<div class="hor-scroll">
-			<table cellspacing="0" class="form-list">
+			<table cellspacing="0" class="form-list" cellspacing="0">
 				<tbody>
 					<tr>
 						<td class="label"><label for="meta_title"><?php echo $this->__('AJAX ZOOM enabled for this product\'s detail view') ?></label></td>
@@ -78,7 +87,7 @@ if ($product->isConfigurable()) {
 	</div>
 	<div class="fieldset fieldset-wide" id="group_fields9">
 		<div class="hor-scroll">
-			<table cellspacing="0" class="form-list">
+			<table cellspacing="0" class="form-list" cellspacing="0">
 				<tbody>
 					<tr>
 						<td class="label"><label for="meta_title"><?php echo $this->__('360/3D View') ?></label></td>
@@ -91,7 +100,7 @@ if ($product->isConfigurable()) {
 							<select id="id_360" name="id_360" style="min-width: 100px">
 								<option value=""><?php echo $this->__('Select') ?></option>
 								<?php foreach ($groups as $group): ?>
-								<option value="<?php echo $group['id_360'] ?>" data-settings="<?php echo urlencode($group['settings']) ?>" data-combinations="[<?php echo urlencode($group['combinations']) ?>]"><?php echo $group['name'] ?></option>
+								<option value="<?php echo $group['id_360']; ?>" data-settings="<?php echo urlencode($group['settings']) ?>" data-combinations="[<?php echo urlencode($group['combinations']) ?>]"><?php echo $group['name'] ?></option>
 								<?php endforeach; ?>
 							</select>						
 						</td>
@@ -100,7 +109,7 @@ if ($product->isConfigurable()) {
 					<tr id="pairs" style="display:none;">
 						<td class="label"><label for="meta_title"><?php echo $this->__('Settings') ?></label></td>
 						<td class="value">
-							<table>
+							<table cellspacing="0">
 								<thead>
 									<tr>
 										<th><?php echo $this->__('Name') ?></th>
@@ -116,14 +125,17 @@ if ($product->isConfigurable()) {
 										<td colspan="4">
 											<div class="row_">
 												<button class="scalable add link_add_option">
-													<span><span><span><?php echo $this->__('Add an option') ?></span></span></span>
+													<span><span><span><?php echo $this->__('Add an option'); ?></span></span></span>
 												</button>
 											</div>
+											<p class="note">
+												 <?php echo $this->__('AJAX-ZOOM has several hundreds options. Most of them can be set dynamically over JS and here, some need to be set in the config file. The most important are already listed above but you can add more if needed! For more options directly related to 360 please refere to AJAX-ZOOM documentation.'); ?>
+											</p>
 										</td>
 									</tr>
 								</tfoot>	
 							</table>
-							<table id="pairTemplate" style="display: none">
+							<table id="pairTemplate" style="display: none" cellspacing="0">
 								<tr>
 									<td><input type="text" name="name[]" value="name_placeholder" class="pair-names"></td>
 									<td>&nbsp; : &nbsp;</td>

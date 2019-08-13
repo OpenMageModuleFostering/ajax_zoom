@@ -4,9 +4,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.8
-*  Date: 2015-11-20
-*  Review: 2015-11-20
+*  Version: 1.0.9
+*  Date: 2015-12-01
+*  Review: 2015-12-01
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -20,7 +20,7 @@
 
 	<modules>
 		<Ax_Zoom>
-			<version>1.0.8</version>
+			<version>1.0.9</version>
 		</Ax_Zoom>
 	</modules>
 	
@@ -325,7 +325,7 @@
 	"es" : "Arrastrar para girar en 360º, pellizcar para ampliar y reducir"
 }
 				</zoomMsg360_touch>
-				<preloadMouseOverImages>false</preloadMouseOverImages>
+				<preloadMouseOverImages>oneByOne</preloadMouseOverImages>
 				<noImageAvailableClass>axZm_mouseOverNoImage</noImageAvailableClass>
 				<width>auto</width>
 				<height>auto</height>

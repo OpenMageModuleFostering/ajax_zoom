@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-sets.phtml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.8
-*  Date: 2015-11-20
-*  Review: 2015-11-20
+*  Version: 1.0.9
+*  Date: 2015-12-01
+*  Review: 2015-12-01
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -29,8 +29,54 @@ $conf = Mage::getStoreConfig('axzoom_options');
 	.hide {
 		display: none !important;
 	}
+	
+	#set_name{
+		width: 278px;
+	}
+	
+	#save_set{
+		margin-top: 10px;
+	}
+	
 	#imageTableSetsRows .active td {
 		background-color: #FFFFE0 !important;
+	}
+	
+	#imageTableSetsRows .images_set>span {
+		padding-left: 20px;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAb1BMVEUAAADo6Ojx8fHw8PDx8fHy8vLv7+/x8fH39/fw8PD6+vr7+/v29vb6+vr7+/v4+Pj8/Pz9/f37+/v8/Pz8/Pz+/v79/f39/f39/f39/f37+/v+/v7+/v7+/v7+/v79/f39/f3+/v79/f3+/v7////JrJzFAAAAInRSTlMAAgQKDBAYGiIuNDY4OkpaaHCNj6Glr7fL09/l7e/x+/39QQhj+gAAAF9JREFUeNqNztcOgCAMQNE6cOPeIK7+/zdKBEHfvEmT5qQPhT+tzLTfMCt35bAX+EX2hWCsiQUC4MWhvUh4Q+ViIF0QBYXIeaBFmRjOKTeg6zWUna5SsHGT+vRAG/zoAstNCsH1/nWyAAAAAElFTkSuQmCC);
+		background-repeat: no-repeat;
+	}
+	#imageTableSetsRows .preview_set>span {
+		padding-left: 20px;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAQAAAC1+jfqAAAA8klEQVQoU43MoUsEYRAF8Mclg4hsMB0iF8QgIqZDLi5m8yEGEf8CwyFWg4gYRIxy0b/gohhNJrkkKmK6tLret9/OzPsMG2TXvcM3ZYb3Y4D/Z9y0Z5Ni9PBvvcChXha7dfS+Wkf2GIKdFRc3K+Bz1h4YGGR3AmBXB1ns24Br+U46p6t6VwHSB5IZvWUIgV+yl7ZqgJ4wybfdop7T/FoJhK70ARvqKQC8NuxNj2s+2JNeAMCoYR/aqwF6RCf7fkNvaNlyCUjMF14n83pFYaAxSPkD4GPZcetAGo1Xvpt8p+VbmJy8Tc9RtjSFyIENXDQF/OYHw2GYt0Xo/PcAAAAASUVORK5CYII=);
+		background-repeat: no-repeat;
+	}
+	
+	#file360-add-button span{
+		padding-left: 20px;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAulBMVEUAAADj4+Pi4uLk5OTm5ubn5+fo6Ojy8vLn5+fv7+/w8PDo6Oj29vbv7+/29vb19fX39/f7+/v6+vr8/Pz7+/v+/v77+/v8/Pz8/Pz7+/v7+/v8/Pz9/f38/Pz9/f38/Pz8/Pz9/f37+/v9/f39/f38/Pz9/f38/Pz9/f3+/v7////7+/v8/Pz9/f39/f39/f39/f39/f39/f39/f38/Pz8/Pz9/f39/f3+/v7+/v79/f3+/v7+/v7///84WsHxAAAAPHRSTlMAAgQEBAQEBAYIDBAYHBweLD5ESlBgbnJ4h42PkZmdn6Ghp6eztbm7u729y8vP1dvd3+Hp7e/v8fP3+f27bAlAAAAAjklEQVR42mXIxwKCMBRE0WfvqIiKYseCFWyAZvL/v+WLISvurOZQvsPNtNMAdwQJ1TcDfy11Gbgz01jDdGOaaACkmvzs5xr0xbZt9a0/+McTb9FcCYhlg2EwVFU9xLUYHoOQ3L2URhc6RykDVNcWOmWqdMHwVBAXQ7zphZChUFeRI5JeIhwGkx08Apvy/QCdyxpVfEL2sAAAAABJRU5ErkJggg==);
+		background-repeat: no-repeat;
+	}
+
+	.link_add{
+		margin-top: 2px;
+		margin-bottom: 2px;
+	}
+	
+	.link_add span{
+		padding-left: 20px;
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAFVBMVEUAAAD///////////////////////9Iz20EAAAABnRSTlMAMjxaYmqUPYFrAAAAKElEQVQI12NgwAvEknAwGAXNUgQFgAy2NCBIQGYwKbmlKing144TAABpqwir9l/p6wAAAABJRU5ErkJggg==);
+		background-repeat: no-repeat;
+	}
+	
+	.link_add_opened span{
+		background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAACVBMVEUAAAD9/f39/f0xxUhDAAAAA3RSTlMA1d8QVTrBAAAAFUlEQVR4AWMYOMAIB1ABJjgYOEcBABCrAB8vkuA9AAAAAElFTkSuQmCC);
+	}
+	
+
+	#imageTableSets tr>td:nth-child(1){
+		width: 100px;
 	}
 </style>
 
@@ -39,12 +85,11 @@ $conf = Mage::getStoreConfig('axzoom_options');
 <div id="product-images360sets" class="entry-edit">
 	<div class="entry-edit-head">
 		<h4 class="icon-head head-edit-form fieldset-legend"><?php echo $this->__('360/3D Views') ?></h4>
+		<div class="right"><button class="link_add" href="#"> <i class="icon-plus"></i> <span><?php echo $this->__('Add a new 360/3D view') ?></span></button></div>
 	</div>
 	<div class="fieldset fieldset-wide" id="group_fields9">
 		<div class="hor-scroll">
-			<div>
-				<a class="link_add" href="#"> <i class="icon-plus"></i> <?php echo $this->__('Add a new 360/3D view') ?></a>
-			</div>
+
 			<br>
 
 			<div class="row" id="newForm" style="display:none">
@@ -60,7 +105,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 						</tr>
 						<?php if ($setsGroups): ?>
 						<tr>
-							<td colspan="3"><b><?php echo $this->__('OR') ?></b></td>
+							<td colspan="3"><span style="font-weight: bold; padding: 5px;"><?php echo $this->__('OR') ?></span></td>
 						</tr>
 						<tr>
 							<td class="label"><label for="existing"><?php echo $this->__('Add to existing 3D as next row') ?></label></td>
@@ -114,7 +159,7 @@ $conf = Mage::getStoreConfig('axzoom_options');
 							<td></td>
 							<td>
 								<button type="button" class="scalable save save_set" >
-									<span><span><span><?php echo $this->__('Add') ?></span></span></span>
+									<span><?php echo $this->__('Add / Import') ?></span>
 								</button>
 							</td>
 							<td></td>
@@ -125,13 +170,13 @@ $conf = Mage::getStoreConfig('axzoom_options');
 			<br>
 			<div class="row">
 				<div class="grid">
-					<table class="data border" id="imageTableSets" >
+					<table class="data border" id="imageTableSets" cellspacing="0">
 						<thead>
 							<tr class="headings">
-								<th><?php echo $this->__('Cover Image') ?></th>
-								<th><?php echo $this->__('Name') ?></th>
-								<th><?php echo $this->__('Active') ?></th>
-								<th class="last" style="width:240px;"><?php echo $this->__('Actions') ?></th>
+								<th><?php echo $this->__('Cover Image'); ?></th>
+								<th><?php echo $this->__('Name'); ?></th>
+								<th><?php echo $this->__('Active'); ?></th>
+								<th class="last" style="width:240px;"><?php echo $this->__('Actions'); ?></th>
 							</tr>
 						</thead>
 						<tbody id="imageTableSetsRows">
@@ -139,23 +184,23 @@ $conf = Mage::getStoreConfig('axzoom_options');
 					</table>
 				</div>
 
-				<table id="lineSet" style="display:none;">
+				<table id="lineSet" style="display:none;" cellspacing="0">
 					<tr id="set_id" data-group="group_id">
 						<td><img src="../modules/ajaxzoom/views/img/image_path.gif" alt="legend" title="legend" class="img-thumbnail" /></td>
 						<td>legend</td>
 						<td>
 							<span class="switch prestashop-switch fixed-width-lg hide_class switch-status">
 								<input type="radio" name="status_field" id="status_field_on" value="1" checked_on />
-								<label class="t" for="status_field_on"><?php echo $this->__('Yes') ?></label>
+								<label class="t" for="status_field_on"><?php echo $this->__('Yes'); ?></label>
 								<input type="radio" name="status_field" id="status_field_off" value="0" checked_off />
-								<label class="t" for="status_field_off"><?php echo $this->__('No') ?></label>
+								<label class="t" for="status_field_off"><?php echo $this->__('No'); ?></label>
 								<a class="slide-button btn"></a>
 							</span>
 						</td>
 						<td>
-							<button class="delete_set scalable delete" ><?php echo $this->__('Delete') ?></button>
-							<button class="images_set scalable" ><?php echo $this->__('Images') ?></button>
-							<button class="scalable preview_set hide_class" ><?php echo $this->__('Preview') ?></button>
+							<button class="delete_set scalable delete"><span><?php echo $this->__('Delete'); ?></span></button>
+							<button class="images_set scalable"><span><?php echo $this->__('Images'); ?></span></button>
+							<button class="scalable preview_set hide_class"><span><?php echo $this->__('Preview'); ?></span></button>
 						</td>
 					</tr>
 				</table>
@@ -252,7 +297,8 @@ $conf = Mage::getStoreConfig('axzoom_options');
 				setLine(data.id_360set, data.path, "", data.name, data.status, data.id_360);
 			}
 
-			$('.link_add').find('i').removeClass('icon-minus').addClass('icon-plus');
+			$('.link_add').removeClass('link_add_opened').find('i').removeClass('icon-minus').addClass('icon-plus');
+			
 			$('#newForm').hide();
 			$('#set_name').val('');
 			$('#existing').val('');
@@ -294,9 +340,11 @@ $conf = Mage::getStoreConfig('axzoom_options');
 
 			if(icon.hasClass('icon-plus')) {
 				icon.removeClass('icon-plus').addClass('icon-minus');
+				$(this).addClass('link_add_opened')
 				$('#newForm').show();
 			} else {
 				icon.removeClass('icon-minus').addClass('icon-plus');
+				$(this).removeClass('link_add_opened')
 				$('#newForm').hide();
 			}
 		});

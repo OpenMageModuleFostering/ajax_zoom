@@ -4,9 +4,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/system.xml
 *  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.4
-*  Date: 2015-10-28
-*  Review: 2015-10-28
+*  Version: 1.0.9
+*  Date: 2015-12-01
+*  Review: 2015-12-01
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -1006,8 +1006,7 @@
 						<preloadMouseOverImages>
 							<label><![CDATA[<div class="notice-msg importantAZoption">preloadMouseOverImages</div>]]></label>
 							<comment>Preload all preview and mouseover images, possible values: false, true, 'oneByOne'</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>axzoom/yesno</source_model>
+							<frontend_type>text</frontend_type>
 							<sort_order>240</sort_order>
 							<show_in_default>1</show_in_default>
 							<show_in_website>1</show_in_website>

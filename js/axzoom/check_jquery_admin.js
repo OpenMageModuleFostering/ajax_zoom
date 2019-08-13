@@ -1,15 +1,15 @@
 /**
 *  Module: jQuery AJAX-ZOOM for Magento, /js/axzoom/check_jquery_admin.php
-*  Copyright: Copyright (c) 2010-2015 Vadim Jacobi
+*  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.0
-*  Date: 2015-09-08
-*  Review: 2015-09-08
+*  Version: 1.1.1
+*  Date: 2016-03-16
+*  Review: 2015-03-16
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
 *  @author    AJAX-ZOOM <support@ajax-zoom.com>
-*  @copyright 2010-2015 AJAX-ZOOM, Vadim Jacobi
+*  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
 
@@ -26,15 +26,18 @@
 		};
 	}
 
-    var pathname = window.location.pathname, basePath = '', pathArr = pathname.split('/');
-    if (pathArr.length < 3){pathArr = pathname.split('\\');}
-    for (var i = 1; i < pathArr.indexOf('index.php'); i++){basePath += '/' + pathArr[i];}
-    if (!basePath){basePath = '/';} else {basePath += '/';} basePath = basePath.replace(/\/\/+/g, '\/'); 
+	var pathname = window.location.pathname, basePath = '', pathArr = pathname.split('/');
+	if (pathArr.length < 3){pathArr = pathname.split('\\');}
+	for (var i = 1; i < pathArr.indexOf('index.php'); i++){basePath += '/' + pathArr[i];}
+	if (!basePath){basePath = '/';} else {basePath += '/';} basePath = basePath.replace(/\/\/+/g, '\/');
 	
 	// If jQuery is not defined inject jQuery 1.11.3 core with jQuery.noConflict() and jquery-migrate 1.2.1
-    if ( (typeof jQuery === 'undefined') && !window.jQuery ) {
-        document.write(unescape("%3Cscript type='text/javascript' src='"+basePath+"js/axzoom/jquery-1.11.3.min.js'%3E%3C/script%3E"));
-        document.write(unescape("%3Cscript type='text/javascript'%3EjQuery.noConflict();%3C/script%3E"));  
-        document.write(unescape("%3Cscript type='text/javascript' src='"+basePath+"js/axzoom/jquery-migrate-1.2.1.min.js'%3E%3C/script%3E"));
-    }
+	if ( (typeof jQuery === 'undefined') && !window.jQuery ) {
+		document.write(unescape("%3Cscript type='text/javascript' src='"+basePath+"js/axzoom/jquery-1.11.3.min.js'%3E%3C/script%3E"));
+		document.write(unescape("%3Cscript type='text/javascript'%3EjQuery.noConflict();%3C/script%3E"));  
+		document.write(unescape("%3Cscript type='text/javascript' src='"+basePath+"js/axzoom/jquery-migrate-1.2.1.min.js'%3E%3C/script%3E"));
+	} else {
+		// Include jquery-migrate 1.2.1 as it can be missing
+		document.write(unescape("%3Cscript type='text/javascript' src='"+basePath+"js/axzoom/jquery-migrate-1.2.1.min.js'%3E%3C/script%3E"));
+	}
 })();

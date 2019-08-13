@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/uploader.phtml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.1.2
-*  Date: 2016-03-31
-*  Review: 2016-03-31
+*  Version: 1.1.4
+*  Date: 2016-04-22
+*  Review: 2016-04-22
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -157,7 +157,6 @@ function return_bytes($val) {
 								$(data.context).appendTo($('#<?php echo $id ?>-success'));
 								$('#<?php echo $id ?>-success').parent().show();
 
-
 								if (data.result.<?php echo $name ?>[i] !== null && data.result.<?php echo $name ?>[i].status == 'ok')
 								{
 
@@ -170,11 +169,10 @@ function return_bytes($val) {
 									$("#img" + id).remove();
 									$('#legend_1').val('');
 
-
 									// check if we need update an image
 									var elem = $('#imageTableSetsRows tr#' + response.id_360set + ' img');
 									if(elem.attr('src').search('no_image') != -1) {
-										elem.attr('src', response.path);
+										elem.attr('src', response.path + '&thumbMode=contain');
 									}
 								}
 							}

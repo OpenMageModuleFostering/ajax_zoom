@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/adminhtml/default/default/template/axzoom/tab360-sets.phtml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.1.2
-*  Date: 2016-03-31
-*  Review: 2016-03-31
+*  Version: 1.1.4
+*  Date: 2016-04-22
+*  Review: 2016-04-22
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -396,14 +396,25 @@ $conf = Mage::getStoreConfig('axzoom_options');
 			if (!$('#set_name').val()){
                 $('#set_name').val('no_name_'+(new Date().getTime()));  
             }
+            
+            var arcfileVal = $('#arcfile').val();
+            
 			doAdminAjax360('<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/axzoom/addSet") ?>', {
 					"name":$('#set_name').val(),
 					"existing":$('#existing').val(),
 					"zip":$('#zip').is(':checked'),
 					"delete":$('#delete').is(':checked'),
-					"arcfile":$('#arcfile').val(),
+					"arcfile":arcfileVal,
 					"id_product" : <?php echo $productId ?>}, afterAddSet
 			);
+			
+            if ($('#zip').is(':checked') && $('#delete').is(':checked')){
+                $("#arcfile option[value='"+arcfileVal+"']").remove();
+                if ($('#arcfile option').size() < 2){
+                	$('#zip').trigger('click').attr({disabled: true, readonly: true});
+				}
+            }
+			
 		});
 
 

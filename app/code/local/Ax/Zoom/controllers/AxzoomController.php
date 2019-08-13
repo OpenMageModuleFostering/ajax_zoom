@@ -386,7 +386,7 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
 
     public function deleteDirectory($dirname, $delete_self = true)
     {
-        if(!isset($dirname) || empty($dirname) || $dirname == '/') {
+        if(empty($dirname) || strpos($dirname, 'axzoom') === FALSE) {
             return false;
         }
 

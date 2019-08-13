@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /jss/axzoom/preview.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.3
-*  Date: 2016-08-12
-*  Review: 2016-08-12
+*  Version: 1.2.4
+*  Date: 2016-08-22
+*  Review: 2016-08-22
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -13,52 +13,59 @@
 *  @copyright 2010-2016 AJAX-ZOOM, Vadim Jacobi
 *  @license   http://www.ajax-zoom.com/index.php?cid=download
 */
-	require_once('../../../app/Mage.php');
-	umask(0);
-	Mage::app();
 
-	/* This is not full protection and is not ment to be full protection */
-	$sess = false;
-	$sess_id = isset($_COOKIE['adminhtml']) ? $_COOKIE['adminhtml'] : false;
+require_once('../../../app/Mage.php');
+umask(0);
+Mage::app();
 
-	if ($sess_id){
-	    $sess = Mage::getSingleton('core/resource_session')->read($sess_id);
+/* This is not full protection and is not ment to be full protection */
+$sess = false;
+$sess_id = isset($_COOKIE['adminhtml']) ? $_COOKIE['adminhtml'] : false;
+if ($sess_id){
+	$sess = Mage::getSingleton('core/resource_session')->read($sess_id);
+	if (!$sess){
+		Mage::getSingleton('core/session', array('name' => 'adminhtml'))->start();
+		$admin_logged_in = Mage::getSingleton('admin/session', array('name' => 'adminhtml'))->isLoggedIn();
+		if ($admin_logged_in){
+			$sess = '_Mage_Admin_Model_User';
+		}
 	}
+}
 
-	if (!($sess && stristr($sess, 'Mage_Admin_Model_User'))){
-		echo 'Oops. Something went wrong. If you are the admin of this website and you are logged in, please contact AJAX-ZOOM support.';
-		exit;
-	}
-	
-	/* Set to true to remove certain things not needed if included in shops / cms */
-	$editor_version = '2.0.1';
-	$last_updated = '2016-08-05';
-	$axzm_cms_mode = true;
-	$axzm_tpl_mode = false;
-	$axzm_path = '../axZm/';
-	$first_load360_dir = Mage::app()->getRequest()->getParam('3dDir');
-	$default_thumb_size = $axzm_cms_mode ? 140 : 180;
-	$player_responsive = $axzm_cms_mode ? true : false;
-	$langugaes_array = array();
+if (!($sess && stristr($sess, 'Mage_Admin_Model_User'))){
+	echo 'Oops. Something went wrong. If you are the admin of this website and you are logged in, please contact AJAX-ZOOM support.';
+	exit;
+}
 
-	// Stores languages
-	$store_collection = Mage::getModel('core/store')->getCollection();
-	foreach($store_collection as $store){
-		$storelang = Mage::getStoreConfig('general/locale/code', $store->getId());
-		array_push($langugaes_array, substr($storelang, 0, 2));
- 	}
+/* Set to true to remove certain things not needed if included in shops / cms */
+$editor_version = '2.0.1';
+$last_updated = '2016-08-05';
+$axzm_cms_mode = true;
+$axzm_tpl_mode = false;
+$axzm_path = '../axZm/';
+$first_load360_dir = Mage::app()->getRequest()->getParam('3dDir');
+$default_thumb_size = $axzm_cms_mode ? 140 : 180;
+$player_responsive = $axzm_cms_mode ? true : false;
+$langugaes_array = array();
 
-	$langugaes_array = array_unique($langugaes_array);
-	$langugaes_array = json_encode($langugaes_array);
+// Stores languages
+$store_collection = Mage::getModel('core/store')->getCollection();
+foreach($store_collection as $store){
+	$storelang = Mage::getStoreConfig('general/locale/code', $store->getId());
+	array_push($langugaes_array, substr($storelang, 0, 2));
+}
 
- 	/* If used with a CMS / Shop, the dynamically generated url for controller */
-	$id_360 = Mage::app()->getRequest()->getParam('group');
-	$id_360set = Mage::app()->getRequest()->getParam('id');
-	$first_load_crop_json = Mage::app()->getRequest()->getParam('url_get')."?id_360set=$id_360set&id_360=$id_360";
-	$save_crop_json = Mage::app()->getRequest()->getParam('url_set')."?id_360set=$id_360set&id_360=$id_360&form_key=".Mage::app()->getRequest()->getParam('form_key');
-	
-	// hotspots
-	$first_load_hotspot_json = Mage::app()->getRequest()->getParam('hs_get')."?id_360set=$id_360set&id_360=$id_360";
+$langugaes_array = array_unique($langugaes_array);
+$langugaes_array = json_encode($langugaes_array);
+
+/* If used with a CMS / Shop, the dynamically generated url for controller */
+$id_360 = Mage::app()->getRequest()->getParam('group');
+$id_360set = Mage::app()->getRequest()->getParam('id');
+$first_load_crop_json = Mage::app()->getRequest()->getParam('url_get')."?id_360set=$id_360set&id_360=$id_360";
+$save_crop_json = Mage::app()->getRequest()->getParam('url_set')."?id_360set=$id_360set&id_360=$id_360&form_key=".Mage::app()->getRequest()->getParam('form_key');
+
+// hotspots
+$first_load_hotspot_json = Mage::app()->getRequest()->getParam('hs_get')."?id_360set=$id_360set&id_360=$id_360";
 ?>
 
 <?php

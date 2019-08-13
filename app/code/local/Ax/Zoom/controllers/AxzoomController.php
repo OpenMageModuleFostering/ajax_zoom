@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/controllers/IndexController.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.3
-*  Date: 2016-08-12
-*  Review: 2016-08-12
+*  Version: 1.2.4
+*  Date: 2016-08-22
+*  Review: 2016-08-22
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -458,7 +458,7 @@ class Ax_Zoom_AxzoomController extends Mage_Adminhtml_Controller_Action
         if (!file_exists($folder)) {
             mkdir($folder, 0777);
         } else {
-            chmod($folder, 0777);
+            @chmod($folder, 0777);
         }
 
         return $folder;

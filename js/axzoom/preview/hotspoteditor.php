@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /js/axzoom/preview/hotspoteditor.php
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.3
-*  Date: 2016-08-12
-*  Review: 2016-08-12
+*  Version: 1.2.4
+*  Date: 2016-08-22
+*  Review: 2016-08-22
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -21,9 +21,15 @@ Mage::app();
 /* This is not full protection and is not ment to be full protection */
 $sess = false;
 $sess_id = isset($_COOKIE['adminhtml']) ? $_COOKIE['adminhtml'] : false;
-
 if ($sess_id){
 	$sess = Mage::getSingleton('core/resource_session')->read($sess_id);
+	if (!$sess){
+		Mage::getSingleton('core/session', array('name' => 'adminhtml'))->start();
+		$admin_logged_in = Mage::getSingleton('admin/session', array('name' => 'adminhtml'))->isLoggedIn();
+		if ($admin_logged_in){
+			$sess = '_Mage_Admin_Model_User';
+		}
+	}
 }
 
 if (!($sess && stristr($sess, 'Mage_Admin_Model_User'))){

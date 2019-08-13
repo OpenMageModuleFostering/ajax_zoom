@@ -3,9 +3,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/design/frontend/base/default/template/ax_zoom/catalog/product/view/media.phtml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.2.3
-*  Date: 2016-08-12
-*  Review: 2016-08-12
+*  Version: 1.2.4
+*  Date: 2016-08-22
+*  Review: 2016-08-22
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -16,7 +16,6 @@
 
 $_product = $this->getProduct();
 $productId = $_product->getId();
-//$productId = Mage::app()->getRequest()->getParam('id');
 $ax = Mage::getModel('axzoom/ax360');
 $conf = Mage::getStoreConfig('axzoom_options');
 $axZmPath = Mage::getBaseUrl('js') . 'axzoom/axZm/';
@@ -34,17 +33,19 @@ if (!$az_gallery_position){$az_gallery_position = 'bottom';}
 	document.writeln(unescape("%3Cscript type='text/javascript' src='"+mageAzJsUrl+"check_fallback.js'%3E%3C/script%3E"));
 </script>
 
+<?php echo !function_exists('ioncube_loader_iversion') ? '<div style="padding: 5px; margin-bottom: 5px; border: 1px solid red">'.$this->__('PHP "Ioncube loader" is not installed on this server. Please install this extension!').'</div>' : '';?>
+
 <?php if ($az_gallery_position == 'bottom') { ?>
 <!-- AJAX-ZOOM mouseover block gallery bottom -->
 <div id="az_mouseOverZoomParent" style="position: relative; background-color: #FFFFFF;">
 	<!-- Container for mouse over image -->
 	<div id="az_mouseOverZoomContainer">
-	    <?php echo $this->__('Zoom loading...');?>
+		<?php echo '<div style="margin: 5px;">'.$this->__('Mouseover Zoom loading...').'</div>';?>
 	</div>
 
 	<!-- gallery with thumbs (will be filled with thumbs by javascript) -->
 	<div id="az_mouseOverZoomGallery">
-	    <?php echo $this->__('Gellery loading...');?>
+		<?php echo $this->__('Gallery loading...');?>
 	</div>
 </div>
 <?php } elseif ($az_gallery_position == 'top') { ?>
@@ -53,12 +54,12 @@ if (!$az_gallery_position){$az_gallery_position = 'bottom';}
 	
 		<!-- gallery with thumbs (will be filled with thumbs by javascript) -->
 		<div id="az_mouseOverZoomGallery" style="position: relative; margin-bottom: 10px; height: 76px; width: 100%;">
-		    <?php echo $this->__('Gellery loading...');?>
+		    <?php echo $this->__('Gallery loading...');?>
 		</div>
 		
 		<!-- Container for mouse over image -->
 		<div id="az_mouseOverZoomContainer" style="position: relative; background-color: #FFFFFF; border: #AAA 1px solid;">
-		    <?php echo $this->__('Mouseover Zoom loading...');?>
+			<?php echo '<div style="margin: 5px;">'.$this->__('Mouseover Zoom loading...').'</div>';?>
 		</div>
 	</div>
 <?php } elseif ($az_gallery_position == 'left') { ?>
@@ -67,7 +68,7 @@ if (!$az_gallery_position){$az_gallery_position = 'bottom';}
 
 		<!-- gallery with thumbs (will be filled with thumbs by javascript) -->
 		<div id="az_mouseOverZoomGallery" style="position: absolute; margin-top: 0; width: 72px; z-index: 1; height: 100%;">
-			<?php echo $this->__('Gellery loading...');?>
+			<?php echo $this->__('Gallery loading...');?>
 		</div> 
 
 		<!-- Parent container for offset to the left or right -->
@@ -75,7 +76,7 @@ if (!$az_gallery_position){$az_gallery_position = 'bottom';}
 			
 			<!-- Container for mouse over image -->
 			<div id="az_mouseOverZoomContainer" style="position: relative; border: #AAA 1px solid; background-color: #FFFFFF; padding: 0;">
-				<?php echo $this->__('Mouseover Zoom loading...');?>
+				<?php echo '<div style="margin: 5px;">'.$this->__('Mouseover Zoom loading...').'</div>';?>
 			</div>
 		</div>
 	</div>
@@ -84,7 +85,7 @@ if (!$az_gallery_position){$az_gallery_position = 'bottom';}
 	<div id="az_mouseOverZoomParent" style="position: relative; width: 100%; margin-bottom: 20px;">
 		<!-- gallery with thumbs (will be filled with thumbs by javascript) -->
 		<div id="az_mouseOverZoomGallery" style="position: absolute; margin-top: 0; right: 0; width: 72px; z-index: 1; height: 100%;">
-			<?php echo $this->__('Gellery loading...');?>
+			<?php echo $this->__('Gallery loading...');?>
 		</div>
 
 		<!-- Parent container for offset to the left or right -->
@@ -92,7 +93,7 @@ if (!$az_gallery_position){$az_gallery_position = 'bottom';}
 			
 			<!-- Container for mouse over image -->
 			<div id="az_mouseOverZoomContainer" style="position: relative; border: #AAA 1px solid; background-color: #FFFFFF; padding: 0;">
-				<?php echo $this->__('Mouseover Zoom loading...');?>
+				<?php echo '<div style="margin: 5px;">'.$this->__('Mouseover Zoom loading...').'</div>';?>
 			</div>
 		</div>
 	</div>
@@ -163,10 +164,10 @@ if ($product->isConfigurable()) {
 
 		$idx = implode(',', $pairs);
 		$res[$idx] = array();
-		
+
 		$obj = null;
 		$cnt = 0;
-		
+
 		// add native images
 		foreach ($p->getMediaGalleryImages() as $image) {
 			$tmp = parse_url($image->getUrl());
@@ -237,7 +238,7 @@ if (count($this->getGalleryImages()) > 0) {
 			}
 		}
 	}
-} 
+}
 // No images present
 else if ($conf['magento']['magentoNoImage'])
 {
@@ -246,7 +247,6 @@ else if ($conf['magento']['magentoNoImage'])
 		array_push($imagesJson, '1: {img: "' . $tmp['path'] . '", title: ""}');
 	}
 }
-
 
 //MAIN_GALLERYPOSITION 
 echo $this->getChildHtml('after'); 
@@ -457,19 +457,19 @@ echo $this->getChildHtml('after');
 			images360: IMAGES_360_JSON
 		});
 	};
-	
+
 	// Change values
 	var updateAxZoomAction = function(idxSel, checkout) { 
 		//JSON.stringify(obj1) === JSON.stringify(obj2) 
 		if ( (jQuery.isPlainObject(idxSel.images) && !jQuery.isEmptyObject(idxSel.images) ) 
 			|| (jQuery.isPlainObject(idxSel.images360) && !jQuery.isEmptyObject(idxSel.images360) )) {
-			
+
 			if (JSON.stringify({images: idxSel.images, images360: idxSel.images360}) == IMAGES_AND_360_LOADED){
 				return;
 			} 
-			
+
 			IMAGES_AND_360_LOADED = JSON.stringify({images: idxSel.images, images360: idxSel.images360});
-			
+
 			if (checkout){
 				zoomParams.images = idxSel.images;
 				zoomParams.images360 = idxSel.images360;
@@ -486,14 +486,14 @@ echo $this->getChildHtml('after');
 			resetAxZoom();
 		}
 	};
-	
+
 	var updateAxZoom = function(e, check) {
 		var obj = jQuery(this);
 		var requestSet = function() {
 			if (!spConfig){
 				return;
 			}
-		
+
 			if((!check && e && e.type == 'change' && obj.val() == '')) {
 				resetAxZoom();
 				return;
@@ -536,12 +536,12 @@ echo $this->getChildHtml('after');
 		}
 	
 	};
-	
+
 	// Shortcut for maybe other applications or additional functionality
 	// window.resetAxZoom() will reset AJAX-ZOOM to the state when article is loaded without attribute selection
 	window.resetAxZoom = resetAxZoom;
 	window.updateAxZoom = updateAxZoom;
-	
+
 	// Init AJAX-ZOOM
 	jQuery.mouseOverZoomInit(zoomParams);
 
@@ -555,6 +555,6 @@ echo $this->getChildHtml('after');
 			}
 		}
 	});
-	
+
 })(jQuery);
 </script>

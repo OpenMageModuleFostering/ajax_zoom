@@ -4,9 +4,9 @@
 *  Module: jQuery AJAX-ZOOM for Magento, /app/code/local/Ax/Zoom/etc/config.xml
 *  Copyright: Copyright (c) 2010-2016 Vadim Jacobi
 *  License Agreement: http://www.ajax-zoom.com/index.php?cid=download
-*  Version: 1.0.10
-*  Date: 2016-01-22
-*  Review: 2015-01-22
+*  Version: 1.0.11
+*  Date: 2016-02-05
+*  Review: 2015-02-05
 *  URL: http://www.ajax-zoom.com
 *  Documentation: http://www.ajax-zoom.com/index.php?cid=modules&module=magento
 *
@@ -20,7 +20,7 @@
 
 	<modules>
 		<Ax_Zoom>
-			<version>1.0.10</version>
+			<version>1.0.11</version>
 		</Ax_Zoom>
 	</modules>
 	
@@ -395,7 +395,7 @@
 				<postMode>true</postMode>
 			</main>
 			<pinterest>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 				<build>parsePinBtns</build>
 				<wrapClass>axZm_mouseOverPinterest</wrapClass>
 				<href>//en.pinterest.com/pin/create/button/</href>

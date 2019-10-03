@@ -1,16 +1,19 @@
 {
-    "name": "OpenMageModuleFostering/AJAX_ZOOM",
+    "name": "OpenMageModuleFostering\/AJAX_ZOOM",
     "type": "magento-module",
     "license": "Commercial,-demoware",
     "homepage": "",
-    "description": "Responsive product detail view mousehover zoom extension with optional 360° spins or multilevel 3D",
+    "description": "Responsive product detail view mousehover zoom extension with optional 360\u00b0 spins or multilevel 3D",
     "authors": [
-    {
-        "name": "AJAX-ZOOM",
-        "email": "support@ajax-zoom.com"
-    }
-],
+        {
+            "name": "AJAX-ZOOM",
+            "email": "support@ajax-zoom.com"
+        }
+    ],
     "suggest": {
-        "magento-hackathon/magento-composer-installer": "*"
-    }
+        "magento-hackathon\/magento-composer-installer": "*"
+    },
+    "keywords": [
+        "openmage-module"
+    ]
 }

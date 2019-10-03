@@ -1,3 +1,5 @@
+
+
 ## Original Package Description
 
 Responsive product detail view mousehover zoom extension with optional 360° spins or multilevel 3D
